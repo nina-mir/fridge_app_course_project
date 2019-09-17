@@ -73,17 +73,28 @@ WSGI_APPLICATION = 'refrigerator_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'refrigerator_development',
-        'USER': 'root',
-        'PASSWORD': '12345678',
-        'HOST': 'localhost',
-        'PORT': '3306'
+if 'DB_NAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['DB_NAME'],
+            'USER': os.environ['USERNAME'],
+            'PASSWORD': os.environ['PASSWORD'],
+            'HOST': os.environ['HOSTNAME'],
+            'PORT': os.environ['PORT'],
+        }
     }
-}
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'refrigerator_development',
+            'USER': 'root',
+            'PASSWORD': '12345678',
+            'HOST': 'localhost',
+            'PORT': '3306'
+        }
+    }
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
