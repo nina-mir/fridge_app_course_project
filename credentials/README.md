@@ -7,17 +7,17 @@
 
 # Blow is a list of items required. Missing items will causes points to be deducted from multiple milestone submissions.
 
-1. Server URL or IP
-2. SSH username
-3. SSH password or key.
+1. Server URL or IP: http://ec2-34-224-23-175.compute-1.amazonaws.com
+2. SSH username : ubuntu
+3. SSH password or key: File TeamCSC103.pem
     <br> If a ssh key is used please upload the key to the credentials folder.
-4. Database URL or IP and port used.
+4. Database URL or IP and port used. Mysql HostName: 0.0.0.0 Port: 3306.
     <br><strong> NOTE THIS DOES NOT MEAN YOUR DATABASE NEEDS A PUBLIC FACING PORT.</strong> But knowing the IP and port number will help with SSH tunneling into the database. The default port is more than sufficient for this class.
-5. Database username
-6. Database password
-7. Database name (basically the name that contains all your tables)
+5. Database username: root
+6. Database password: sfsuteam103
+7. Database name (basically the name that contains all your tables): refrigerator.
 8. Instructions on how to use the above information.
-
+To look at our web: just copy URL above and paste it on any browser. Use the command "ssh -i "TeamCSC103.pem" ubuntu@ec2-34-224-23-175.compute-1.amazonaws.com" to access our instance. If this command if needed "chmod 400 TeamCSC103.pem". To access our database first you need to access our ec2 instance. After that use "mysql -u root -p" and database password to access our database or access using the mySQL workbench. See the ManageServerConnection.png for setting.
 # Most important things to Remember
 ## These values need to kept update to date throughout the semester. <br>
 ## <strong>Failure to do so will result it points be deducted from milestone submissions.</strong><br>
