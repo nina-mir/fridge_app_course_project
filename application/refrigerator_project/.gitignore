@@ -1,7 +1,0 @@
-*.pyc
-*~
-__pycache__
-team103
-db.sqlite3
-/static
-.DS_Store
