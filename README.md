@@ -12,6 +12,9 @@
 ## Live Project Link
 [http://ec2-34-224-23-175.compute-1.amazonaws.com](http://ec2-34-224-23-175.compute-1.amazonaws.com)
 
+### Test Server Link
+[http://ec2-3-91-133-192.compute-1.amazonaws.com](http://ec2-3-91-133-192.compute-1.amazonaws.com)
+
 ## Instructor's ReadMe 
 -------------
 Please when ready add your teams application URL or IP to the repository description. This will help with grading. Teams are expected to keep this value up to date.
