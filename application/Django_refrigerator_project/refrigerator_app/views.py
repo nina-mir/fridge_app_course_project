@@ -7,12 +7,12 @@ import io
 from io import BytesIO
 import sys
 import math
-from PIL import Image, ImageDraw, ImageFont
+# from PIL import Image, ImageDraw, ImageFont
 # Create your views here.
 
 def home(request):
     my_dict = {'insert_me':"Hello I am from views.py"}
-    return render(request,'first_app/home.html', context=my_dict)
+    return render(request,'refrigerator_project/home.html', context=my_dict)
 
 
 def simple_upload(request):
@@ -24,7 +24,7 @@ def simple_upload(request):
         print(filename)
         text = process_text_analysis(filename)
         context['text'] = text
-    return render(request, 'first_app/index.html', context)
+    return render(request, 'refrigerator_project/index.html', context)
 
 def DisplayBlockInformation(block):
     if 'Text' in block:
