@@ -22,15 +22,17 @@ def simple_upload(request):
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         print(filename)
-        text = process_text_analysis(filename)
+        text = detect_text(filename)
         context['text'] = text
     return render(request, 'refrigerator_project/index.html', context)
 
+# AWS TextTract
 def DisplayBlockInformation(block):
     if 'Text' in block:
         return block['Text']
     return ''
-    
+
+# AWS TextTract
 def process_text_analysis(filename):
 
     bw_img = open(filename,'rb')
@@ -42,8 +44,36 @@ def process_text_analysis(filename):
 
     blocks=response['Blocks']
     result = []
+    print('Calling From Amazon Textract')
     for block in blocks:
         text = DisplayBlockInformation(block)
         result.append(text)
     
-    return ' '.join(result) 
+    return ' '.join(result)
+
+# Google Vision
+def detect_text(filename):
+    """Detects text in the file."""
+    from google.cloud import vision
+    import io
+    client = vision.ImageAnnotatorClient()
+
+    with io.open(filename, 'rb') as image_file:
+        content = image_file.read()
+
+    image = vision.types.Image(content=content)
+
+    response = client.text_detection(image=image)
+    texts = response.text_annotations
+    result = []
+    print('Calling From Google Vision')
+    for text in texts:
+        text = '\n"{}"'.format(text.description)
+        result.append(text)
+        # print('\n"{}"'.format(text.description))
+
+        # vertices = (['({},{})'.format(vertex.x, vertex.y)
+        #             for vertex in text.bounding_poly.vertices])
+
+        # print('bounds: {}'.format(','.join(vertices)))
+    return ' '.join(result)
