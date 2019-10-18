@@ -8,11 +8,14 @@ from io import BytesIO
 import sys
 import math
 from PIL import Image, ImageDraw, ImageFont
+from .models import Inventory
 # Create your views here.
 
 def home(request):
     my_dict = {'insert_me':"Hello I am from views.py"}
-    return render(request,'refrigerator_project/home.html', context=my_dict)
+    inventory_items = Inventory.objects.all()
+    return render(request,'refrigerator_project/home.html', context={'inventory_items':inventory_items})
+    
 
 
 def simple_upload(request):

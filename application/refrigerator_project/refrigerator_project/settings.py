@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'refrigerator_app'
 ]
 
 MIDDLEWARE = [
@@ -77,7 +78,7 @@ WSGI_APPLICATION = 'refrigerator_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'refrigerator_db',
+        'NAME': 'testdatabase',
         'USER': 'admin',
         'PASSWORD': 'password',
         'HOST': 'refrigerator-db.c4p7z07xl4sc.us-east-1.rds.amazonaws.com',
