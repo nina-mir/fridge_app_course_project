@@ -4,12 +4,12 @@
         <div>
             <form method = "post">
             {% csrf_token %}
-            Item name: <input type="text" name="itemname"><br>
+            Search by name, id, calories: <input type="text" name="itemname"><br>
             <input type="submit" value="Search" name = "search">
             </form>
             {% for each in sr %}
             <tr> 
-                <td>Item Name: {{ each.itemname }} | Id: {{ each.itemid }} | Perishable:{{ each.isperishable }}</td>
+                <td>Item Name:{{ each.itemname }} |  Id: {{ each.itemid }}  | Calories:{{ each.calories }}</td>
                 <br></br>
             </tr>
             {% endfor %}

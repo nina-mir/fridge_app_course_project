@@ -7,7 +7,7 @@
             <p>Items in Inventory: </p>
             {% for each in inventory_items %}
             <tr> 
-                <td>{{ each.itemname }} | {{ each.itemid }} | {{ each.isperishable }} | {{ each.calories }}</td>
+                <td>Item name:{{ each.itemname }} | Item Id: {{ each.itemid }} | Calories: {{ each.calories }}</td>
                 <br></br>
             </tr>
             {% endfor %}

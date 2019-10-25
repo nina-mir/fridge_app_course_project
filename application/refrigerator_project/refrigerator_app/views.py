@@ -84,7 +84,7 @@ def search(request):
     if(request.method == 'POST'):
         srch = request.POST['itemname']
         if srch:
-            match = Items.objects.filter(Q(itemname__icontains = srch))
+            match = Items.objects.filter(Q(itemname__icontains = srch) | Q(itemid__icontains = srch) | Q(calories__icontains = srch))
             if match:
                 return render(request,'refrigerator_project/search.html',{'sr':match})
     return render(request,'refrigerator_project/search.html')
