@@ -1,0 +1,19 @@
+<html>    
+    <body>
+        <p>Welcome To Search Section</p>
+        <div>
+            <form method = "post">
+            {% csrf_token %}
+            Item name: <input type="text" name="itemname"><br>
+            <input type="submit" value="Search" name = "search">
+            </form>
+            {% for each in sr %}
+            <tr> 
+                <td>Item Name: {{ each.itemname }} | Id: {{ each.itemid }} | Perishable:{{ each.isperishable }}</td>
+                <br></br>
+            </tr>
+            {% endfor %}
+            </form>
+        </div>
+    </body>
+</html>
