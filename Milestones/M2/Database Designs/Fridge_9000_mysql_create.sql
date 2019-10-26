@@ -72,3 +72,10 @@ ALTER TABLE `Recipes` ADD CONSTRAINT `Recipes_fk0` FOREIGN KEY (`FridgeId`) REFE
 
 ALTER TABLE `Recipes` ADD CONSTRAINT `Recipes_fk1` FOREIGN KEY (`UserId`) REFERENCES `Users`(`UserID`);
 
+
+insert into Items(ItemName, Age, isPerishable, Calories, creation_date, modified_date, eff_bgn_ts, eff_end_ts) values('Apple','00:06:00',1,NULL,NOW(),NOW(),NOW(), '9999-12-31');
+insert into Items(ItemName, Age, isPerishable, Calories, creation_date, modified_date, eff_bgn_ts, eff_end_ts) values('Banana','00:06:00',1,NULL,NOW(),NOW(),NOW(),'9999-12-31');
+insert into Items(ItemName, Age, isPerishable, Calories, creation_date, modified_date, eff_bgn_ts, eff_end_ts) values('Orange','00:06:00',1,NULL,NOW(),NOW(),NOW(),'9999-12-31');
+insert into Items(ItemName, Age, isPerishable, Calories, creation_date, modified_date, eff_bgn_ts, eff_end_ts) values('Pork','00:06:00',1,NULL,NOW(),NOW(),NOW(),'9999-12-31');
+insert into Items(ItemName, Age, isPerishable, Calories, creation_date, modified_date, eff_bgn_ts, eff_end_ts) values('Pineapple','00:06:00',1,NULL,NOW(),NOW(),NOW(),'9999-12-31');
+insert into Items(ItemName, Age, isPerishable, Calories, creation_date, modified_date, eff_bgn_ts, eff_end_ts) values('Cheese','00:06:00',1,NULL,NOW(),NOW(),NOW(),'9999-12-31');
