@@ -7,13 +7,14 @@ import io
 from io import BytesIO
 import sys
 import math
-#from PIL import Image, ImageDraw, ImageFont
+from .models import Items
+from django.db.models import Q
 # Create your views here.
 
 def home(request):
-    my_dict = {'insert_me':"Hello I am from views.py"}
-    return render(request,'refrigerator_project/home.html', context=my_dict)
-
+    inventory_items = Items.objects.all()
+    return render(request,'refrigerator_project/home.html', context={'inventory_items':inventory_items})
+    
 
 def simple_upload(request):
     context = {}
@@ -48,7 +49,7 @@ def process_text_analysis(filename):
     for block in blocks:
         text = DisplayBlockInformation(block)
         result.append(text)
-
+    
     return ' '.join(result)
 
 # Google Vision
@@ -77,3 +78,12 @@ def detect_text(filename):
 
         # print('bounds: {}'.format(','.join(vertices)))
     return ' '.join(result)
+
+def search(request):
+    if(request.method == 'POST'):
+        srch = request.POST['itemname']
+        if srch:
+            match = Items.objects.filter(Q(itemname__icontains = srch) | Q(itemid__icontains = srch) | Q(calories__icontains = srch))
+            if match:
+                return render(request,'refrigerator_project/search.html',{'sr':match})
+    return render(request,'refrigerator_project/search.html')
