@@ -1,4 +1,5 @@
-USE 'refrigerator_development'
+USE `refrigerator_development`;
+
 CREATE TABLE `Users` (
 	`UserID` INT NOT NULL AUTO_INCREMENT,
 	`Email` varchar(255) NOT NULL UNIQUE,

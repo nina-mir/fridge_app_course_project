@@ -9,6 +9,8 @@ services:
       MYSQL_DATABASE: 'refrigerator_development'
       MYSQL_PASSWORD: '12345678'
       MYSQL_ROOT_PASSWORD: '12345678'
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
