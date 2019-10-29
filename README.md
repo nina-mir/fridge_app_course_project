@@ -16,7 +16,6 @@
 [http://ec2-3-91-133-192.compute-1.amazonaws.com](http://ec2-3-91-133-192.compute-1.amazonaws.com)
 
 ## Branch Description 
--------------
 All branches other than Master, Dev_Main, and Documentation are dedicated to development of specific features of the application. Within those features are sub features that are also developed within the parent's feature's branch.
 
 1. Master
@@ -46,6 +45,7 @@ All branches other than Master, Dev_Main, and Documentation are dedicated to dev
 9. Documentation
     - This branch used for updating documentation of the application: ReadMe, Milestones, Etc.
     - No other commits will be done here except for documentation.
+    - Should always be a derivative of branch Master.
 
 
 
