@@ -18,7 +18,11 @@ from django.urls import path
 from django.conf.urls import include
 from refrigerator_app import views
 urlpatterns = [
-    path('',views.home, name='home'),
+    path('',views.home, name='home'), 
+    path('fridge/',views.fridge, name='fridge'), 
+    path('recipe/',views.recipe, name='recipe'), 
+    path('profile/',views.profile, name='profile'),  
     path('upload/',views.simple_upload, name='upload'),
     path('admin/', admin.site.urls),
+    path('search/',views.search, name='search'),
 ]
