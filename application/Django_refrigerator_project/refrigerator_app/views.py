@@ -14,7 +14,18 @@ from django.db.models import Q
 def home(request):
     inventory_items = Items.objects.all()
     return render(request,'refrigerator_project/home.html', context={'inventory_items':inventory_items})
-    
+
+def profile(request):
+    return render(request,'refrigerator_project/profile.html', context={})
+
+def fridge(request):
+    my_dict = {'insert_me':"Hello I am from views.py"}
+    return render(request,'refrigerator_project/fridge.html', context=my_dict)
+
+def recipe(request):
+    my_dict = {'insert_me':"Hello I am from views.py"}
+    return render(request,'refrigerator_project/recipe.html', context=my_dict)
+
 
 def simple_upload(request):
     context = {}
