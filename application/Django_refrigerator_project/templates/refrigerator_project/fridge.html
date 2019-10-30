@@ -9,8 +9,24 @@
 
 <a href="/upload">Upload Image</a>
 
-
-
+<div>
+    <p>Items in Inventory: </p>
+    {% for each in inventory_items %}
+    <tr> 
+        <td>Item name:{{ each.itemname }} | Item Id: {{ each.itemid }} | Calories: {{ each.calories }}
+            | 
+            {% load static %} 
+            {% with image_static=each.itemname|add:'.jpg'    %}                          
+                
+                <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;"> 
+            {% endwith %}
+            
+            
+        </td>
+        <br></br>
+    </tr>
+    {% endfor %}
+</div>
 
 
 {% endblock %}
