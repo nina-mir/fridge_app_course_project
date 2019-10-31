@@ -4,6 +4,10 @@
   flex-direction: row;
 }
 
+.navbar-toggler {
+  left: 5%;
+}
+
 /*.icon is for spacing in between icons */
 
 .icon {
