@@ -1,7 +1,7 @@
-{% extends 'refrigerator_project/fridge_base.html' %}
+{% extends 'refrigerator_project/base_login.html' %}
+{% load static %}
 {% block content %}
-    
-    <body>
+<!-- <body>
         <p>Welcome To Refrigerator App</p>
         <a href="/upload">Upload Image</a><br>
         <a href="/search">Search Item</a><br>
@@ -14,6 +14,27 @@
             </tr>
             {% endfor %}
         </div>
-    </body>
-{% endblock %}
+    </body> -->
 
+<div class="container-fluid">
+    <div class="row d-flex justify-content-center">
+        <img src="{% static "fridge_black.png" %}" alt="josh image" style="height: 300px; vertical-align: middle;">
+    </div>
+    <div class="row d-flex justify-content-center">
+        <h1 class="text-center">Welcome to the Fridge App 9000!</h1>
+    </div>
+    <div class="row d-flex justify-content-center">
+        <h3 class="text-center">Here you can manage your refrigerator.</h2>
+    </div>
+    <div class="row d-flex justify-content-center">
+        <div style="width: 70%;">
+            <a href="{% url 'login' %}" class="btn btn-primary btn-lg btn-block" role="button"
+                aria-pressed="true">Login</a>
+        </div>
+        <!-- <a href="{% url 'login' %}" class="btn btn-primary btn-lg btn-block" role="button" aria-pressed="true">Login</a> -->
+    </div>
+    <div class="row d-flex justify-content-center" style="padding-top: 5px;">
+        <a href="{% url 'register' %}" class="btn btn-secondary" role="button" aria-pressed="true">Sign Up</a>
+    </div>
+</div>
+{% endblock %}
