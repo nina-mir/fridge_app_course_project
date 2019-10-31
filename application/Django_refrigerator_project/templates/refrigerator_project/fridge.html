@@ -1,27 +1,25 @@
-{% extends 'refrigerator_project/fridge_base.html' %}
+{% extends 'refrigerator_project/base_fridge.html' %}
 {% block content %}
 
 <h1>Welcome To Refrigerator App</h1>
 <h2> fridge.html is here!!! </h2>
 
 {% load static %}
-<img src="{% static "fridge.svg" %}" alt="josh image" style="height: 30px;">    
+<img src="{% static "fridge.svg" %}" alt="josh image" style="height: 30px;">
 
 <a href="/upload">Upload Image</a>
 
 <div>
     <p>Items in Inventory: </p>
     {% for each in inventory_items %}
-    <tr> 
+    <tr>
         <td>Item name:{{ each.itemname }} | Item Id: {{ each.itemid }} | Calories: {{ each.calories }}
-            | 
-            {% load static %} 
-            {% with image_static=each.itemname|add:'.jpg'    %}                          
-                
-                <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;"> 
+            |
+            {% load static %}
+            {% with image_static=each.itemname|add:'.jpg'    %}
+
+            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
             {% endwith %}
-            
-            
         </td>
         <br></br>
     </tr>

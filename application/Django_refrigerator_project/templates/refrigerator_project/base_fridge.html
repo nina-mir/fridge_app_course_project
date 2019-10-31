@@ -37,7 +37,10 @@
             document.getElementById("mySidenav").style.width = "0";
         }
     </script>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+</head>
+
+<body>
+    <nav class="navbar fixed-top justify-content-center navbar-dark bg-dark">
         <div class="container" style="height: 35px;">
             <button onclick="openNav()" class="navbar-toggler" type="button">
                 <span class="navbar-toggler-icon"></span>
@@ -55,10 +58,8 @@
         <a href="#">Rename Fridge</a>
         <a href="#">Delete Fridge</a>
     </div>
-    <nav class="navbar fixed-bottom justify-content-center navbar-expand-lg navbar-dark bg-dark">
-
+    <nav class="navbar fixed-bottom justify-content-center navbar-dark bg-dark">
         <ul class="navbar-nav" style="height: 35px;">
-
             <li class="nav-item">
                 <!-- <img href="{% url 'fridge' %}" src="{% static "fridge.png" %}" alt="josh image" style="height: 30px; vertical-align: middle;"> -->
                 <a class="nav-link" href="{% url 'fridge' %}"><i class="fas fa-home fa-lg"></i></a>
@@ -82,11 +83,9 @@
             </li>
         </ul>
     </nav>
-</head>
-
-<body>
     {% block content %}
     {% endblock %}
+
     <script src="" async defer></script>
 </body>
 
