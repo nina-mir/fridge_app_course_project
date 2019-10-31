@@ -24,7 +24,7 @@
         crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/5316448d7f.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="{% static "base.css" %}">
+    <link rel="stylesheet" href="{% static 'base.css' %}">
 
     <script>
         /* Set the width of the side navigation to 250px */
@@ -43,7 +43,7 @@
     <nav class="navbar fixed-top justify-content-center navbar-dark bg-dark">
         <div class="container" style="height: 35px;">
             <a class="navbar-brand" href="{% url 'fridge' %}">
-                <img src="{% static "logo_gray.png" %}" height="30" alt="">
+                <img src="{% static 'logo_gray.png' %}" height="30" alt="">
             </a>
         </div>
     </nav>
@@ -51,7 +51,9 @@
         <ul class="navbar-nav" style="height: 35px;">
 
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'fridge' %}"><i class="fas fa-home fa-lg"></i></a>
+                <img href="{% url 'fridge' %}" src="{% static 'fridge_gray.png' %}" alt="josh image"
+                    style="height: 30px; padding-top: 50%;">
+                <!-- <a class="nav-link" href="{% url 'fridge' %}"><i class="fas fa-home fa-lg"></i></a> -->
             </li>
 
             <li class="nav-item">
