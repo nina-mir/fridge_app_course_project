@@ -40,12 +40,12 @@ class AuthPermission(models.Model):
 class AuthUser(models.Model):
     password = models.CharField(max_length=128)
     last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.BooleanField()
+    is_superuser = models.IntegerField()
     username = models.CharField(unique=True, max_length=150)
     first_name = models.CharField(max_length=30)
     email = models.CharField(max_length=254)
-    is_staff = models.BooleanField()
-    is_active = models.BooleanField()
+    is_staff = models.IntegerField()
+    is_active = models.IntegerField()
     date_joined = models.DateTimeField()
     last_name = models.CharField(max_length=150)
 
@@ -155,7 +155,7 @@ class FridgeContents(models.Model):
 class Items(models.Model):
     itemid = models.AutoField(db_column='ItemID', primary_key=True)  # Field name made lowercase.
     itemname = models.CharField(db_column='ItemName', max_length=255)  # Field name made lowercase.
-    age = models.TimeField(db_column='Age')  # Field name made lowercase.
+    age = models.DateTimeField(db_column='Age')  # Field name made lowercase.
     isperishable = models.IntegerField(db_column='isPerishable')  # Field name made lowercase.
     calories = models.IntegerField(db_column='Calories', blank=True, null=True)  # Field name made lowercase.
     creation_date = models.DateTimeField()
@@ -182,11 +182,8 @@ class Recipes(models.Model):
 
 
 class Users(models.Model):
-    userid = models.AutoField(db_column='UserID', primary_key=True)  # Field name made lowercase.
-    email = models.CharField(db_column='Email', unique=True, max_length=255)  # Field name made lowercase.
+    userid = models.ForeignKey('AuthUser', models.DO_NOTHING, db_column='UserID')  # Field name made lowercase.
     username = models.CharField(db_column='Username', unique=True, max_length=255)  # Field name made lowercase.
-    password = models.CharField(db_column='Password', max_length=255)  # Field name made lowercase.
-    name = models.CharField(db_column='Name', max_length=255)  # Field name made lowercase.
     ownedfridges = models.TextField(db_column='OwnedFridges', blank=True, null=True)  # Field name made lowercase.
     friendedfridges = models.TextField(db_column='FriendedFridges', blank=True, null=True)  # Field name made lowercase.
     personalnotes = models.TextField(db_column='PersonalNotes', blank=True, null=True)  # Field name made lowercase.
@@ -196,5 +193,3 @@ class Users(models.Model):
     class Meta:
         managed = False
         db_table = 'Users'
-        unique_together = (('userid', 'email'),)
-

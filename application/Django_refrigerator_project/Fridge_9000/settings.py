@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'Fridge_9000.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'temp_database',
+        'NAME': 'ref_updated_10_31',
         'USER': 'admin',
         'PASSWORD': 'password',
         'HOST': 'refrigerator-db.c4p7z07xl4sc.us-east-1.rds.amazonaws.com',
