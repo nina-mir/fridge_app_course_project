@@ -17,31 +17,8 @@
 <div>
     <p>Items in Inventory: </p>
     {% for each in inventory_items %}
-<<<<<<< HEAD
-    <tr> 
-        <td>
-            
-            <!--Item name:{{ each.itemname }} | Item Id: {{ each.itemid }} | Calories: {{ each.calories }}
-            | 
-            <!--{% load static %} 
-            {% with image_static=each.itemname|add:'.jpg'    %}                          
-                
-                <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;"> 
-            {% endwith %}
-            -->
-            
-        </td> 
-=======
     <tr>
-        <td>Item name:{{ each.itemname }} | Item Id: {{ each.itemid }} | Calories: {{ each.calories }}
-            |
-            {% load static %}
-            {% with image_static=each.itemname|add:'.jpg'    %}
-
-            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-            {% endwith %}
-        </td>
->>>>>>> 06f89b33ad170ffff04bd96d25c7cc638ca106db
+        
         <div id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="card">
                     <h5 class="card-header">
