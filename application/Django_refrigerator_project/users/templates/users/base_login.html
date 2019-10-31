@@ -26,19 +26,6 @@
 
     <link rel="stylesheet" href="{% static "base.css" %}">
 
-    <script>
-        /* Set the width of the side navigation to 250px */
-        function openNav() {
-            document.getElementById("mySidenav").style.width = "250px";
-        }
-
-        /* Set the width of the side navigation to 0 */
-        function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-    </script>
-</head>
-
 <body>
     <nav class="navbar fixed-top justify-content-center navbar-dark bg-dark">
         <div class="container" style="height: 35px;">
@@ -47,33 +34,28 @@
             </a>
         </div>
     </nav>
-    <nav class="navbar fixed-bottom justify-content-center navbar-dark bg-dark">
-        <ul class="navbar-nav" style="height: 35px;">
 
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'fridge' %}"><i class="fas fa-home fa-lg"></i></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link icon" href="#"><i class="fas fa-shopping-cart fa-lg"></i></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link icon" style="margin-top: -5px;" href="{% url 'upload' %}"><i
-                        class="far fa-plus-square fa-2x"></i></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link icon" href="{% url 'recipe' %}"><i class="fas fa-scroll fa-lg"></i></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link icon" href="{% url 'profile' %}"></i><i class="fas fa-user fa-lg"></i></a>
-            </li>
-        </ul>
-    </nav>
-    {% block content %}
-    {% endblock %}
+    <div class="container">
+        <span>Fridge Testing</span>
+        {% if user.is_authenticated %}
+        <!-- If the user is authenticated, show the logout -->
+        <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <!-- for displaying messages like success -->
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
     <script src="" async defer></script>
 </body>
 

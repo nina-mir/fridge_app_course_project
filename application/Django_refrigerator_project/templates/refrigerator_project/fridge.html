@@ -1,4 +1,4 @@
- {% extends 'refrigerator_project/fridge_base.html' %}
+{% extends 'refrigerator_project/base_fridge.html' %}
 {% block content %}
 
 {% load static %}
@@ -10,13 +10,14 @@
 <h2> fridge.html is here!!! </h2>
 
 {% load static %}
-<img src="{% static "fridge.svg" %}" alt="josh image" style="height: 30px;">    
+<img src="{% static "fridge.svg" %}" alt="josh image" style="height: 30px;">
 
 <a href="/upload">Upload Image</a>
 
 <div>
     <p>Items in Inventory: </p>
     {% for each in inventory_items %}
+<<<<<<< HEAD
     <tr> 
         <td>
             
@@ -30,6 +31,17 @@
             -->
             
         </td> 
+=======
+    <tr>
+        <td>Item name:{{ each.itemname }} | Item Id: {{ each.itemid }} | Calories: {{ each.calories }}
+            |
+            {% load static %}
+            {% with image_static=each.itemname|add:'.jpg'    %}
+
+            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+            {% endwith %}
+        </td>
+>>>>>>> 06f89b33ad170ffff04bd96d25c7cc638ca106db
         <div id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="card">
                     <h5 class="card-header">

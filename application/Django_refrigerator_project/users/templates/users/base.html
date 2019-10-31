@@ -18,7 +18,7 @@
 </head>
 <body>
     <header class="container">
-        <a class="home" href="{% url 'home' %}">Home</a>
+        
         <span>Fridge Testing</span>
         {% if user.is_authenticated %}   <!-- If the user is authenticated, show the logout -->
             <a href="{% url 'logout' %}">Logout</a>
