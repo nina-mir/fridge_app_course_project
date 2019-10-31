@@ -28,3 +28,9 @@
           align-items: center;
           justify-content: center
         }
+        /*text box centered*/
+        .textarea {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+      }

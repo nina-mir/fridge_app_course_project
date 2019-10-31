@@ -15,6 +15,11 @@ def home(request):
     inventory_items = Items.objects.all()
     return render(request,'refrigerator_project/home.html', context={'inventory_items':inventory_items})
 
+def delete_item(request):
+    inventory_items = Items.objects.all()
+    return render(request,'refrigerator_project/home.html', context={'inventory_items':inventory_items})
+
+
 def profile(request):
     return render(request,'refrigerator_project/profile.html', context={})
 
