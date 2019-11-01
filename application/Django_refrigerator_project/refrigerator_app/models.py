@@ -155,7 +155,7 @@ class FridgeContents(models.Model):
 class Items(models.Model):
     itemid = models.AutoField(db_column='ItemID', primary_key=True)  # Field name made lowercase.
     itemname = models.CharField(db_column='ItemName', max_length=255)  # Field name made lowercase.
-    age = models.DateTimeField(db_column='Age')  # Field name made lowercase.
+    age = models.BigIntegerField(db_column='Age')  # Field name made lowercase.
     isperishable = models.IntegerField(db_column='isPerishable')  # Field name made lowercase.
     calories = models.IntegerField(db_column='Calories', blank=True, null=True)  # Field name made lowercase.
     creation_date = models.DateTimeField()
