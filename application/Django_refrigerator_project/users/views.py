@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required  #for using @login_req
 from .forms import UserRegisterForm     #our created form
 from .models import Users
 import datetime
-from refrigerator_app.models import Users
+
 def register(request):
     
     if request.method == 'POST':

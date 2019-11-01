@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'refrigerator_app',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     '/Django_refrigerator_project/static',
 )
+
+LOGIN_REDIRECT_URL = 'home'   #need this to redirect to home from login
+LOGIN_URL = 'login'         #need this for login
