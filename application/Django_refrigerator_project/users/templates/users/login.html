@@ -1,6 +1,6 @@
 {% extends "refrigerator_project/base_login.html" %}
 {% block content %}
-<div>
+<div class="container main">
     <form method="POST">
         {% csrf_token %}
         <fieldset class="form-group">
@@ -9,7 +9,8 @@
             <!-- This is referring to a form in the forms.py I made in the in the users directory -->
         </fieldset>
         <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">Login</button>
+            <input type="submit" value="Login" />
+            <!--<button class="btn btn-outline-info" type="submit">Login</button> -->
         </div>
     </form>
     <div class="border-top pt-3">
