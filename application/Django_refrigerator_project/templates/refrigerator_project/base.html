@@ -45,6 +45,11 @@
             <a class="navbar-brand" href="{% url 'fridge' %}">
                 <img src="{% static 'logo_gray.png' %}" height="30" alt="">
             </a>
+            <div style="position: absolute; right:3px;">
+                {% if request.path == "/profile/" %}
+                    <a  class="btn btn-primary" href="{% url 'logout' %}">logout</a>
+                {% endif %}
+            </div>    
         </div>
     </nav>
     <nav class="navbar fixed-bottom justify-content-center navbar-dark bg-dark">
