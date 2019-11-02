@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'refrigerator_app',
-    'users.apps.UsersConfig',  #add the users app
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
