@@ -55,7 +55,7 @@ def simple_upload(request):
         print(filename)
         text = detect_text(filename)
         context['text'] = text
-    return render(request, 'refrigerator_project/index.html', context)
+    return render(request, 'refrigerator_project/receipt_upload.html', context)
 
 # AWS TextTract
 def DisplayBlockInformation(block):
