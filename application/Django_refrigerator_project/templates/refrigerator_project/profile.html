@@ -1,18 +1,17 @@
 {% extends 'refrigerator_project/base.html' %}
 {% block content %}
 
+<a type="button" class="btn btn-success" href="{% url 'logout' %}">logout</a>
 
 
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'fridge_card.css' %}">
 
-
-
-
 <h1> welcome to my profiel page </h1> 
-<h1>NAME </h1>
-<h2> email </h2>
 
+<h1>NAME : {{ user.username }}</h1>   
+
+<h2> email </h2>
 <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
             <h5 class="card-header">
