@@ -133,5 +133,5 @@ STATICFILES_DIRS = (
 )
 
 
-LOGIN_REDIRECT_URL = 'home'   #need this to redirect to home from login
+LOGIN_REDIRECT_URL = 'fridge'   #need this to redirect to home from login
 LOGIN_URL = 'login'         #need this for login

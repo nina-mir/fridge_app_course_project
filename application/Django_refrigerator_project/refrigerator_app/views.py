@@ -15,12 +15,18 @@ def home(request):
     inventory_items = Items.objects.all()
     return render(request,'refrigerator_project/home.html', context={'inventory_items':inventory_items})
 
+def delete_item(request):
+    inventory_items = Items.objects.all()
+    return render(request,'refrigerator_project/home.html', context={'inventory_items':inventory_items})
+
+
 def profile(request):
     return render(request,'refrigerator_project/profile.html', context={})
 
 def fridge(request):
+    inventory_items = Items.objects.all()
     my_dict = {'insert_me':"Hello I am from views.py"}
-    return render(request,'refrigerator_project/fridge.html', context=my_dict)
+    return render(request,'refrigerator_project/fridge.html', context={'inventory_items':inventory_items})
 
 def recipe(request):
     my_dict = {'insert_me':"Hello I am from views.py"}

@@ -1,0 +1,36 @@
+        /*.card-header and .fa for drop down ability*/
+        .card-header .fa {
+          transition: .3s transform ease-in-out;
+        }
+        /*ability for arrow to rotate*/
+        .card-header .collapsed .fa {
+            transform: rotate(-90deg);
+        }
+        /*card resizing*/
+        .card{
+          margin-left: 15px;
+          margin-right: 15px;
+          margin-top: 10px;
+        }
+        /*.column and .row are for inside the dropdown card*/
+        .column{
+          float: left;
+          width: 50%;
+        }
+        .row:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+        /*trash icon to be centered*/
+        .trash-center{
+          display: flex;
+          align-items: center;
+          justify-content: center
+        }
+        /*text box centered*/
+        .textarea {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+      }
