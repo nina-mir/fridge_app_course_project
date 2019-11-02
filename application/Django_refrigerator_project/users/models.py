@@ -123,7 +123,7 @@ class Fridge(models.Model):
     fridgeid = models.AutoField(db_column='FridgeID', primary_key=True)  # Field name made lowercase.
     fridgename = models.CharField(db_column='FridgeName', max_length=255)  # Field name made lowercase.
     owner = models.ForeignKey('Users', models.DO_NOTHING, db_column='Owner')  # Field name made lowercase.
-    friends = models.TextField(db_column='Friends')  # Field name made lowercase.
+    friends = models.TextField(db_column='Friends', null=True)  # Field name made lowercase.
     auto_gen_grocery_list = models.TextField(db_column='Auto_gen_grocery_list', blank=True, null=True)  # Field name made lowercase.
     manually_added_list = models.TextField(db_column='Manually_added_list', blank=True, null=True)  # Field name made lowercase.
     creation_date = models.DateTimeField()
