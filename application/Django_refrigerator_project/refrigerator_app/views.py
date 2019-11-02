@@ -11,14 +11,27 @@ from .models import Items
 from django.db.models import Q
 # Create your views here.
 
+
 def home(request):
     inventory_items = Items.objects.all()
-    return render(request,'refrigerator_project/home.html', context={'inventory_items':inventory_items})
+    return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
+
 
 def delete_item(request):
     inventory_items = Items.objects.all()
-    return render(request,'refrigerator_project/home.html', context={'inventory_items':inventory_items})
+    return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
 
+
+def groceries(request):
+    # return render(request, 'refrigerator_project/groceries.html')
+    if(request.method == 'POST'):
+        srch = request.POST['itemname']
+        if srch:
+            match = Items.objects.filter(Q(itemname__icontains=srch) | Q(
+                itemid__icontains=srch) | Q(calories__icontains=srch))
+            if match:
+                return render(request, 'refrigerator_project/groceries.html', {'sr': match})
+    return render(request,'refrigerator_project/groceries.html')
 
 def profile(request):
     return render(request,'refrigerator_project/profile.html', context={})
