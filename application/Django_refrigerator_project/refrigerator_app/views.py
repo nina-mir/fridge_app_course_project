@@ -2,26 +2,29 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.decorators import login_required  #for using @login_required decorator on top of a function
 import boto3
 import io
 from io import BytesIO
 import sys
 import math
 from .models import Items
+from .models import Users
+from .models import AuthUser
 from django.db.models import Q
 # Create your views here.
 
-
+@login_required
 def home(request):
     inventory_items = Items.objects.all()
     return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
 
-
+@login_required
 def delete_item(request):
     inventory_items = Items.objects.all()
     return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
 
-
+@login_required
 def groceries(request):
     # return render(request, 'refrigerator_project/groceries.html')
     if(request.method == 'POST'):
@@ -33,19 +36,23 @@ def groceries(request):
                 return render(request, 'refrigerator_project/groceries.html', {'sr': match})
     return render(request,'refrigerator_project/groceries.html')
 
+@login_required
 def profile(request):
-    return render(request,'refrigerator_project/profile.html', context={})
+    user_info = Users.objects.all()
+    return render(request,'refrigerator_project/profile.html', context={'user_info' : user_info })
 
+@login_required
 def fridge(request):
     inventory_items = Items.objects.all()
     my_dict = {'insert_me':"Hello I am from views.py"}
     return render(request,'refrigerator_project/fridge.html', context={'inventory_items':inventory_items})
 
+@login_required
 def recipe(request):
     my_dict = {'insert_me':"Hello I am from views.py"}
     return render(request,'refrigerator_project/recipe.html', context=my_dict)
 
-
+@login_required
 def simple_upload(request):
     context = {}
     if request.method == 'POST' and request.FILES['image']:
@@ -83,6 +90,7 @@ def process_text_analysis(filename):
     return ' '.join(result)
 
 # Google Vision
+@login_required
 def detect_text(filename):
     """Detects text in the file."""
     from google.cloud import vision
@@ -109,6 +117,7 @@ def detect_text(filename):
         # print('bounds: {}'.format(','.join(vertices)))
     return ' '.join(result)
 
+@login_required
 def search(request):
     if(request.method == 'POST'):
         srch = request.POST['itemname']
