@@ -25,6 +25,7 @@ urlpatterns = [
     # path('',views.home, name='home'), 
     path('', views.home, name='home'),
     path('fridge/',views.fridge, name='fridge'), 
+    path('groceries/', views.groceries, name='groceries'),
     path('recipe/',views.recipe, name='recipe'), 
     path('profile/',views.profile, name='profile'),  
     path('upload/',views.simple_upload, name='upload'),
