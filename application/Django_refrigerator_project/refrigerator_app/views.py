@@ -14,7 +14,7 @@ from .models import AuthUser
 from django.db.models import Q
 # Create your views here.
 
-@login_required
+
 def home(request):
     inventory_items = Items.objects.all()
     return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
