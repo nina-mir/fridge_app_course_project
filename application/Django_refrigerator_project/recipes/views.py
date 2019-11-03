@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
+from django.contrib.auth.decorators import login_required  #for using @login_required decorator on top of a function
 
 # Create your views here.
 
+@login_required
 def recipe_landing(request):
     return render(request, 'recipes/recipe_landing.html')
 
+@login_required
 def recipe_search(request):
     return render(request, 'recipes/recipe_search.html')
