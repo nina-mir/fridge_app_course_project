@@ -11,6 +11,7 @@ import math
 from .models import Items
 from .models import Users
 from .models import AuthUser
+from .models import Fridge
 from django.db.models import Q
 # Create your views here.
 
@@ -26,7 +27,8 @@ def delete_item(request):
 
 @login_required
 def groceries(request):
-    # return render(request, 'refrigerator_project/groceries.html')
+    fridge_data = Fridge
+    inventory_items = Items.objects.all()
     if(request.method == 'POST'):
         srch = request.POST['itemname']
         if srch:
@@ -34,7 +36,7 @@ def groceries(request):
                 itemid__icontains=srch) | Q(calories__icontains=srch))
             if match:
                 return render(request, 'refrigerator_project/groceries.html', {'sr': match})
-    return render(request,'refrigerator_project/groceries.html')
+    return render(request,'refrigerator_project/groceries.html', context={'inventory_items':inventory_items})
 
 @login_required
 def profile(request):

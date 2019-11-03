@@ -1,5 +1,19 @@
 {% extends 'refrigerator_project/base.html' %}
 {% block content %}
+{% load static %}
+
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+        margin-top: 60px;
+        margin-bottom: 60px;
+    }
+
+    .modal-body {
+        max-height: calc(100vh - 260px);
+        overflow-y: auto;
+    }
+</style>
 
 <div class="container-fluid">
     <div class="row d-flex justify-content-center">
@@ -13,6 +27,25 @@
     <div class="row">
         <div class="col">
             <h4>Missing These Items:</h4>
+            <!-- Missing Items For Loop -->
+            {% if missing_items %}
+            {% for each in missing_items %}
+            <div class="card">
+                <h5 class="card-header">
+                    <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
+                        aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                        {{ each.itemname }}
+                        {% with image_static=each.itemname|add:'.jpg' %}
+                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                        {% endwith %}
+                    </a>
+                </h5>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>none</p>
+            {% endif %}
+
         </div>
     </div>
     <div class="row">
@@ -29,28 +62,34 @@
             </div>
         </div>
     </div>
-    <!-- <div class="row d-flex justify-content-center">
+    <div class="row">
         <div class="col">
-            <form method="post">
-                {% csrf_token %}
-                Search by name, id, calories: <input type="text" name="itemname"><br>
-                <input type="submit" value="Search" name="search">
-            </form>
-            {% for each in sr %}
-            <tr>
-                <td>Item Name: {{ each.itemname }} | Id: {{ each.itemid }} | Calories:{{ each.calories }}</td>
-                <br></br>
-            </tr>
-            {% endfor %}
-            </form>
+        <!-- Manual Items For Loop -->
+        {% if manual_items %}
+        {% for each in manual_items %}
+        <div class="card">
+            <h5 class="card-header">
+                <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
+                    aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                    {{ each.itemname }}
+                    {% with image_static=each.itemname|add:'.jpg' %}
+                    <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                    {% endwith %}
+                </a>
+            </h5>
         </div>
-    </div> -->  
+        {% endfor %}
+        {% else %}
+        <p>none</p>
+        {% endif %}
+        </div>
+    </div>
 </div>
 
 <!-- Show Modal if Search has been initiated -->
 {% if sr %}
 <script type="text/javascript">
-    $(window).on('load',function(){
+    $(window).on('load', function () {
         $('#addItem').modal('show');
     });
 </script>
@@ -69,18 +108,61 @@
             </div>
             <!--Body-->
             <div class="modal-body">
-                <form method="post">
-                    {% csrf_token %}
-                    Search by Name, ID, or Calories: <input type="text" name="itemname"><br>
-                    <input type="submit" value="Search" name="search">
-                </form>
-                {% for each in sr %}
-                <tr>
-                    <td>Item Name: {{ each.itemname }} | Id: {{ each.itemid }} | Calories:{{ each.calories }}</td>
-                    <br></br>
-                </tr>
-                {% endfor %}
-                </form>
+                <!-- Search For Items -->
+                <div class="container">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col">
+                                Search by Name, ID, or Calories: <input type="text" name="itemname" size="35"><br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <input type="submit" value="Search" name="search">
+                            </div>
+                        </div>
+
+                    </form>
+                    <hr size="3" width="100%" color="gray">
+                    <!-- Display Search Results if Applicable -->
+                    {% if sr %}
+                    <h6>Found Items:</h6>
+                    {% endif %}
+                    {% for each in sr %}
+                    <div class="card">
+                        <h5 class="card-header">
+                            <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
+                                aria-expanded="true" aria-controls="collapse-example" id="heading"
+                                class="collapsed d-block">
+                                {{ each.itemname }}
+                                {% with image_static=each.itemname|add:'.jpg' %}
+                                <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                                {% endwith %}
+                            </a>
+                        </h5>
+                    </div>
+                    {% endfor %}
+                    </form>
+                </div>
+                <!-- View List of Items -->
+                <div class="container">
+                    {% for each in inventory_items %}
+                    <div class="card">
+                        <h5 class="card-header">
+                            <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
+                                aria-expanded="true" aria-controls="collapse-example" id="heading"
+                                class="collapsed d-block">
+                                {{ each.itemname }}
+                                {% with image_static=each.itemname|add:'.jpg' %}
+                                <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                                {% endwith %}
+                            </a>
+                        </h5>
+                    </div>
+                    {% endfor %}
+                </div>
+
             </div>
             <!-- Footer -->
             <div class="modal-footer">
@@ -90,21 +172,5 @@
         </div>
     </div>
 </div>
-
-
-<!-- <div>
-    <form method="post">
-        {% csrf_token %}
-        Search by name, id, calories: <input type="text" name="itemname"><br>
-        <input type="submit" value="Search" name="search">
-    </form>
-    {% for each in sr %}
-    <tr>
-        <td>Item Name: {{ each.itemname }} | Id: {{ each.itemid }} | Calories:{{ each.calories }}</td>
-        <br></br>
-    </tr>
-    {% endfor %}
-    </form>
-</div> -->
 
 {% endblock %}
