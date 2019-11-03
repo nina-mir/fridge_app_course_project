@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Fridge App 9000</title>
+    <meta name="description" content="An application for all your fridge needs.">
+    <meta name="viewport" content="width=device-width initial-scale=1">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/5316448d7f.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{% static 'base.css' %}">
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+
+<body>
+    <nav class="navbar fixed-top justify-content-center navbar-dark bg-dark">
+        <div class="container" style="height: 35px;">
+            <a class="navbar-brand" href="{% url 'fridge' %}">
+                <img src="{% static 'logo_gray.png' %}" height="30" alt="">
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <span>Fridge Testing</span>
+        {% if user.is_authenticated %}
+        <!-- If the user is authenticated, show the logout -->
+        <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <!-- for displaying messages like success -->
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
+    <script src="" async defer></script>
+</body>
+
+</html>

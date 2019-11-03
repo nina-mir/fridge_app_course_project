@@ -1,0 +1,77 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+input {
+    display: block;
+    padding: 6px 10px;
+    border-radius: 3px;
+}
+
+input[type=text], input[type=password], input[type=email] {
+    width: 100%;
+    margin-bottom: 0px;
+    border: 1px solid rgb(167, 167, 167);
+}
+
+input[type=submit] {
+    width: 100%;
+    cursor: pointer;
+    color: white;
+    background-color: rgba(30, 130, 250, 1);
+    border: none;
+    padding: 12px 20px;
+}
+
+input[type=submit]:hover {
+    background-color: rgb(23, 117, 199);
+}
+
+label {
+    display: inline;
+}
+
+form {
+    display: block;
+}
+
+legend {
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 32px;
+}
+
+.main {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 50px;
+    background-color: rgb(248, 248, 248);
+    padding: 20px 30px;
+    box-shadow: -2px -2px 2px rgb(139, 139, 139), 2px 2px 2px rgb(139, 139, 139);
+    border: 2px solid rgb(230, 230, 230);
+    border-radius: 5px;
+}
+
+.helptext, ul, li {
+    color: rgb(102, 102, 102);
+    font-size: 12px;
+}
+
+.errorlist li {
+    color: red;
+    font-size: 12px;
+}
+
+.main input {
+    margin-bottom: 25px;
+}
+
+@media only screen and (max-width: 600px) {
+    .main {
+      width: 100%;
+    }
+  }
+  

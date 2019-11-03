@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <style>
+        .card-header .fa {
+          transition: .3s transform ease-in-out;
+        }
+        .card-header .collapsed .fa {
+            transform: rotate(-90deg);
+        }
+        .card{
+          margin-left: 15px;
+          margin-right: 15px;
+          margin-top: 10px;
+        }
+        .column{
+          float: left;
+          width: 50%;
+        }
+        .row:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+        .trash-center{
+          display: flex;
+          align-items: center;
+          justify-content: center
+        }
+        .textarea {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+      
+        </style>
+    </head>
+    <body>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/5316448d7f.js" crossorigin="anonymous"></script>
+
+
+    <div id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="card">
+            <h5 class="card-header">
+                <a data-toggle="collapse" href="#owned" data-parent="#accordion" aria-expanded="true" aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                        Ownded Fridges
+                  <i class="fa fa-chevron-left pull-right float-right"></i>
+                </a>
+            </h5>
+            <div id="owned" class="collapse" aria-labelledby="heading-example">
+              <div class="row">
+                    <div class="column trash-center">
+                        <ul style="list-style-type:none; padding-top: 10px;">
+                          <li>Calories:  {{ each.calories }} </li>
+                          <li>Added on: </li>
+                          <li>Expiration: </li>
+                          <li>Added By: {{ each.addedby }} </li>
+                        </ul>
+                    </div>
+                    <div class="column trash-center ">
+                      <ul>
+                        <a class="nav-link" href="#"><i class="far fa-trash-alt fa-lg"></i></a>
+                      </ul>
+                    </div>
+               </div> 
+           </div>
+      </div>
+
+      <div class="card">
+          <h5 class="card-header">
+            <a data-toggle="collapse" href="#friended" data-parent="#accordion" aria-expanded="true" aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                    Friended Fridges
+              <i class="fa fa-chevron-left pull-right float-right"></i>
+            </a>
+            </h5>
+            <div id="friended" class="collapse" aria-labelledby="heading-example">
+            <div class="row">
+                    <div class="column trash-center">
+                        <ul style="list-style-type:none; padding-top: 10px;">
+                        <li>Calories:  {{ each.calories }} </li>
+                        <li>Added on: </li>
+                        <li>Expiration: </li>
+                        <li>Added By: {{ each.addedby }} </li>
+                        </ul>
+                    </div>
+                        <div class="column trash-center ">
+                    <ul>
+                        <a class="nav-link" href="#"><i class="far fa-trash-alt fa-lg"></i></a>
+                      </ul>
+                    </div>
+               </div> 
+           </div>
+     </div>
+
+     <div class="card">
+       <h5 class="card-header">
+            <a data-toggle="collapse" href="#notePad" data-parent="#accordion" aria-expanded="true" aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                   Personal Notes
+              <i class="fa fa-chevron-left pull-right float-right"></i>
+            </a>
+        </h5>
+        <div id="notePad" class="collapse" aria-labelledby="heading-example">
+                <textarea placeholder="Personal Notes" id = "myTextArea" rows = "5" cols = "44" class="textarea"></textarea>
+       </div>
+       </div>
+
+
+</div>
+        
+        <script src="" async defer></script>
+    </body>
+</html>

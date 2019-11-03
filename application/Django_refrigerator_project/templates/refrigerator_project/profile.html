@@ -1,0 +1,85 @@
+{% extends 'refrigerator_project/base.html' %}
+{% block content %}
+
+<a type="button" class="btn btn-success" href="{% url 'logout' %}">logout</a>
+
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'fridge_card.css' %}">
+
+<h1> welcome to my profiel page </h1> 
+
+<h1>NAME : {{ user.username }}</h1>   
+
+<h2> email </h2>
+<div id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="card">
+            <h5 class="card-header">
+                <a data-toggle="collapse" href="#owned" data-parent="#accordion" aria-expanded="true" aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                        Ownded Fridges
+                  <i class="fa fa-chevron-left pull-right float-right"></i>
+                </a>
+            </h5>
+            <div id="owned" class="collapse" aria-labelledby="heading-example">
+              <div class="row">
+                    <div class="column trash-center">
+                        <ul style="list-style-type:none; padding-top: 10px;">
+                          <li>Calories:  {{ each.calories }} </li>
+                          <li>Added on: </li>
+                          <li>Expiration: </li>
+                          <li>Added By: {{ each.addedby }} </li>
+                        </ul>
+                    </div>
+                    <div class="column trash-center ">
+                      <ul>
+                        <a class="nav-link" href="#"><i class="far fa-trash-alt fa-lg"></i></a>
+                      </ul>
+                    </div>
+               </div> 
+           </div>
+      </div>
+
+      <div class="card">
+          <h5 class="card-header">
+            <a data-toggle="collapse" href="#friended" data-parent="#accordion" aria-expanded="true" aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                    Friended Fridges
+              <i class="fa fa-chevron-left pull-right float-right"></i>
+            </a>
+            </h5>
+            <div id="friended" class="collapse" aria-labelledby="heading-example">
+            <div class="row">
+                    <div class="column trash-center">
+                        <ul style="list-style-type:none; padding-top: 10px;">
+                        <li>Calories:  {{ each.calories }} </li>
+                        <li>Added on: </li>
+                        <li>Expiration: </li>
+                        <li>Added By: {{ each.addedby }} </li>
+                        </ul>
+                    </div>
+                        <div class="column trash-center ">
+                    <ul>
+                        <a class="nav-link" href="#"><i class="far fa-trash-alt fa-lg"></i></a>
+                      </ul>
+                    </div>
+               </div> 
+           </div>
+     </div>
+
+     <div class="card">
+       <h5 class="card-header">
+            <a data-toggle="collapse" href="#notePad" data-parent="#accordion" aria-expanded="true" aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                   NotePad
+              <i class="fa fa-chevron-left pull-right float-right"></i>
+            </a>
+        </h5>
+          <div id="notePad" class="collapse" aria-labelledby="heading-example">
+              <textarea placeholder="Personal Notes" id = "myTextArea" rows = "5" cols = "44" class="textarea"></textarea>
+        </div>
+     </div>
+
+
+</div>
+
+
+{% endblock %}
+

@@ -2,21 +2,63 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.decorators import login_required  #for using @login_required decorator on top of a function
 import boto3
 import io
 from io import BytesIO
 import sys
 import math
-from PIL import Image, ImageDraw, ImageFont
-from .models import Items
+from .models import Item
+from users.models import User
+from users.models import AuthUser
 from django.db.models import Q
 # Create your views here.
 
+@login_required
 def home(request):
-    inventory_items = Items.objects.all()
-    return render(request,'refrigerator_project/home.html', context={'inventory_items':inventory_items})
-    
+    inventory_items = Item.objects.all()
+    current_user = request.user
+    print(current_user.username)
+    print('----------------')
+    temp = User.objects.filter(username = current_user.username)
+    print(temp)
 
+    return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
+
+@login_required
+def delete_item(request):
+    inventory_items = Item.objects.all()
+    return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
+
+@login_required
+def groceries(request):
+    # return render(request, 'refrigerator_project/groceries.html')
+    if(request.method == 'POST'):
+        srch = request.POST['itemname']
+        if srch:
+            match = Item.objects.filter(Q(itemname__icontains=srch) | Q(
+                itemid__icontains=srch) | Q(calories__icontains=srch))
+            if match:
+                return render(request, 'refrigerator_project/groceries.html', {'sr': match})
+    return render(request,'refrigerator_project/groceries.html')
+
+@login_required
+def profile(request):
+    user_info = User.objects.all()
+    return render(request,'refrigerator_project/profile.html', context={'user_info' : user_info })
+
+@login_required
+def fridge(request):
+    inventory_items = Item.objects.all()
+    my_dict = {'insert_me':"Hello I am from views.py"}
+    return render(request,'refrigerator_project/fridge.html', context={'inventory_items':inventory_items})
+
+@login_required
+def recipe(request):
+    my_dict = {'insert_me':"Hello I am from views.py"}
+    return render(request,'refrigerator_project/recipe.html', context=my_dict)
+
+@login_required
 def simple_upload(request):
     context = {}
     if request.method == 'POST' and request.FILES['image']:
@@ -54,6 +96,7 @@ def process_text_analysis(filename):
     return ' '.join(result)
 
 # Google Vision
+@login_required
 def detect_text(filename):
     """Detects text in the file."""
     from google.cloud import vision
@@ -80,11 +123,12 @@ def detect_text(filename):
         # print('bounds: {}'.format(','.join(vertices)))
     return ' '.join(result)
 
+@login_required
 def search(request):
     if(request.method == 'POST'):
         srch = request.POST['itemname']
         if srch:
-            match = Items.objects.filter(Q(itemname__icontains = srch) | Q(itemid__icontains = srch) | Q(calories__icontains = srch))
+            match = Item.objects.filter(Q(itemname__icontains = srch) | Q(itemid__icontains = srch) | Q(calories__icontains = srch))
             if match:
                 return render(request,'refrigerator_project/search.html',{'sr':match})
     return render(request,'refrigerator_project/search.html')

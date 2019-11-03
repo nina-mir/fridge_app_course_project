@@ -1,0 +1,20 @@
+{% extends "refrigerator_project/base_login.html" %}
+{% block content %}
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Sign Up Today</legend>
+                {{ form.as_p }}   <!-- This is referring to a form in the forms.py I made in the in the users directory -->
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Sign Up</button>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">Already have an account?
+                <a href="{% url 'login' %}" class="ml-2">Sign In</a>
+            </small>
+        </div>
+    </div>
+{% endblock content %}

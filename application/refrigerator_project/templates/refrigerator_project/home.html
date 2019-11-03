@@ -1,0 +1,16 @@
+<html>    
+    <body>
+        <p>Welcome To Refrigerator App</p>
+        <a href="/upload">Upload Image</a><br>
+        <a href="/search">Search Item</a><br>
+        <div>
+            <p>Items in Inventory: </p>
+            {% for each in inventory_items %}
+            <tr> 
+                <td>Item name:{{ each.itemname }} | Item Id: {{ each.itemid }} | Calories: {{ each.calories }}</td>
+                <br></br>
+            </tr>
+            {% endfor %}
+        </div>
+    </body>
+</html>
