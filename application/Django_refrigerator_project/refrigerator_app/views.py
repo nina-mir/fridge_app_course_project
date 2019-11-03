@@ -90,8 +90,15 @@ def process_text_analysis(filename):
     return ' '.join(result)
 
 # Google Vision
-@login_required
 def detect_text(filename):
+    db =['apple', 'pineapple','strawberry', 'bread', 'juice', 'yogurt']
+    
+    """matching against the database function"""
+    def is_it_in(a):
+        if a.casefold() in (name.casefold() for name in db):
+            return True;
+
+    
     """Detects text in the file."""
     from google.cloud import vision
     import io
@@ -104,18 +111,30 @@ def detect_text(filename):
 
     response = client.text_detection(image=image)
     texts = response.text_annotations
-    result = []
-    print('Calling From Google Vision')
-    for text in texts:
-        text = '\n"{}"'.format(text.description)
-        result.append(text)
-        # print('\n"{}"'.format(text.description))
+    nina = next(iter(texts))
+    print(type(nina))
+    print(type(nina.description))
+    output = nina.description.splitlines( ) 
+    for x in output:
+        splitted = x.split()
+        for i in splitted:
+            if is_it_in(i):
+                print(i)
+                break
+
+    
+    # result = []
+    # print('Calling From Google Vision')
+    # for text in texts:
+    #     text = '\n"{}"'.format(text.description)
+    #     result.append(text)
+    #     print('\n"{}"'.format(text.description))
 
         # vertices = (['({},{})'.format(vertex.x, vertex.y)
         #             for vertex in text.bounding_poly.vertices])
 
         # print('bounds: {}'.format(','.join(vertices)))
-    return ' '.join(result)
+    return 'nina' #' '.join(result)
 
 @login_required
 def search(request):
