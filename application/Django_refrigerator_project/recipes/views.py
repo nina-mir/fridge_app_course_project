@@ -6,3 +6,6 @@ from django.conf import settings
 
 def recipe_landing(request):
     return render(request, 'recipes/recipe_landing.html')
+
+def recipe_search(request):
+    return render(request, 'recipes/recipe_search.html')

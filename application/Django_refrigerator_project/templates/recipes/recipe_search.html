@@ -1,0 +1,101 @@
+{% extends 'refrigerator_project/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h2 class="text-center">Select the items you'd like to use</h2>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 25px;">
+        <div class="col">
+            <!-- Search For Items -->
+            <div class="container">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            Search by Name, ID, or Calories: <input type="text" name="itemname" size="35"><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input type="submit" value="Search" name="search">
+                        </div>
+                    </div>
+
+                </form>
+                <hr size="3" width="100%" color="gray">
+                <!-- Display Search Results if Applicable -->
+                {% if sr %}
+                <h6>Found Items:</h6>
+                {% endif %}
+                {% for each in sr %}
+                <div class="card">
+                    <h5 class="card-header">
+                        <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
+                            aria-expanded="true" aria-controls="collapse-example" id="heading"
+                            class="collapsed d-block">
+                            {{ each.itemname }}
+                            {% with image_static=each.itemname|add:'.jpg' %}
+                            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                            {% endwith %}
+                        </a>
+                    </h5>
+                </div>
+                {% endfor %}
+                </form>
+            </div>
+            <!-- View List of Items -->
+            <div class="container">
+                {% for each in inventory_items %}
+                <div class="card">
+                    <h5 class="card-header">
+                        <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
+                            aria-expanded="true" aria-controls="collapse-example" id="heading"
+                            class="collapsed d-block">
+                            {{ each.itemname }}
+                            {% with image_static=each.itemname|add:'.jpg' %}
+                            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                            {% endwith %}
+                        </a>
+                    </h5>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <!-- Display All Saved Recipes for Selected Fridge -->
+            {% if saved_recipes %}
+            {% for each in saved_recipes %}
+            <div class="card">
+                <h5 class="card-header">
+                    <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
+                        aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                        {{ each.itemname }}
+                        {% with image_static=each.itemname|add:'.jpg' %}
+                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                        {% endwith %}
+                    </a>
+                </h5>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>none</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div style="width: 70%;">
+                <a href="{% url 'recipe_search' %}" class="btn btn-primary btn-lg btn-block" role="button"
+                    aria-pressed="true">Find Recipes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
