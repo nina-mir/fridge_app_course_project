@@ -79,7 +79,8 @@ class DjangoAdminLog(models.Model):
     object_id = models.TextField(blank=True, null=True)
     object_repr = models.CharField(max_length=200)
     change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+    content_type = models.ForeignKey(
+        'DjangoContentType', models.DO_NOTHING, blank=True, null=True)
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
     action_flag = models.PositiveSmallIntegerField()
 
@@ -118,14 +119,21 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-
 class Fridge(models.Model):
-    fridgeid = models.AutoField(db_column='FridgeID', primary_key=True)  # Field name made lowercase.
-    fridgename = models.CharField(db_column='FridgeName', max_length=255)  # Field name made lowercase.
-    owner = models.ForeignKey('Users', models.DO_NOTHING, db_column='Owner')  # Field name made lowercase.
-    friends = models.TextField(db_column='Friends', null=True)  # Field name made lowercase.
-    auto_gen_grocery_list = models.TextField(db_column='Auto_gen_grocery_list', blank=True, null=True)  # Field name made lowercase.
-    manually_added_list = models.TextField(db_column='Manually_added_list', blank=True, null=True)  # Field name made lowercase.
+    # Field name made lowercase.
+    fridgeid = models.AutoField(db_column='FridgeID', primary_key=True)
+    # Field name made lowercase.
+    fridgename = models.CharField(db_column='FridgeName', max_length=255)
+    # Field name made lowercase.
+    owner = models.ForeignKey('Users', models.DO_NOTHING, db_column='Owner')
+    # Field name made lowercase.
+    friends = models.TextField(db_column='Friends', null=True)
+    # Field name made lowercase.
+    auto_gen_grocery_list = models.TextField(
+        db_column='Auto_gen_grocery_list', blank=True, null=True)
+    # Field name made lowercase.
+    manually_added_list = models.TextField(
+        db_column='Manually_added_list', blank=True, null=True)
     creation_date = models.DateTimeField()
     modified_date = models.DateTimeField()
     eff_bgn_ts = models.DateTimeField()
@@ -137,11 +145,18 @@ class Fridge(models.Model):
 
 
 class FridgeContents(models.Model):
-    fridgeid = models.ForeignKey(Fridge, models.DO_NOTHING, db_column='FridgeID')  # Field name made lowercase.
-    itemid = models.ForeignKey('Items', models.DO_NOTHING, db_column='ItemID')  # Field name made lowercase.
-    addedby = models.ForeignKey('Users', models.DO_NOTHING, db_column='AddedBy')  # Field name made lowercase.
-    expirationdate = models.DateTimeField(db_column='ExpirationDate')  # Field name made lowercase.
-    size = models.IntegerField(db_column='Size', blank=True, null=True)  # Field name made lowercase.
+    # Field name made lowercase.
+    fridgeid = models.ForeignKey(
+        Fridge, models.DO_NOTHING, db_column='FridgeID')
+    # Field name made lowercase.
+    itemid = models.ForeignKey('Items', models.DO_NOTHING, db_column='ItemID')
+    # Field name made lowercase.
+    addedby = models.ForeignKey(
+        'Users', models.DO_NOTHING, db_column='AddedBy')
+    # Field name made lowercase.
+    expirationdate = models.DateTimeField(db_column='ExpirationDate')
+    # Field name made lowercase.
+    size = models.IntegerField(db_column='Size', blank=True, null=True)
     creation_date = models.DateTimeField()
     modified_date = models.DateTimeField()
     eff_bgn_ts = models.DateTimeField()
@@ -153,11 +168,15 @@ class FridgeContents(models.Model):
 
 
 class Items(models.Model):
-    itemid = models.AutoField(db_column='ItemID', primary_key=True)  # Field name made lowercase.
-    itemname = models.CharField(db_column='ItemName', max_length=255)  # Field name made lowercase.
+    # Field name made lowercase.
+    itemid = models.AutoField(db_column='ItemID', primary_key=True)
+    # Field name made lowercase.
+    itemname = models.CharField(db_column='ItemName', max_length=255)
     age = models.DateTimeField(db_column='Age')  # Field name made lowercase.
-    isperishable = models.IntegerField(db_column='isPerishable')  # Field name made lowercase.
-    calories = models.IntegerField(db_column='Calories', blank=True, null=True)  # Field name made lowercase.
+    # Field name made lowercase.
+    isperishable = models.IntegerField(db_column='isPerishable')
+    # Field name made lowercase.
+    calories = models.IntegerField(db_column='Calories', blank=True, null=True)
     creation_date = models.DateTimeField()
     modified_date = models.DateTimeField()
     eff_bgn_ts = models.DateTimeField()
@@ -169,10 +188,14 @@ class Items(models.Model):
 
 
 class Recipes(models.Model):
-    fridgeid = models.ForeignKey(Fridge, models.DO_NOTHING, db_column='FridgeId')  # Field name made lowercase.
-    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='UserId')  # Field name made lowercase.
+    # Field name made lowercase.
+    fridgeid = models.ForeignKey(
+        Fridge, models.DO_NOTHING, db_column='FridgeId')
+    # Field name made lowercase.
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='UserId')
     title = models.TextField(db_column='Title')  # Field name made lowercase.
-    sourceurl = models.TextField(db_column='SourceUrl')  # Field name made lowercase.
+    # Field name made lowercase.
+    sourceurl = models.TextField(db_column='SourceUrl')
     eff_bgn_ts = models.DateTimeField()
     eff_end_ts = models.DateTimeField()
 
@@ -182,11 +205,21 @@ class Recipes(models.Model):
 
 
 class Users(models.Model):
-    userid = models.ForeignKey('AuthUser', models.DO_NOTHING, db_column='UserID')  # Field name made lowercase.
-    username = models.CharField(db_column='Username', unique=True, max_length=255)  # Field name made lowercase.
-    ownedfridges = models.TextField(db_column='OwnedFridges', blank=True, null=True)  # Field name made lowercase.
-    friendedfridges = models.TextField(db_column='FriendedFridges', blank=True, null=True)  # Field name made lowercase.
-    personalnotes = models.TextField(db_column='PersonalNotes', blank=True, null=True)  # Field name made lowercase.
+    # Field name made lowercase.
+    userid = models.ForeignKey(
+        'AuthUser', models.DO_NOTHING, db_column='UserID')
+    # Field name made lowercase.
+    username = models.CharField(
+        db_column='Username', unique=True, max_length=255)
+    # Field name made lowercase.
+    ownedfridges = models.TextField(
+        db_column='OwnedFridges', blank=True, null=True)
+    # Field name made lowercase.
+    friendedfridges = models.TextField(
+        db_column='FriendedFridges', blank=True, null=True)
+    # Field name made lowercase.
+    personalnotes = models.TextField(
+        db_column='PersonalNotes', blank=True, null=True)
     eff_bgn_ts = models.DateTimeField()
     eff_end_ts = models.DateTimeField()
 

@@ -40,6 +40,7 @@
 </head>
 
 <body>
+    <!-- Header -->
     <nav class="navbar fixed-top justify-content-center navbar-dark bg-dark">
         <div class="container" style="height: 35px;">
             <a class="navbar-brand" href="{% url 'fridge' %}">
@@ -52,6 +53,7 @@
             </div>    
         </div>
     </nav>
+    <!-- Footer -->
     <nav class="navbar fixed-bottom justify-content-center navbar-dark bg-dark">
         <ul class="navbar-nav" style="height: 35px;">
 
@@ -70,7 +72,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link icon" href="{% url 'recipe' %}"><i class="fas fa-scroll fa-lg"></i></a>
+                <a class="nav-link icon" href="{% url 'recipes' %}"><i class="fas fa-scroll fa-lg"></i></a>
             </li>
 
             <li class="nav-item">
@@ -78,9 +80,9 @@
             </li>
         </ul>
     </nav>
+    <!-- Content -->
     {% block content %}
     {% endblock %}
-    <script src="" async defer></script>
 </body>
 
 </html>

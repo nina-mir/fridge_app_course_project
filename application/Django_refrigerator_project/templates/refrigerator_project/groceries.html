@@ -64,24 +64,24 @@
     </div>
     <div class="row">
         <div class="col">
-        <!-- Manual Items For Loop -->
-        {% if manual_items %}
-        {% for each in manual_items %}
-        <div class="card">
-            <h5 class="card-header">
-                <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
-                    aria-controls="collapse-example" id="heading" class="collapsed d-block">
-                    {{ each.itemname }}
-                    {% with image_static=each.itemname|add:'.jpg' %}
-                    <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                    {% endwith %}
-                </a>
-            </h5>
-        </div>
-        {% endfor %}
-        {% else %}
-        <p>none</p>
-        {% endif %}
+            <!-- Manual Items For Loop -->
+            {% if manual_items %}
+            {% for each in manual_items %}
+            <div class="card">
+                <h5 class="card-header">
+                    <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
+                        aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                        {{ each.itemname }}
+                        {% with image_static=each.itemname|add:'.jpg' %}
+                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                        {% endwith %}
+                    </a>
+                </h5>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>none</p>
+            {% endif %}
         </div>
     </div>
 </div>
