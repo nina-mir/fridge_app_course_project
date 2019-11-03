@@ -1,5 +1,6 @@
 {% extends 'refrigerator_project/base.html' %}
 {% block content %}
+{% load static %}
 
 <style>
     .modal-dialog {
@@ -26,6 +27,25 @@
     <div class="row">
         <div class="col">
             <h4>Missing These Items:</h4>
+            <!-- Missing Items For Loop -->
+            {% if missing_items %}
+            {% for each in missing_items %}
+            <div class="card">
+                <h5 class="card-header">
+                    <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
+                        aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                        {{ each.itemname }}
+                        {% with image_static=each.itemname|add:'.jpg' %}
+                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                        {% endwith %}
+                    </a>
+                </h5>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>none</p>
+            {% endif %}
+
         </div>
     </div>
     <div class="row">
@@ -40,6 +60,28 @@
                 <a data-toggle="modal" data-target="#addItem" class="btn btn-primary btn-lg" role="button"
                     aria-pressed="true">+</a>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+        <!-- Manual Items For Loop -->
+        {% if manual_items %}
+        {% for each in manual_items %}
+        <div class="card">
+            <h5 class="card-header">
+                <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
+                    aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                    {{ each.itemname }}
+                    {% with image_static=each.itemname|add:'.jpg' %}
+                    <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                    {% endwith %}
+                </a>
+            </h5>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>none</p>
+        {% endif %}
         </div>
     </div>
 </div>
@@ -70,14 +112,36 @@
                 <div class="container">
                     <form method="post">
                         {% csrf_token %}
-                        Search by Name, ID, or Calories: <input type="text" name="itemname"><br>
-                        <input type="submit" value="Search" name="search">
+                        <div class="row">
+                            <div class="col">
+                                Search by Name, ID, or Calories: <input type="text" name="itemname" size="35"><br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <input type="submit" value="Search" name="search">
+                            </div>
+                        </div>
+
                     </form>
+                    <hr size="3" width="100%" color="gray">
+                    <!-- Display Search Results if Applicable -->
+                    {% if sr %}
+                    <h6>Found Items:</h6>
+                    {% endif %}
                     {% for each in sr %}
-                    <tr>
-                        <td>Item Name: {{ each.itemname }} | Id: {{ each.itemid }} | Calories:{{ each.calories }}</td>
-                        <br></br>
-                    </tr>
+                    <div class="card">
+                        <h5 class="card-header">
+                            <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
+                                aria-expanded="true" aria-controls="collapse-example" id="heading"
+                                class="collapsed d-block">
+                                {{ each.itemname }}
+                                {% with image_static=each.itemname|add:'.jpg' %}
+                                <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                                {% endwith %}
+                            </a>
+                        </h5>
+                    </div>
                     {% endfor %}
                     </form>
                 </div>
@@ -90,30 +154,11 @@
                                 aria-expanded="true" aria-controls="collapse-example" id="heading"
                                 class="collapsed d-block">
                                 {{ each.itemname }}
-                                {% load static %}
-                                {% with image_static=each.itemname|add:'.jpg'    %}
+                                {% with image_static=each.itemname|add:'.jpg' %}
                                 <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                                 {% endwith %}
-                                <i class="fa fa-chevron-left pull-right float-right"></i>
                             </a>
                         </h5>
-                        <div id="collapse-example1" class="collapse" aria-labelledby="heading-example">
-                            <div class="row">
-                                <div class="column trash-center">
-                                    <ul style="list-style-type:none; padding-top: 10px;">
-                                        <li>Calories: {{ each.calories }} </li>
-                                        <li>Added on: </li>
-                                        <li>Expiration: </li>
-                                        <li>Added By: {{ each.addedby }} </li>
-                                    </ul>
-                                </div>
-                                <div class="column trash-center ">
-                                    <ul>
-                                        <a class="nav-link" href="#"><i class="far fa-trash-alt fa-lg"></i></a>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     {% endfor %}
                 </div>

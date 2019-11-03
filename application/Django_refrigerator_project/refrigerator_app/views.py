@@ -11,6 +11,7 @@ import math
 from .models import Items
 from .models import Users
 from .models import AuthUser
+from .models import Fridge
 from django.db.models import Q
 # Create your views here.
 
@@ -26,6 +27,7 @@ def delete_item(request):
 
 @login_required
 def groceries(request):
+    fridge_data = Fridge
     inventory_items = Items.objects.all()
     if(request.method == 'POST'):
         srch = request.POST['itemname']
@@ -90,7 +92,6 @@ def process_text_analysis(filename):
     return ' '.join(result)
 
 # Google Vision
-@login_required
 def detect_text(filename):
     """Detects text in the file."""
     from google.cloud import vision
