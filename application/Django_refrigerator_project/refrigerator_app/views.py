@@ -8,7 +8,7 @@ import io
 from io import BytesIO
 import sys
 import math
-from .models import Item
+from .models import Item, FridgeContent
 from users.models import User
 from users.models import AuthUser
 from django.db.models import Q
@@ -21,7 +21,7 @@ def home(request):
     print(current_user.username)
     print('----------------')
     temp = User.objects.filter(username = current_user.username)
-    print(temp)
+    print(temp[0].ownedfridges)
 
     return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
 
@@ -49,8 +49,19 @@ def profile(request):
 
 @login_required
 def fridge(request):
-    inventory_items = Item.objects.all()
-    my_dict = {'insert_me':"Hello I am from views.py"}
+    current_user = request.user
+    temp = User.objects.filter(username = current_user.username).get()
+    Owndfridge_id = int(temp.ownedfridges.split(',')[0])
+
+    inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
+    context = {
+        #'name' = Item.objects.filter(Item_pk = inventory_items.item).get().name
+        #'calories' = inventory_items.calories
+        #'creation_date' = inventory_items.creation_date
+        #'expirationdate' = inventory_items.expirationdate
+        #'addedby' = User.objects.filter(id = inventory_items.addedby).get().name
+    }
+
     return render(request,'refrigerator_project/fridge.html', context={'inventory_items':inventory_items})
 
 @login_required
@@ -92,7 +103,7 @@ def process_text_analysis(filename):
     for block in blocks:
         text = DisplayBlockInformation(block)
         result.append(text)
-    
+
     return ' '.join(result)
 
 # Google Vision
