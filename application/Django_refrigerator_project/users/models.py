@@ -117,6 +117,7 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
+
 class User(models.Model):
     auth_user = models.ForeignKey('AuthUser', models.DO_NOTHING, related_name='users')  
     username = models.CharField(unique=True, max_length=255)  
