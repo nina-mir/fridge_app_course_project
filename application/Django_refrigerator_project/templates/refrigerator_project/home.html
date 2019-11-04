@@ -1,4 +1,4 @@
-{% extends 'refrigerator_project/base_login.html' %}
+{% extends 'refrigerator_project/base.html' %}
 {% load static %}
 {% block content %}
 <!-- <body>
@@ -17,7 +17,7 @@
     </body> -->
 
 <div class="container-fluid">
-    <div class="row d-flex justify-content-center">
+    <div class="row d-flex justify-content-center" style="padding-top: 25px;">
         <img src="{% static 'fridge_black.png' %}" alt="josh image" style="height: 300px; vertical-align: middle;">
     </div>
     <div class="row d-flex justify-content-center">
@@ -28,8 +28,13 @@
     </div>
     <div class="row d-flex justify-content-center">
         <div style="width: 70%;">
+            {% if user.is_authenticated %}
+            <a href="{% url 'fridge' %}" class="btn btn-primary btn-lg btn-block" role="button"
+                aria-pressed="true">Already Logged In</a>
+            {% else %}
             <a href="{% url 'login' %}" class="btn btn-primary btn-lg btn-block" role="button"
                 aria-pressed="true">Login</a>
+            {% endif %}
         </div>
         <!-- <a href="{% url 'login' %}" class="btn btn-primary btn-lg btn-block" role="button" aria-pressed="true">Login</a> -->
     </div>

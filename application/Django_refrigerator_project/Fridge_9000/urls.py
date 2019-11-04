@@ -17,19 +17,21 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
 from refrigerator_app import views
+from recipes import views as recipe_views
 from django.contrib.auth import views as auth_views      #view from django, we will use for our login and logout
 from users import views as user_views       #view from our users apps
+
 urlpatterns = [
-    # path('',views.home, name='home'), 
     path('', views.home, name='home'),
-    path('fridge/',views.fridge, name='fridge'), 
+    path('fridge/', views.fridge, name='fridge'), 
     path('groceries/', views.groceries, name='groceries'),
-    path('recipe/',views.recipe, name='recipe'), 
-    path('profile/',views.profile, name='profile'),  
-    path('upload/',views.simple_upload, name='upload'),
-    path('register/', user_views.register, name='register'), #the login and logout views are from Django, not in our views
-    path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
+    path('recipes/', recipe_views.recipe_landing, name='recipes'), 
+    path('recipes/search/', recipe_views.recipe_search, name='recipe_search'), 
+    path('profile/', views.profile, name='profile'),  
+    path('upload/', views.simple_upload, name='upload'),
+    path('auth/register/', user_views.register, name='register'), #the login and logout views are from Django, not in our views
+    path('auth/login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
+    path('auth/logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('admin/', admin.site.urls),
-    path('search/',views.search, name='search'),
+    path('search/', views.search, name='search'),
 ]
