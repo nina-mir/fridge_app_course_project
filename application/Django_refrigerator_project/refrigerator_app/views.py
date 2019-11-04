@@ -51,9 +51,13 @@ def profile(request):
 def fridge(request):
     current_user = request.user
     try:
+        #Getting primary fridge of logged in user
         temp = User.objects.filter(username = current_user.username).get()
         Owndfridge_id = int(temp.ownedfridges.split(',')[0])
-        inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
+
+        #Getting items from logged in user's fridge & sorting based on expirationdate
+        inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id)).order_by('expirationdate')
+
         context={
         'inventory_items':inventory_items
         }
