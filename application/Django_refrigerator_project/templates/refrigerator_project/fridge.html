@@ -4,19 +4,21 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'fridge_card.css' %}">
 
-<h1>Welcome To Refrigerator App</h1>
-<h2> fridge.html is here!!! </h2>
-
-{% load static %}
-<img src="{% static 'fridge_logo_black.svg' %}" alt="josh image" style="height: 30px;">
-
-<a href="/upload">Upload Image</a>
-
-<div>
-    <p>Items in Inventory: </p>
-    {% for each in inventory_items %}
-    <tr>
-
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h2 class="text-center">Fridge Name</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h4>Items in Inventory: </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      {% for each in inventory_items %}
+      <tr>
         <div id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="card">
                     <h5 class="card-header">
@@ -50,12 +52,10 @@
             </div>
           </div>
         </div>
-
-
-
-
-    </tr>
-    {% endfor %}
+      </tr>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
 

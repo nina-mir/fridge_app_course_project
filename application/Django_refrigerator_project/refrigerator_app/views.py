@@ -15,16 +15,14 @@ from django.db.models import Q
 from .models import Fridge
 # Create your views here.
 
-@login_required
 def home(request):
-    inventory_items = Item.objects.all()
-    current_user = request.user
-    print(current_user.username)
-    print('----------------')
-    temp = User.objects.filter(username = current_user.username)
-    print(temp[0].ownedfridges)
-
-    return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
+    # inventory_items = Item.objects.all()
+    # current_user = request.user
+    # print(current_user.username)
+    # print('----------------')
+    # temp = User.objects.filter(username = current_user.username)
+    # print(temp[0].ownedfridges)
+    return render(request, 'refrigerator_project/home.html')
 
 @login_required
 def delete_item(request):
