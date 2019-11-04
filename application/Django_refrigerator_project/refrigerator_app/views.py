@@ -54,17 +54,13 @@ def fridge(request):
         temp = User.objects.filter(username = current_user.username).get()
         Owndfridge_id = int(temp.ownedfridges.split(',')[0])
         inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
-        context = {
-            #'name' = Item.objects.filter(Item_pk = inventory_items.item).get().name
-            #'calories' = inventory_items.calories
-            #'creation_date' = inventory_items.creation_date
-            #'expirationdate' = inventory_items.expirationdate
-            #'addedby' = User.objects.filter(id = inventory_items.addedby).get().name
+        context={
+        'inventory_items':inventory_items
         }
     except:
         print('Error')
         return render(request,'refrigerator_project/fridge.html')
-    return render(request,'refrigerator_project/fridge.html', context={'inventory_items':inventory_items})
+    return render(request,'refrigerator_project/fridge.html', context=context)
 
 @login_required
 def recipe(request):
@@ -118,7 +114,7 @@ def detect_text(filename):
         if a.casefold() in (name.casefold() for name in db):
             return True;
 
-    
+
     """Detects text in the file."""
     from google.cloud import vision
     import io
@@ -134,7 +130,7 @@ def detect_text(filename):
     nina = next(iter(texts))
     print(type(nina))
     print(type(nina.description))
-    output = nina.description.splitlines( ) 
+    output = nina.description.splitlines( )
     for x in output:
         splitted = x.split()
         for i in splitted:
@@ -143,7 +139,7 @@ def detect_text(filename):
                 i = i.lower().capitalize()
                 post_processing_results.append(i)
                 break
-    
+
     # result = []
     # print('Calling From Google Vision')
     # for text in texts:
