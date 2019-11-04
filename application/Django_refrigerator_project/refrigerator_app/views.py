@@ -111,7 +111,8 @@ def process_text_analysis(filename):
 # Google Vision
 def detect_text(filename):
     db =['apple', 'pineapple','strawberry', 'bread', 'juice', 'yogurt']
-    
+    post_processing_results = []
+
     """matching against the database function"""
     def is_it_in(a):
         if a.casefold() in (name.casefold() for name in db):
@@ -139,8 +140,9 @@ def detect_text(filename):
         for i in splitted:
             if is_it_in(i):
                 print(i)
+                i = i.lower().capitalize()
+                post_processing_results.append(i)
                 break
-
     
     # result = []
     # print('Calling From Google Vision')
@@ -153,7 +155,9 @@ def detect_text(filename):
         #             for vertex in text.bounding_poly.vertices])
 
         # print('bounds: {}'.format(','.join(vertices)))
-    return 'nina' #' '.join(result)
+    #return 'nina' #' '.join(result)
+    return post_processing_results
+
 
 @login_required
 def search(request):
