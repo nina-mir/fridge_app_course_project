@@ -52,18 +52,20 @@ def profile(request):
 @login_required
 def fridge(request):
     current_user = request.user
-    temp = User.objects.filter(username = current_user.username).get()
-    Owndfridge_id = int(temp.ownedfridges.split(',')[0])
-
-    inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
-    context = {
-        #'name' = Item.objects.filter(Item_pk = inventory_items.item).get().name
-        #'calories' = inventory_items.calories
-        #'creation_date' = inventory_items.creation_date
-        #'expirationdate' = inventory_items.expirationdate
-        #'addedby' = User.objects.filter(id = inventory_items.addedby).get().name
-    }
-
+    try:
+        temp = User.objects.filter(username = current_user.username).get()
+        Owndfridge_id = int(temp.ownedfridges.split(',')[0])
+        inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
+        context = {
+            #'name' = Item.objects.filter(Item_pk = inventory_items.item).get().name
+            #'calories' = inventory_items.calories
+            #'creation_date' = inventory_items.creation_date
+            #'expirationdate' = inventory_items.expirationdate
+            #'addedby' = User.objects.filter(id = inventory_items.addedby).get().name
+        }
+    except:
+        print('Error')
+        return render(request,'refrigerator_project/fridge.html')
     return render(request,'refrigerator_project/fridge.html', context={'inventory_items':inventory_items})
 
 @login_required
