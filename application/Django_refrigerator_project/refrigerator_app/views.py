@@ -38,8 +38,8 @@ def groceries(request):
     if(request.method == 'POST'):
         srch = request.POST['itemname']
         if srch:
-            match = Item.objects.filter(Q(itemname__icontains=srch) | Q(
-                itemid__icontains=srch) | Q(calories__icontains=srch))
+            match = Item.objects.filter(Q(name__icontains=srch) | Q(
+                id__icontains=srch) | Q(calories__icontains=srch))
             if match:
                 return render(request, 'refrigerator_project/groceries.html', {'sr': match})
     return render(request,'refrigerator_project/groceries.html', context={'inventory_items':inventory_items})

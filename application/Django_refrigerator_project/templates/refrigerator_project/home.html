@@ -9,7 +9,7 @@
             <p>Items in Inventory: </p>
             {% for each in inventory_items %}
             <tr> 
-                <td>Item name:{{ each.itemname }} | Item Id: {{ each.itemid }} | Calories: {{ each.calories }}</td>
+                <td>Item name:{{ each.name }} | Item Id: {{ each.id }} | Calories: {{ each.calories }}</td>
                 <br></br>
             </tr>
             {% endfor %}

@@ -34,8 +34,8 @@
                 <h5 class="card-header">
                     <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
                         aria-controls="collapse-example" id="heading" class="collapsed d-block">
-                        {{ each.itemname }}
-                        {% with image_static=each.itemname|add:'.jpg' %}
+                        {{ each.name }}
+                        {% with image_static=each.name|add:'.jpg' %}
                         <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                         {% endwith %}
                     </a>
@@ -71,8 +71,8 @@
                 <h5 class="card-header">
                     <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
                         aria-controls="collapse-example" id="heading" class="collapsed d-block">
-                        {{ each.itemname }}
-                        {% with image_static=each.itemname|add:'.jpg' %}
+                        {{ each.name }}
+                        {% with image_static=each.name|add:'.jpg' %}
                         <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                         {% endwith %}
                     </a>
@@ -135,8 +135,8 @@
                             <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
                                 aria-expanded="true" aria-controls="collapse-example" id="heading"
                                 class="collapsed d-block">
-                                {{ each.itemname }}
-                                {% with image_static=each.itemname|add:'.jpg' %}
+                                {{ each.name }}
+                                {% with image_static=each.name|add:'.jpg' %}
                                 <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                                 {% endwith %}
                             </a>
@@ -153,8 +153,8 @@
                             <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
                                 aria-expanded="true" aria-controls="collapse-example" id="heading"
                                 class="collapsed d-block">
-                                {{ each.itemname }}
-                                {% with image_static=each.itemname|add:'.jpg' %}
+                                {{ each.name }}
+                                {% with image_static=each.name|add:'.jpg' %}
                                 <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                                 {% endwith %}
                             </a>
