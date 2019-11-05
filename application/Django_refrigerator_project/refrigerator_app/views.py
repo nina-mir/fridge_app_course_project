@@ -84,6 +84,9 @@ def profile(request):
 def fridge(request):
     current_user = request.user
     current_time = datetime.now()
+    print(current_time)
+    week_time = current_time + timedelta(days=7)
+    print(week_time)
     try: 
         if(request.method == 'POST'):
             print("ADDING AN APPLE")
