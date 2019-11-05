@@ -15,7 +15,9 @@
                 Fridge Name
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Fridge #1</a>
+              {% for each in fridge_list %}
+                <a class="dropdown-item" href="#">{{ each.name }}</a>
+              {% endfor %}
                 <a class="dropdown-item" href="#">Fridge #2</a>
                 <a class="dropdown-item" href="#">Fridge #3</a>
             </div>

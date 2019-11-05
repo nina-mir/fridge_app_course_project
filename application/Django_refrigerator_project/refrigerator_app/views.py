@@ -15,6 +15,8 @@ from users.models import AuthUser
 from django.db.models import Q
 from .models import Fridge
 import datetime
+from datetime import timedelta
+from datetime import datetime
 # Create your views here.
 
 
@@ -107,22 +109,43 @@ def fridge(request):
         #Getting primary fridge of logged in user
         temp = User.objects.filter(username = current_user.username).get()
         Owndfridge_id = int(temp.ownedfridges.split(',')[0])
-        inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
+
+        #Sort items from their fridge based on expiration date
+        inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id)).order_by('expirationdate')
         fridge_name = Fridge.objects.filter(id = Owndfridge_id).get().name
     except:
         print('Error')
         return render(request,'refrigerator_project/fridge.html')
     return render(request,'refrigerator_project/fridge.html', {'inventory_items':inventory_items, 'fridge_name':fridge_name})
 
+def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):
+    try:
+        for item_id in id_age_list:
+            fridge_content = FridgeContent(expirationdate= (datetime.now()+timedelta(hours=id_age_list[item_id])), size=1, creation_date=datetime.now(), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999,12,31), addedby_id=addedby_person_id, fridge_id=Owndfridge_id, item_id=item_id)
+            fridge_content.save()
+    except:
+        print("Error saving item to db")
+
+
 @login_required
 def simple_upload(request):
     context = {}
+    current_user = request.user
     if request.method == 'POST' and request.FILES['image']:
         myfile = request.FILES['image']
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         print(filename)
-        text = detect_text(filename)
+
+        id_list, text = detect_text(filename)
+
+        temp = User.objects.filter(username = current_user.username).get()
+        Owndfridge_id = int(temp.ownedfridges.split(',')[0])
+        addedby_person_id = temp.id
+
+        #Save to fridgeContent Table
+        save_to_db(id_list,Owndfridge_id,addedby_person_id)
+
         context={'text':text}
     return render(request, 'refrigerator_project/receipt_upload.html', context)
 
@@ -153,8 +176,8 @@ def process_text_analysis(filename):
 
 # Google Vision
 def detect_text(filename):
-    db =['apple', 'pineapple','strawberry', 'bread', 'juice', 'yogurt']
     post_processing_results = []
+    tmp_id_exp_age_store = {}
 
     """matching against the database function"""
     # def is_it_in(a):
@@ -186,6 +209,7 @@ def detect_text(filename):
                 if each.name.lower() == i.lower():
                     print('Found one')
                     post_processing_results.append(each.name)
+                    tmp_id_exp_age_store[each.id] = each.age
                     break
     # result = []
     # print('Calling From Google Vision')
@@ -199,7 +223,7 @@ def detect_text(filename):
 
         # print('bounds: {}'.format(','.join(vertices)))
     #return 'nina' #' '.join(result)
-    return post_processing_results
+    return tmp_id_exp_age_store, post_processing_results
 
 
 @login_required
