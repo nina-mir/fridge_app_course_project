@@ -80,7 +80,7 @@ def simple_upload(request):
         filename = fs.save(myfile.name, myfile)
         print(filename)
         text = detect_text(filename)
-        context['text'] = text
+        context={'text':text}
     return render(request, 'refrigerator_project/receipt_upload.html', context)
 
 # AWS TextTract
@@ -114,9 +114,9 @@ def detect_text(filename):
     post_processing_results = []
 
     """matching against the database function"""
-    def is_it_in(a):
-        if a.casefold() in (name.casefold() for name in db):
-            return True;
+    # def is_it_in(a):
+    #     if a.casefold() in (name.casefold() for name in db):
+    #         return True;
 
 
     """Detects text in the file."""
@@ -138,12 +138,12 @@ def detect_text(filename):
     for x in output:
         splitted = x.split()
         for i in splitted:
-            if is_it_in(i):
-                print(i)
-                i = i.lower().capitalize()
-                post_processing_results.append(i)
-                break
-
+            temp = Item.objects.filter(Q(name__icontains = i))
+            for each in temp:
+                if each.name.lower() == i.lower():
+                    print('Found one')
+                    post_processing_results.append(each.name)
+                    break
     # result = []
     # print('Calling From Google Vision')
     # for text in texts:
@@ -164,7 +164,7 @@ def search(request):
     if(request.method == 'POST'):
         srch = request.POST['itemname']
         if srch:
-            match = Item.objects.filter(Q(itemname__icontains = srch) | Q(itemid__icontains = srch) | Q(calories__icontains = srch))
+            match = Item.objects.filter(Q(name__icontains = srch) | Q(id__icontains = srch) | Q(calories__icontains = srch))
             if match:
                 return render(request,'refrigerator_project/search.html',{'sr':match})
     return render(request,'refrigerator_project/search.html')
