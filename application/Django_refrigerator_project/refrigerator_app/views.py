@@ -84,9 +84,7 @@ def profile(request):
 def fridge(request):
     current_user = request.user
     current_time = datetime.now()
-    print(current_time)
     week_time = current_time + timedelta(days=7)
-    print(week_time)
     try: 
         if(request.method == 'POST'):
             print("ADDING AN APPLE")
@@ -113,7 +111,7 @@ def fridge(request):
     except:
         print('Error')
         return render(request,'refrigerator_project/fridge.html')
-    return render(request,'refrigerator_project/fridge.html', {'inventory_items':inventory_items, 'fridge_name':fridge_name, 'current_date': current_time})
+    return render(request,'refrigerator_project/fridge.html', {'inventory_items':inventory_items, 'fridge_name':fridge_name, 'current_date': current_time, 'week_time': week_time})
 
 
 def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):
