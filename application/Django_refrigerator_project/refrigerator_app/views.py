@@ -29,18 +29,17 @@ def home(request):
     # print(temp[0].ownedfridges)
     return render(request, 'refrigerator_project/home.html')
 
-
 @login_required
 def delete_item(request):
     inventory_items = Item.objects.all()
+
     return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
 
 
 @login_required
 def groceries(request):
+    all_items = Item.objects.all()
     try:
-        inventory_items = Item.objects.all()
-        print(inventory_items)
         current_user = request.user
         user_id = User.objects.filter(username=request.user.username).get().id
         fridge = Fridge.objects.filter(owner_id = user_id).get()
@@ -50,10 +49,8 @@ def groceries(request):
         Owndfridge_id = int(temp.ownedfridges.split(',')[0])
         inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
 
-            # Missing items is bugged fix it.
-            # Check for Tracked items missing from fridge
+        # Check for Tracked items missing from fridge
         missing_items = []
-        print(tracked_items)
         for tItems in tracked_items:
             inFridge = False
             for iItems in inventory_items:
@@ -61,9 +58,8 @@ def groceries(request):
                     inFridge = True
             if (inFridge == False):
                 missing_items.append(tItems)
-        print(missing_items)
 
-            # Search for item functionality
+        # Search for item functionality
         if(request.method == 'POST'):
             srch = request.POST['itemname']
             if srch:
@@ -71,10 +67,10 @@ def groceries(request):
                     id__icontains=srch) | Q(calories__icontains=srch))
                 if match:
                     return render(request, 'refrigerator_project/groceries.html', {'sr': match})
-        return render(request, 'refrigerator_project/groceries.html', {'inventory_items': inventory_items, 'missing_items': missing_items,  'manual_items': manual_items})
+        return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'missing_items': missing_items,  'manual_items': manual_items})
     except:
-        print('Error in grocery')
-        return render(request, 'refrigerator_project/groceries.html', {'inventory_items': inventory_items})
+        print('Error Finding Grocery Lists')
+    return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items})
 
 
 
@@ -87,9 +83,10 @@ def profile(request):
 @login_required
 def fridge(request):
     current_user = request.user
+    current_time = datetime.now()
     try: 
         if(request.method == 'POST'):
-            print("ADDEDING AN APPLE")
+            print("ADDING AN APPLE")
             # get id if the specified item
             item_id = Item.objects.filter(name="apple").get().id
             # get id of user
@@ -113,7 +110,7 @@ def fridge(request):
     except:
         print('Error')
         return render(request,'refrigerator_project/fridge.html')
-    return render(request,'refrigerator_project/fridge.html', {'inventory_items':inventory_items, 'fridge_name':fridge_name})
+    return render(request,'refrigerator_project/fridge.html', {'inventory_items':inventory_items, 'fridge_name':fridge_name, 'current_date': current_time})
 
 
 def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):

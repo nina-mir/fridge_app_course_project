@@ -3,6 +3,7 @@
 {% block content %}
 
 <link rel="stylesheet" href="{% static 'login.css' %}">
+
 <div class="container">
     <form method="POST">
         {% csrf_token %}
@@ -21,4 +22,5 @@
         </small>
     </div>
 </div>
+
 {% endblock content %}

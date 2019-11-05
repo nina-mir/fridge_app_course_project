@@ -4,6 +4,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'fridge_card.css' %}">
 
+{% if fridge_name %}
 <div class="container">
   <div class="row">
     <div class="col">
@@ -65,6 +66,12 @@
     </div>
   </div>
 </div>
+{% else %}
+<!-- Insert code to create fridge when user doesnt have one -->
+<h1 style="text-align: center;"> No Fridges.</h1>
+{% endif %}
+
+
 
 
 
