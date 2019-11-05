@@ -56,17 +56,32 @@
                             aria-expanded="true" aria-controls="collapse-example" id="heading"
                             class="collapsed d-block">
                             {{ each.name }}
+                            <form action="/action_page.php">
+                                <input type="checkbox" style="float:right;"> 
+                            </form>
                             {% with image_static=each.name|add:'.jpg' %}
                             <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                            
                             {% endwith %}
                         </a>
                     </h5>
                 </div>
                 {% endfor %}
+                <!-- submit button-->
+                <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
+                    <div style="width: 70%;">
+                        <a href="#" class="btn btn-primary btn-lg btn-block" role="button" aria-pressed="true">Next</a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-    <div class="row">
+    
+    
+    
+    
+    <!-- <div class="row">
         <div class="col">
             <div class="container">
                 {% for each in inventory_items %}
@@ -83,14 +98,17 @@
                     </h5>
                 </div>
                 {% endfor %}
+                <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
+                    <div style="width: 70%;">
+                        <a href="#" class="btn btn-primary btn-lg btn-block" role="button" aria-pressed="true">Next</a>
+                    </div>
+                </div>
+
+
             </div>
         </div>
-    </div>
-    <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
-        <div style="width: 70%;">
-            <a href="#" class="btn btn-primary btn-lg btn-block" role="button" aria-pressed="true">Next</a>
-        </div>
-    </div>
+    </div> -->
+    
 </div>
 
 {% endblock %}
