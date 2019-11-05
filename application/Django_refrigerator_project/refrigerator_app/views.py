@@ -38,40 +38,43 @@ def delete_item(request):
 
 @login_required
 def groceries(request):
-    inventory_items = Item.objects.all()
-    print(inventory_items)
-    current_user = request.user
-    user_id = User.objects.filter(username=request.user.username).get().id
-    fridge = Fridge.objects.filter(owner_id = user_id).get()
-    tracked_items = fridge.auto_gen_grocery_list.split(',')
-    manual_items = fridge.manually_added_list.split(',')
-    temp = User.objects.filter(username = current_user.username).get()
-    Owndfridge_id = int(temp.ownedfridges.split(',')[0])
-    inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
+    try:
+        inventory_items = Item.objects.all()
+        print(inventory_items)
+        current_user = request.user
+        user_id = User.objects.filter(username=request.user.username).get().id
+        fridge = Fridge.objects.filter(owner_id = user_id).get()
+        tracked_items = fridge.auto_gen_grocery_list.split(',')
+        manual_items = fridge.manually_added_list.split(',')
+        temp = User.objects.filter(username = current_user.username).get()
+        Owndfridge_id = int(temp.ownedfridges.split(',')[0])
+        inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
 
-        # Missing items is bugged fix it.
-        # Check for Tracked items missing from fridge
-    missing_items = []
-    print(tracked_items)
-    for tItems in tracked_items:
-        inFridge = False
-        for iItems in inventory_items:
-            if (tItems == iItems):
-                inFridge = True
-        if (inFridge == False):
-            missing_items.append(tItems)
-    print(missing_items)
+            # Missing items is bugged fix it.
+            # Check for Tracked items missing from fridge
+        missing_items = []
+        print(tracked_items)
+        for tItems in tracked_items:
+            inFridge = False
+            for iItems in inventory_items:
+                if (tItems == iItems):
+                    inFridge = True
+            if (inFridge == False):
+                missing_items.append(tItems)
+        print(missing_items)
 
-         # Search for item functionality
-    if(request.method == 'POST'):
-        srch = request.POST['itemname']
-        if srch:
-            match = Item.objects.filter(Q(name__icontains=srch) | Q(
-                id__icontains=srch) | Q(calories__icontains=srch))
-            if match:
-                return render(request, 'refrigerator_project/groceries.html', {'sr': match})
-    # return render(request, 'refrigerator_project/groceries.html', {'inventory_items': inventory_items})
-    return render(request, 'refrigerator_project/groceries.html', {'inventory_items': inventory_items, 'missing_items': missing_items,  'manual_items': manual_items})
+            # Search for item functionality
+        if(request.method == 'POST'):
+            srch = request.POST['itemname']
+            if srch:
+                match = Item.objects.filter(Q(name__icontains=srch) | Q(
+                    id__icontains=srch) | Q(calories__icontains=srch))
+                if match:
+                    return render(request, 'refrigerator_project/groceries.html', {'sr': match})
+        return render(request, 'refrigerator_project/groceries.html', {'inventory_items': inventory_items, 'missing_items': missing_items,  'manual_items': manual_items})
+    except:
+        print('Error in grocery')
+        return render(request, 'refrigerator_project/groceries.html', {'inventory_items': inventory_items})
 
 
 
