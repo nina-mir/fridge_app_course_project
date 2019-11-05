@@ -66,7 +66,7 @@ def groceries(request):
                 match = Item.objects.filter(Q(name__icontains=srch) | Q(
                     id__icontains=srch) | Q(calories__icontains=srch))
                 if match:
-                    return render(request, 'refrigerator_project/groceries.html', {'sr': match})
+                    return render(request, 'refrigerator_project/groceries.html', {'sr': match, 'missing_items': missing_items,  'manual_items': manual_items})
         return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'missing_items': missing_items,  'manual_items': manual_items})
     except:
         print('Error Finding Grocery Lists')
