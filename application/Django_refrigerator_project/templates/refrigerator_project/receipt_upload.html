@@ -1,6 +1,8 @@
 {% extends 'refrigerator_project/base.html' %}
 {% block content %}
+{% load static %}
 
+<link rel="stylesheet" type="text/css" href="{% static 'fridge_card.css' %}">
 
 <div class="container-fluid">
     <div class="row d-flex justify-content-center">
@@ -20,9 +22,31 @@
         </div>
     </div>
     <div>
-        {% if text %}
-        {{text}}
-        {% endif %}
+        <!-- content block pertaining to the outpout of the OCR API-->
+        <!-- May be needed to be turned into a MODAL later-->
+        <div class="row">
+            <div class="col">
+                {% for each in text %}
+                <tr>
+                <div id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="card">
+                            <h5 class="card-header">
+                                <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true" aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                                        {{ each }}
+                                        {% load static %}
+                                        {% with image_static=each|add:'.jpg'    %}
+                                            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                                        {% endwith %}
+                                </a>
+                            </h5>
+                           
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </tr>
+                {% endfor %}
+            </div>
     </div>
 </div>
 

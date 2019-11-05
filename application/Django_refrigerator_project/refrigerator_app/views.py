@@ -104,6 +104,7 @@ def fridge(request):
 
 
     try:
+        #Getting primary fridge of logged in user
         temp = User.objects.filter(username = current_user.username).get()
         Owndfridge_id = int(temp.ownedfridges.split(',')[0])
         inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
@@ -153,13 +154,14 @@ def process_text_analysis(filename):
 # Google Vision
 def detect_text(filename):
     db =['apple', 'pineapple','strawberry', 'bread', 'juice', 'yogurt']
-    
+    post_processing_results = []
+
     """matching against the database function"""
     def is_it_in(a):
         if a.casefold() in (name.casefold() for name in db):
             return True;
 
-    
+
     """Detects text in the file."""
     from google.cloud import vision
     import io
@@ -175,15 +177,16 @@ def detect_text(filename):
     nina = next(iter(texts))
     print(type(nina))
     print(type(nina.description))
-    output = nina.description.splitlines( ) 
+    output = nina.description.splitlines( )
     for x in output:
         splitted = x.split()
         for i in splitted:
             if is_it_in(i):
                 print(i)
+                i = i.lower().capitalize()
+                post_processing_results.append(i)
                 break
 
-    
     # result = []
     # print('Calling From Google Vision')
     # for text in texts:
@@ -195,7 +198,9 @@ def detect_text(filename):
         #             for vertex in text.bounding_poly.vertices])
 
         # print('bounds: {}'.format(','.join(vertices)))
-    return 'nina' #' '.join(result)
+    #return 'nina' #' '.join(result)
+    return post_processing_results
+
 
 @login_required
 def search(request):
