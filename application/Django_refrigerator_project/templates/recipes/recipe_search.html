@@ -56,14 +56,10 @@
                             aria-expanded="true" aria-controls="collapse-example" id="heading"
                             class="collapsed d-block">
                             {{ each.name }}
-<<<<<<< HEAD
                             <form action="/action_page.php">
                                 <input type="checkbox" style="float:right;"> 
                             </form>
-                            {% with image_static=each.name|add:'.jpg' %}
-=======
                             {% with image_static=each.name|add:'.png' %}
->>>>>>> 6f254ea58ae35118ac4c5da8714e62adeef2ef64
                             <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                             
                             {% endwith %}
