@@ -41,7 +41,6 @@ def groceries(request):
     inventory_items = Item.objects.all()
     print(inventory_items)
 
-    # Get Manual & Tracked Items List & Fridge Inventory
     try:
         user_id = User.objects.filter(username=request.user.username).get().id
         fridge = Fridge.objects.filter(owner_id = user_id).get()
@@ -52,18 +51,20 @@ def groceries(request):
         inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
     except:
         pass
-
+    # Missing items is bugged fix it.
     # Check for Tracked items missing from fridge
-    missing_items = []
-    print(tracked_items)
-    for tItems in tracked_items:
-        inFridge = False
-        for iItems in inventory_items:
-            if (tItems == iItems.name):
-                inFridge = True
-        if (inFridge == False):
-            missing_items.append(tItems)
-    print(missing_items)
+    # missing_items = []
+    # print(tracked_items)
+    # for tItems in tracked_items:
+    #     inFridge = False
+    #     for iItems in inventory_items:
+    #         if (tItems == iItems.name):
+    #             inFridge = True
+    #     if (inFridge == False):
+    #         missing_items.append(tItems)
+    # print(missing_items)
+
+    # Search for item functionality
 
     # Search for item functionality
     if(request.method == 'POST'):
@@ -75,7 +76,8 @@ def groceries(request):
                 return render(request, 'refrigerator_project/groceries.html', {'sr': match})
 
 
-    return render(request, 'refrigerator_project/groceries.html', {'inventory_items': inventory_items, 'missing_items': missing_items,  'manual_items': manual_items})
+    # return render(request, 'refrigerator_project/groceries.html', {'inventory_items': inventory_items, 'missing_items': missing_items,  'manual_items': manual_items})
+    return render(request, 'refrigerator_project/groceries.html', {'inventory_items': inventory_items})
 
 
 @login_required
