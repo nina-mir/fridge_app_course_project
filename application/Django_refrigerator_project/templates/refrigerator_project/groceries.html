@@ -34,8 +34,8 @@
                 <h5 class="card-header">
                     <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
                         aria-controls="collapse-example" id="heading" class="collapsed d-block">
-                        {{ each.name }}
-                        {% with image_static=each.name|add:'.jpg' %}
+                        {{ each }}
+                        {% with image_static=each|add:'.jpg' %}
                         <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                         {% endwith %}
                     </a>
@@ -63,7 +63,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col">
+        <div class="col" style="padding-top: 15px;">
             <!-- Manual Items For Loop -->
             {% if manual_items %}
             {% for each in manual_items %}
@@ -71,8 +71,8 @@
                 <h5 class="card-header">
                     <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
                         aria-controls="collapse-example" id="heading" class="collapsed d-block">
-                        {{ each.name }}
-                        {% with image_static=each.name|add:'.jpg' %}
+                        {{ each }}
+                        {% with image_static=each|add:'.jpg' %}
                         <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                         {% endwith %}
                     </a>
@@ -148,7 +148,7 @@
                 <!-- View List of Items -->
                 <div class="container">
                     {% for each in inventory_items %}
-                    <div class="card">
+                    <div class="card" style="padding-top: 4px;">
                         <h5 class="card-header">
                             <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
                                 aria-expanded="true" aria-controls="collapse-example" id="heading"
