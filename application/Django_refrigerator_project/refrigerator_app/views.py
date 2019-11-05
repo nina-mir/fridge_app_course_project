@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.contrib.auth.decorators import login_required  #for using @login_required decorator on top of a function
+# for using @login_required decorator on top of a function
+from django.contrib.auth.decorators import login_required
 import boto3
 import io
 from io import BytesIO
@@ -13,7 +14,9 @@ from users.models import User
 from users.models import AuthUser
 from django.db.models import Q
 from .models import Fridge
+import datetime
 # Create your views here.
+
 
 def home(request):
     # inventory_items = Item.objects.all()
@@ -24,15 +27,43 @@ def home(request):
     # print(temp[0].ownedfridges)
     return render(request, 'refrigerator_project/home.html')
 
+
 @login_required
 def delete_item(request):
     inventory_items = Item.objects.all()
     return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
 
+
 @login_required
 def groceries(request):
-    fridge_data = Fridge
     inventory_items = Item.objects.all()
+    print(inventory_items)
+
+    # Get Manual & Tracked Items List & Fridge Inventory
+    try:
+        user_id = User.objects.filter(username=request.user.username).get().id
+        fridge = Fridge.objects.filter(owner_id = user_id).get()
+        tracked_items = fridge.auto_gen_grocery_list.split(',')
+        manual_items = fridge.manually_added_list.split(',')
+        temp = User.objects.filter(username = current_user.username).get()
+        Owndfridge_id = int(temp.ownedfridges.split(',')[0])
+        inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
+    except:
+        pass
+
+    # Check for Tracked items missing from fridge
+    missing_items = []
+    print(tracked_items)
+    for tItems in tracked_items:
+        inFridge = False
+        for iItems in inventory_items:
+            if (tItems == iItems.name):
+                inFridge = True
+        if (inFridge == False):
+            missing_items.append(tItems)
+    print(missing_items)
+
+    # Search for item functionality
     if(request.method == 'POST'):
         srch = request.POST['itemname']
         if srch:
@@ -40,36 +71,48 @@ def groceries(request):
                 id__icontains=srch) | Q(calories__icontains=srch))
             if match:
                 return render(request, 'refrigerator_project/groceries.html', {'sr': match})
-    return render(request,'refrigerator_project/groceries.html', context={'inventory_items':inventory_items})
+
+
+    return render(request, 'refrigerator_project/groceries.html', {'inventory_items': inventory_items, 'missing_items': missing_items,  'manual_items': manual_items})
+
 
 @login_required
 def profile(request):
     user_info = User.objects.all()
-    return render(request,'refrigerator_project/profile.html', context={'user_info' : user_info })
+    return render(request, 'refrigerator_project/profile.html', context={'user_info': user_info})
+
 
 @login_required
 def fridge(request):
     current_user = request.user
+
+    # Add Item to Fridge
+    if(request.method == 'POST'):
+        print("ADDED AN APPLE")
+        # get id if the specified item
+        item_id = Item.objects.filter(name="apple").get().id
+        # get id of user
+        user_id = User.objects.filter(username=current_user.username).get().id
+        # get id of selected fridge
+        temp = User.objects.filter(username = current_user.username).get()
+        fridge_id = int(temp.ownedfridges.split(',')[0])
+        # make new fridge content
+        fridge_content = FridgeContent(expirationdate='2019-12-10', size=1, creation_date=datetime.datetime.now(), modified_date=datetime.datetime.now(), eff_bgn_ts=datetime.datetime.now(), eff_end_ts=datetime.datetime.max, addedby_id=user_id, fridge_id=fridge_id, item_id=item_id)
+        fridge_content.save()
+
+    # Delete Item from Fridge
+
+
     try:
         #Getting primary fridge of logged in user
         temp = User.objects.filter(username = current_user.username).get()
         Owndfridge_id = int(temp.ownedfridges.split(',')[0])
-
-        #Getting items from logged in user's fridge & sorting based on expirationdate
-        inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id)).order_by('expirationdate')
-
-        context={
-        'inventory_items':inventory_items
-        }
+        inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
+        fridge_name = Fridge.objects.filter(id = Owndfridge_id).get().name
     except:
         print('Error')
         return render(request,'refrigerator_project/fridge.html')
-    return render(request,'refrigerator_project/fridge.html', context=context)
-
-@login_required
-def recipe(request):
-    my_dict = {'insert_me':"Hello I am from views.py"}
-    return render(request,'refrigerator_project/recipe.html', context=my_dict)
+    return render(request,'refrigerator_project/fridge.html', {'inventory_items':inventory_items, 'fridge_name':fridge_name})
 
 @login_required
 def simple_upload(request):
