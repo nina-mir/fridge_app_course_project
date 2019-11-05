@@ -34,7 +34,7 @@
                             class="collapsed d-block">
                             {{ each }}
                             {% load static %}
-                            {% with image_static=each|add:'.jpg'    %}
+                            {% with image_static=each|add:'.png'    %}
                             <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                             {% endwith %}
                         </a>

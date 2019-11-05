@@ -66,7 +66,7 @@ def groceries(request):
                 match = Item.objects.filter(Q(name__icontains=srch) | Q(
                     id__icontains=srch) | Q(calories__icontains=srch))
                 if match:
-                    return render(request, 'refrigerator_project/groceries.html', {'sr': match})
+                    return render(request, 'refrigerator_project/groceries.html', {'sr': match, 'missing_items': missing_items,  'manual_items': manual_items})
         return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'missing_items': missing_items,  'manual_items': manual_items})
     except:
         print('Error Finding Grocery Lists')
@@ -84,9 +84,7 @@ def profile(request):
 def fridge(request):
     current_user = request.user
     current_time = datetime.now()
-    print(current_time)
     week_time = current_time + timedelta(days=7)
-    print(week_time)
     try: 
         if(request.method == 'POST'):
             print("ADDING AN APPLE")
@@ -113,7 +111,7 @@ def fridge(request):
     except:
         print('Error')
         return render(request,'refrigerator_project/fridge.html')
-    return render(request,'refrigerator_project/fridge.html', {'inventory_items':inventory_items, 'fridge_name':fridge_name, 'current_date': current_time})
+    return render(request,'refrigerator_project/fridge.html', {'inventory_items':inventory_items, 'fridge_name':fridge_name, 'current_date': current_time, 'week_time': week_time})
 
 
 def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):
