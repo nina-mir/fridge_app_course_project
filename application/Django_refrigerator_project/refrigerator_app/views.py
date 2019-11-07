@@ -4,7 +4,6 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 # for using @login_required decorator on top of a function
 from django.contrib.auth.decorators import login_required
-import boto3
 import io
 from io import BytesIO
 import sys
@@ -21,12 +20,6 @@ from datetime import datetime
 
 
 def home(request):
-    # inventory_items = Item.objects.all()
-    # current_user = request.user
-    # print(current_user.username)
-    # print('----------------')
-    # temp = User.objects.filter(username = current_user.username)
-    # print(temp[0].ownedfridges)
     return render(request, 'refrigerator_project/home.html')
 
 @login_required
@@ -145,41 +138,10 @@ def simple_upload(request):
         context={'text':text}
     return render(request, 'refrigerator_project/receipt_upload.html', context)
 
-# AWS TextTract
-def DisplayBlockInformation(block):
-    if 'Text' in block:
-        return block['Text']
-    return ''
-
-# AWS TextTract
-def process_text_analysis(filename):
-
-    bw_img = open(filename,'rb')
-
-    client = boto3.client('textract')
-
-    response = client.analyze_document(Document={'Bytes': bw_img.read()},
-        FeatureTypes=["TABLES", "FORMS"])
-
-    blocks=response['Blocks']
-    result = []
-    print('Calling From Amazon Textract')
-    for block in blocks:
-        text = DisplayBlockInformation(block)
-        result.append(text)
-
-    return ' '.join(result)
-
 # Google Vision
 def detect_text(filename):
     post_processing_results = []
     tmp_id_exp_age_store = {}
-
-    """matching against the database function"""
-    # def is_it_in(a):
-    #     if a.casefold() in (name.casefold() for name in db):
-    #         return True;
-
 
     """Detects text in the file."""
     from google.cloud import vision
@@ -207,18 +169,6 @@ def detect_text(filename):
                     post_processing_results.append(each.name)
                     tmp_id_exp_age_store[each.id] = each.age
                     break
-    # result = []
-    # print('Calling From Google Vision')
-    # for text in texts:
-    #     text = '\n"{}"'.format(text.description)
-    #     result.append(text)
-    #     print('\n"{}"'.format(text.description))
-
-        # vertices = (['({},{})'.format(vertex.x, vertex.y)
-        #             for vertex in text.bounding_poly.vertices])
-
-        # print('bounds: {}'.format(','.join(vertices)))
-    #return 'nina' #' '.join(result)
     return tmp_id_exp_age_store, post_processing_results
 
 
