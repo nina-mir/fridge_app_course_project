@@ -30,7 +30,6 @@
         /* Set the width of the side navigation to 250px */
         function openNav() {
             document.getElementById("mySidenav").style.width = "250px";
-            sidebarButton.onClick = closeNav()
         }
 
         /* Set the width of the side navigation to 0 */
@@ -45,7 +44,7 @@
     <nav class="navbar fixed-top justify-content-center navbar-dark bg-dark">
         <div class="container" style="height: 35px;">
             {% if "fridge" in request.path %}
-            <button id="sidebarButton" onclick="openNav()" class="navbar-toggler" type="button">
+            <button onclick="openNav()" class="navbar-toggler" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
             {% endif %}
