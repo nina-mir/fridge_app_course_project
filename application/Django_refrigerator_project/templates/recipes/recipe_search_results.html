@@ -1,8 +1,13 @@
 {% extends 'refrigerator_project/base.html' %}
-{% load static %}
 {% block content %}
 
-<h3> Nina is ready to code! </h3>
+<h3> found recipes = {{ count }} </h3>
+
+{% for each in recipes %}
+      
+    {{ each.title }}
+      
+{% endfor %}
 
 {% endblock %}
 

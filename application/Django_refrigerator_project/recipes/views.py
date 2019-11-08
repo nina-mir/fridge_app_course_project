@@ -36,7 +36,6 @@ def recipe_search(request):
 
 @login_required
 def next(request):
-    inventory_items = Item.objects.all()
     if request.method == 'GET':
         response = request.GET
         list =response.getlist('ingredient', default=None)
@@ -48,14 +47,15 @@ def next(request):
             kompi = i + "," + kompi 
         print(kompi)
         get_recipes = food2fork_call(kompi)
-        process_recipes(get_recipes)
-    return render(request, 'recipes/recipe_search_results.html', context={'inventory_items':inventory_items})
-
-
-
+        context = process_recipes(get_recipes)
+        print(context['count'])
+        print(type(context))
+    
+    #print(context) 
+    return render(request, 'recipes/recipe_search_results.html', {'count':context['count'],
+    'recipes':context['recipes']} )
 
 # method to mkae API call to food2fork recipe API
-
 def food2fork_call(list):
 
 # you have to sign up for an API key, which has some allowances. 
@@ -72,15 +72,11 @@ def food2fork_call(list):
     }
     
     responsePost = requests.post(url, paramsPost)
-
     if responsePost.status_code == 202: # everything went well!
         print('food2dork: all good!')
-
     #print(responsePost.content)
-
     try:
-        result = responsePost.json()
-        
+        result = responsePost.json()      
     except ValueError:
         result = {'error': 'No JSON content returned'}
         
@@ -94,17 +90,10 @@ def process_recipes(str):
     print("string value: %s" % toSee["count"])
     recipes = toSee["recipes"]
     print(type(recipes))
+    return toSee
     # print(len(recipes))
     # for x in range(len(recipes)):
     #     print(x)
     #     #print(recipes[x])
     #     print(recipes[x]["title"])
     #     print(recipes[x]["publisher"])
-
-
-
-
-
-
-
-
