@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<script src="{% static '/js/scripts.js' %}"></script>
+<!--script src="{% static '/js/scripts.js' %}"></script-->
 
 
 <div class="container-fluid">
@@ -54,7 +54,7 @@
 
             <!-- View List of Items -->
 
-            <form id = "ingredients_survey" method="POST">
+            <form id = "ingredients_survey" action="{% url 'next' %}" method="GET" novalidate>
             <div class="container">
                 {% for each in inventory_items %}
                 <div class="card form-group">
@@ -78,7 +78,7 @@
                 <!-- submit button-->
                 <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
                     <div style="width: 70%;">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">Next</button>
+                        <button class="btn btn-primary btn-lg btn-block" name="next" type="submit">Next</button>
                     </div>
                 </div>
             </div>
