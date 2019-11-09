@@ -124,6 +124,12 @@ def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):
         print("Error saving item to db")
 
 
+# this function does 2 things:
+# 1) user uploads an image of a receipt which will be processed
+# And, returns a list of item names to be verified by the user. (POST request)
+# 2) The user verifies which items they want to be added to their fridge
+# they can do so by selecting appropriate checkboxes and submitting the result. (GET request) 
+
 @login_required
 def simple_upload(request):
     context = {}
@@ -135,16 +141,31 @@ def simple_upload(request):
         print(filename)
 
         id_list, text = detect_text(filename)
+        context={'text':text}
+        return render(request, 'refrigerator_project/receipt_upload.html', context)
+    else:
+        if request.method == 'GET':
+            response = request.GET
+            list =response.getlist('ingredient', default=None)
+        
+        tmp_id_exp_age_store = {}
+        for i in list:
+            temp_ = Item.objects.filter(Q(name__icontains = i))
+            for each in temp_:
+                if each.name.lower() == i.lower():
+                    print('Found one')
+                    tmp_id_exp_age_store[each.id] = each.age
+                    break
 
         temp = User.objects.filter(username = current_user.username).get()
         Owndfridge_id = int(temp.ownedfridges.split(',')[0])
         addedby_person_id = temp.id
 
         #Save to fridgeContent Table
-        save_to_db(id_list,Owndfridge_id,addedby_person_id)
-
-        context={'text':text}
+        save_to_db(tmp_id_exp_age_store,Owndfridge_id,addedby_person_id)
     return render(request, 'refrigerator_project/receipt_upload.html', context)
+
+
 
 # Google Vision
 def detect_text(filename):
@@ -164,8 +185,8 @@ def detect_text(filename):
     response = client.text_detection(image=image)
     texts = response.text_annotations
     nina = next(iter(texts))
-    print(type(nina))
-    print(type(nina.description))
+    #print(type(nina))
+    #print(type(nina.description))
     output = nina.description.splitlines( )
     for x in output:
         splitted = x.split()
