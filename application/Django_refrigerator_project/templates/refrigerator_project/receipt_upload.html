@@ -12,12 +12,12 @@
         <div style="width: 70%;">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <input type="file" accept="image/*" name="image" id="file">
+                <input type="file" onchange="this.form.submit()" accept="image/*" name="image" id="file">
                 <!-- <input type="file" accept="image/*" name="image" id="file" hidden/>
                 <a class="btn btn-primary btn-lg btn-block" role="button"
                 aria-pressed="false">Upload Receipt Image</a> -->
 
-                <button type="submit">Upload</button>
+                <!-- <button type="submit">Upload</button> -->
             </form>
         </div>
     </div>
