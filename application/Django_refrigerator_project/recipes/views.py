@@ -62,8 +62,8 @@ def food2fork_call(list):
 # Check the API documentation for further details:
     url = 'https://www.food2fork.com/api/search'
 
-#key = '6e81eadfd535b092815e395bcc38be11' 
-    key = '57604ca61ce33d68532bb9af7f0472f9'
+    key = '6e81eadfd535b092815e395bcc38be11' 
+    #key = '57604ca61ce33d68532bb9af7f0472f9'
     paramsPost = { 
         'key': key,
         'q': list,
