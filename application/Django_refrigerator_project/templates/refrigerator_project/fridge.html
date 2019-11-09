@@ -15,7 +15,8 @@
     <div class="col">
       <form method="POST">
         {% csrf_token %}
-        <input type="submit" name = "add_apple" value="ADD APPLE" class="btn btn-primary btn-lg btn-block" role="button"
+        <input type = "text" name = "item_name">
+        <input type="submit" name = "add_item" value="ADD ITEM" class="btn btn-primary btn-lg btn-block" role="button"
           aria-pressed="true">
       </form>
     </div>

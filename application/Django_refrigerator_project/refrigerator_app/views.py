@@ -78,34 +78,29 @@ def fridge(request):
     current_user = request.user
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
+    # Deleting item with using button
     try:
         if request.method == 'POST':
             if request.POST.get('delete_item'):
                 content_id = request.POST.get('delete_item')
-                print(content_id)
                 fridge_content = FridgeContent.objects.get(id = content_id)
-                print(fridge_content)
                 fridge_content.eff_end_ts = datetime.now()
-                print("debug")
                 fridge_content.save()
     except:
         print('Error from adding deleteing an item')
+    # adding item using Button
     try:
         if request.method == 'POST':
-            if request.POST.get('add_apple'):
-                print("Add apple called")
-                # get id if the specified item
-                item_id = Item.objects.filter(name="apple").get().id
-                # get id of user
-                user_id = User.objects.filter(username=current_user.username).get().id
-                # get id of selected fridge
+            if request.POST.get('add_item'):
+                item_name = request.POST.get('item_name').lower()
+                item = Item.objects.filter(name=item_name).get()
+                item_dict = {item.id:item.age}
                 temp = User.objects.filter(username = current_user.username).get()
-                fridge_id = int(temp.ownedfridges.split(',')[0])
-                # make new fridge content
-                fridge_content = FridgeContent(expirationdate='2020-12-10', size=1, creation_date=datetime.now(), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime.max, addedby_id=user_id, fridge_id=fridge_id, item_id=item_id)
-                fridge_content.save()
+                Owndfridge_id = int(temp.ownedfridges.split(',')[0])
+                addedby_person_id = temp.id
+                save_to_db(item_dict, Owndfridge_id, addedby_person_id)
     except:
-        print('Error')
+        print('Add item failed')
     try:
         #Getting primary fridge of logged in user
         temp = User.objects.filter(username = current_user.username).get()
