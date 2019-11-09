@@ -2,9 +2,7 @@
 {% load static %}
 {% block content %}
 
-
-<!--script src="{% static '/js/scripts.js' %}"></script-->
-
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200&display=swap" rel="stylesheet">
 
 <div class="container-fluid">
     <div class="row">
@@ -55,10 +53,10 @@
             <!-- View List of Items -->
 
             <form id = "ingredients_survey" action="{% url 'next' %}" method="GET" novalidate>
-            <div class="container">
+            <div class="container" style="color:initial;">
                 {% for each in inventory_items %}
                 <div class="card form-group">
-                    
+                    <label>
                     <h5 class="card-header">
                         <input type="checkbox" style="float:right;" name="ingredient" value="{{ each.name }}"
                         data-toggle="collapse"  data-parent="#accordion"
@@ -71,7 +69,9 @@
                         {% endwith %}
                             <!--input type="checkbox" style="float:right;" name="ingredient" value="{{ each.name }}">
                         </p-->
+                        
                     </h5>
+                    </label>
                     
                 </div>
                 {% endfor %}

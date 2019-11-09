@@ -1,8 +1,12 @@
 {% extends 'refrigerator_project/base.html' %}
-
+{% load static %}
 {% block content %}
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+<link href="//s.w.org/wp-includes/css/dashicons.css?20150710" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400&display=swap" rel="stylesheet">
+<!--script src="{% static '/js/fave_button.js' %}"></script-->
+
+
 
 <div class="container-fluid" style="font-family: 'Inconsolata', serif;" >
     <h3> Found {{ count }} Recipes!</h3>
@@ -10,14 +14,16 @@
         <div class="col">
             <!-- Display Found Recipes for Selected Grocery Items -->
             {% for each in recipes %}
-            <div class="card"  >
+            <div class="card">
                 <h5 class="card-header">
-                    <a data-toggle="collapse" href="{{ each.source_url }}" data-parent="#accordion" 
+                    <p data-toggle="collapse"  data-parent="#accordion" 
                     aria-expanded="true" aria-controls="collapse-example" id="heading"
                     class="collapsed d-block">
                         <img src="{{ each.image_url }}" alt="recipe_img" style="width:30%;height:auto">
-                        <p style="float: right; width:60%;">{{ each.title }}</p>
-                    </a>
+                        <a style="float: right; width:60%;" href="{{ each.source_url }}">
+                            {{ each.title }}
+                        </a>       
+                    </p>
                 </h5>
             </div>
             {% endfor %}
