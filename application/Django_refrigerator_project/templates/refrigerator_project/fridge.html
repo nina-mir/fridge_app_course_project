@@ -13,9 +13,10 @@
   </div>
   <div class="row">
     <div class="col">
-      <form action="#" method="POST">
+      <form method="POST">
         {% csrf_token %}
-        <input type="submit" value="Add Apple" class="btn btn-primary btn-lg btn-block" role="button"
+        <input type = "text" name = "item_name">
+        <input type="submit" name = "add_item" value="ADD ITEM" class="btn btn-primary btn-lg btn-block" role="button"
           aria-pressed="true">
       </form>
     </div>
@@ -30,7 +31,7 @@
       <!-- Accordion for Collapsible Elements -->
       {% for each in inventory_items %}
       {% with item_unique_id=each.id %}
-
+      {% if each.eff_end_ts.date > current_date.date%}
       {% if each.expirationdate.date < current_date.date %}
       <!-- expired -->
 
@@ -59,7 +60,10 @@
               </div>
               <div class="column trash-center ">
                 <ul>
-                  <a class="nav-link" href="#collapse-{{item_unique_id}}"><i class="far fa-trash-alt fa-lg"></i></a>
+                  <form class="far fa-trash-alt fa-lg" method="post">
+                  {% csrf_token %}
+                  <input type="submit" name="delete_item" value={{item_unique_id}}></input>
+                 </form>
                 </ul>
               </div>
             </div>
@@ -94,7 +98,10 @@
               </div>
               <div class="column trash-center ">
                 <ul>
-                  <a class="nav-link" href="#collapse-{{item_unique_id}}"><i class="far fa-trash-alt fa-lg"></i></a>
+                 <form class="far fa-trash-alt fa-lg" method="post">
+                  {% csrf_token %}
+                  <input type="submit" name="delete_item" value={{item_unique_id}}></input>
+                 </form>
                 </ul>
               </div>
             </div>
@@ -128,7 +135,10 @@
               </div>
               <div class="column trash-center ">
                 <ul>
-                  <a class="nav-link" href="#collapse-{{item_unique_id}}"><i class="far fa-trash-alt fa-lg"></i></a>
+                  <form class="far fa-trash-alt fa-lg" method="post">
+                  {% csrf_token %}
+                  <input type="submit" name="delete_item" value={{item_unique_id}}></input>
+                 </form>
                 </ul>
               </div>
             </div>
@@ -136,7 +146,7 @@
         </div>
       </div>
       {% endif %}
-
+      {% endif %}
       {% endwith %}
       {% endfor %}
       <!-- End Accordion -->
