@@ -1,3 +1,5 @@
+import json
+import requests
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
@@ -31,3 +33,67 @@ def recipe_landing(request):
 def recipe_search(request):
     inventory_items = Item.objects.all()
     return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
+
+@login_required
+def next(request):
+    if request.method == 'GET':
+        response = request.GET
+        list =response.getlist('ingredient', default=None)
+        print(response)
+        print(list)
+        # Using for loop 
+        kompi =""
+        for i in list: 
+            kompi = i + "," + kompi 
+        print(kompi)
+        get_recipes = food2fork_call(kompi)
+        context = process_recipes(get_recipes)
+        print(context['count'])
+        print(type(context))
+    
+    #print(context) 
+    return render(request, 'recipes/recipe_search_results.html', {'count':context['count'],
+    'recipes':context['recipes']} )
+
+# method to mkae API call to food2fork recipe API
+def food2fork_call(list):
+
+# you have to sign up for an API key, which has some allowances. 
+# Check the API documentation for further details:
+    url = 'https://www.food2fork.com/api/search'
+
+    key = '6e81eadfd535b092815e395bcc38be11' 
+    #key = '57604ca61ce33d68532bb9af7f0472f9'
+    paramsPost = { 
+        'key': key,
+        'q': list,
+        'sort': 'r', #(optional) How the results should be sorted. See Below for details.
+        'page': '0' #(optional) Used to get additional results} 
+    }
+    
+    responsePost = requests.post(url, paramsPost)
+    if responsePost.status_code == 202: # everything went well!
+        print('food2dork: all good!')
+    #print(responsePost.content)
+    try:
+        result = responsePost.json()      
+    except ValueError:
+        result = {'error': 'No JSON content returned'}
+        
+    return responsePost.text
+
+
+def process_recipes(str):
+
+    toSee = json.loads(str)
+    print(type(toSee))
+    print("string value: %s" % toSee["count"])
+    recipes = toSee["recipes"]
+    print(type(recipes))
+    return toSee
+    # print(len(recipes))
+    # for x in range(len(recipes)):
+    #     print(x)
+    #     #print(recipes[x])
+    #     print(recipes[x]["title"])
+    #     print(recipes[x]["publisher"])
