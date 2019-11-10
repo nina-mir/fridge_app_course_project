@@ -2,6 +2,7 @@
 {% block content %}
 {% load static %}
 
+<script defer src="{% static '/js/scripts.js' %}"> </script>
 <link rel="stylesheet" type="text/css" href="{% static 'fridge_card.css' %}">
 
 <div class="container-fluid">
@@ -45,47 +46,25 @@
                     {% endwith %}                    
                 </h5>
                 </label>
-                
             </div>
             {% endfor %}
             <!-- submit button-->
-            
+            {%  if text %}
+                <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
+                    <div style="width: 70%;">
+                        <button class="btn btn-primary btn-lg btn-block"
+                         name="validate_items" type="submit" >Next</button>
+                    </div>
+                </div>               
+            {% endif %}
 
-            <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
-                <div style="width: 70%;">
-                    <button class="btn btn-primary btn-lg btn-block" name="validate_items" type="submit">Next</button>
-                </div>
-            </div>
+
+
+            
         </div>
     </form>
 
-
-
-
-
-
-
-    <!-- <div class="row">
-        <div class="col">
-            {% for each in text %}
-            <div id="accordion" role="tablist" aria-multiselectable="true">
-                <div class="card">
-                    <h5 class="card-header">
-                        <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
-                            aria-expanded="true" aria-controls="collapse-example" id="heading"
-                            class="collapsed d-block">
-                            {{ each }}
-                            {% load static %}
-                            {% with image_static=each|add:'.png'    %}
-                            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                            {% endwith %}
-                        </a>
-                    </h5>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div> -->
+    
 </div>
 
 {% endblock %}
