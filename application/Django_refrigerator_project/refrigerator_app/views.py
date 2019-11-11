@@ -22,6 +22,7 @@ from datetime import datetime
 def home(request):
     return render(request, 'refrigerator_project/home.html')
 
+
 @login_required
 def delete_item(request):
     inventory_items = Item.objects.all()
@@ -35,12 +36,13 @@ def groceries(request):
     try:
         current_user = request.user
         user_id = User.objects.filter(username=request.user.username).get().id
-        fridge = Fridge.objects.filter(owner_id = user_id).get()
+        fridge = Fridge.objects.filter(owner_id=user_id).get()
         tracked_items = fridge.auto_gen_grocery_list.split(',')
         manual_items = fridge.manually_added_list.split(',')
-        temp = User.objects.filter(username = current_user.username).get()
+        temp = User.objects.filter(username=current_user.username).get()
         Owndfridge_id = int(temp.ownedfridges.split(',')[0])
-        inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id))
+        inventory_items = FridgeContent.objects.filter(
+            Q(fridge_id=Owndfridge_id))
 
         # Check for Tracked items missing from fridge
         missing_items = []
@@ -66,7 +68,6 @@ def groceries(request):
     return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items})
 
 
-
 @login_required
 def profile(request):
     user_info = User.objects.all()
@@ -75,6 +76,18 @@ def profile(request):
 
 @login_required
 def fridge(request):
+    # Send user to receipt upload page upon "+" button click
+    try:
+        if request.method == 'POST' and request.FILES['receipt_image']:
+            return receipt_upload(request)
+    except:
+        print("No image.")
+    try:
+        if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
+            receipt_upload(request)
+    except:
+        print("No Selected items.")
+    
     current_user = request.user
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
@@ -83,7 +96,7 @@ def fridge(request):
         if request.method == 'POST':
             if request.POST.get('delete_item'):
                 content_id = request.POST.get('delete_item')
-                fridge_content = FridgeContent.objects.get(id = content_id)
+                fridge_content = FridgeContent.objects.get(id=content_id)
                 fridge_content.eff_end_ts = datetime.now()
                 fridge_content.save()
     except:
@@ -94,78 +107,74 @@ def fridge(request):
             if request.POST.get('add_item'):
                 item_name = request.POST.get('item_name').lower()
                 item = Item.objects.filter(name=item_name).get()
-                item_dict = {item.id:item.age}
-                temp = User.objects.filter(username = current_user.username).get()
+                item_dict = {item.id: item.age}
+                temp = User.objects.filter(
+                    username=current_user.username).get()
                 Owndfridge_id = int(temp.ownedfridges.split(',')[0])
                 addedby_person_id = temp.id
                 save_to_db(item_dict, Owndfridge_id, addedby_person_id)
     except:
         print('Add item failed')
     try:
-        #Getting primary fridge of logged in user
-        temp = User.objects.filter(username = current_user.username).get()
+        # Getting primary fridge of logged in user
+        temp = User.objects.filter(username=current_user.username).get()
         Owndfridge_id = int(temp.ownedfridges.split(',')[0])
 
-        #Sort items from their fridge based on expiration date
-        inventory_items = FridgeContent.objects.filter(Q(fridge_id = Owndfridge_id)).order_by('expirationdate')
-        fridge_name = Fridge.objects.filter(id = Owndfridge_id).get().name
+        # Sort items from their fridge based on expiration date
+        inventory_items = FridgeContent.objects.filter(
+            Q(fridge_id=Owndfridge_id)).order_by('expirationdate')
+        fridge_name = Fridge.objects.filter(id=Owndfridge_id).get().name
     except:
         print('Error')
-        return render(request,'refrigerator_project/fridge.html')
-    return render(request,'refrigerator_project/fridge.html', {'inventory_items':inventory_items, 'fridge_name':fridge_name, 'current_date': current_time, 'week_time': week_time})
+        return render(request, 'refrigerator_project/fridge.html')
+    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'current_date': current_time, 'week_time': week_time})
 
 
 def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):
     try:
         for item_id in id_age_list:
-            fridge_content = FridgeContent(expirationdate= (datetime.now()+timedelta(hours=id_age_list[item_id])), size=1, creation_date=datetime.now(), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999,12,31), addedby_id=addedby_person_id, fridge_id=Owndfridge_id, item_id=item_id)
+            fridge_content = FridgeContent(expirationdate=(datetime.now()+timedelta(hours=id_age_list[item_id])), size=1, creation_date=datetime.now(
+            ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31), addedby_id=addedby_person_id, fridge_id=Owndfridge_id, item_id=item_id)
             fridge_content.save()
     except:
         print("Error saving item to db")
 
-
-# this function does 2 things:
-# 1) user uploads an image of a receipt which will be processed
-# And, returns a list of item names to be verified by the user. (POST request)
-# 2) The user verifies which items they want to be added to their fridge
-# they can do so by selecting appropriate checkboxes and submitting the result. (GET request) 
-
 @login_required
-def simple_upload(request):
+def receipt_upload(request):
     context = {}
     current_user = request.user
-    if request.method == 'POST' and request.FILES['image']:
-        myfile = request.FILES['image']
-        fs = FileSystemStorage()
-        filename = fs.save(myfile.name, myfile)
-        print(filename)
-
-        id_list, text = detect_text(filename)
-        context={'text':text}
-        return render(request, 'refrigerator_project/receipt_upload.html', context)
-    else:
-        if request.method == 'GET':
-            response = request.GET
-            list =response.getlist('ingredient', default=None)
-        
-        tmp_id_exp_age_store = {}
-        for i in list:
-            temp_ = Item.objects.filter(Q(name__icontains = i))
-            for each in temp_:
-                if each.name.lower() == i.lower():
-                    print('Found one')
-                    tmp_id_exp_age_store[each.id] = each.age
-                    break
-
-        temp = User.objects.filter(username = current_user.username).get()
-        Owndfridge_id = int(temp.ownedfridges.split(',')[0])
-        addedby_person_id = temp.id
-
-        #Save to fridgeContent Table
-        save_to_db(tmp_id_exp_age_store,Owndfridge_id,addedby_person_id)
+    # Display found receipt content upon image receipt
+    print(request.POST)
+    if request.method == 'POST':
+        try:
+            if request.FILES['receipt_image']:
+                myfile = request.FILES['receipt_image']
+                fs = FileSystemStorage()
+                filename = fs.save(myfile.name, myfile)
+                text = detect_text(filename)[1]
+                context = {'text': text}
+        except:
+            pass
+    # Get list of selected found items and save it to db
+    if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
+        print("submitted")
+        try:
+            list = request.POST.getlist('selected_items', default=None)
+            print(list)
+            selected_items = {}
+            for i in list:
+                temp_ = Item.objects.filter(Q(name__icontains=i))
+                for j in temp_:
+                    if j.name.lower() == i.lower():
+                        selected_items[j.id] = j.age
+                        break
+            user = User.objects.filter(username=current_user.username).get()
+            Owndfridge_id = int(user.ownedfridges.split(',')[0])
+            # Save to fridgeContent Table
+            save_to_db(selected_items, Owndfridge_id, user.id)
+        except:
+            print("Error saving selected items to fridge.")
     return render(request, 'refrigerator_project/receipt_upload.html', context)
-
-
 
 # Google Vision
 def detect_text(filename):
@@ -185,8 +194,6 @@ def detect_text(filename):
     response = client.text_detection(image=image)
     texts = response.text_annotations
     nina = next(iter(texts))
-    #print(type(nina))
-    #print(type(nina.description))
     output = nina.description.splitlines( )
     for x in output:
         splitted = x.split()
@@ -194,7 +201,7 @@ def detect_text(filename):
             temp = Item.objects.filter(Q(name__icontains = i))
             for each in temp:
                 if each.name.lower() == i.lower():
-                    print('Found one')
+                    print('Found one jose')
                     post_processing_results.append(each.name)
                     tmp_id_exp_age_store[each.id] = each.age
                     break
@@ -206,7 +213,8 @@ def search(request):
     if(request.method == 'POST'):
         srch = request.POST['itemname']
         if srch:
-            match = Item.objects.filter(Q(name__icontains = srch) | Q(id__icontains = srch) | Q(calories__icontains = srch))
+            match = Item.objects.filter(Q(name__icontains=srch) | Q(
+                id__icontains=srch) | Q(calories__icontains=srch))
             if match:
-                return render(request,'refrigerator_project/search.html',{'sr':match})
-    return render(request,'refrigerator_project/search.html')
+                return render(request, 'refrigerator_project/search.html', {'sr': match})
+    return render(request, 'refrigerator_project/search.html')

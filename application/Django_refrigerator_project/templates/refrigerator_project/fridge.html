@@ -1,6 +1,6 @@
 {% extends 'refrigerator_project/base.html' %}
-{% block content %}
 {% load static %}
+{% block content %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'fridge_card.css' %}">
 
@@ -13,6 +13,7 @@
   </div>
   <div class="row">
     <div class="col">
+      <!-- Add Item Form -->
       <form method="POST">
         {% csrf_token %}
         <input type="text" name="item_name">
@@ -156,7 +157,7 @@
   </div>
 </div>
 {% else %}
-<!-- Insert code to create fridge when user doesnt have one -->
+<!-- Show when user has no fridges -->
 <h1 style="text-align: center;"> No Fridges.</h1>
 {% endif %}
 

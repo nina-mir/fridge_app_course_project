@@ -1,70 +1,66 @@
 {% extends 'refrigerator_project/base.html' %}
-{% block content %}
 {% load static %}
+{% block content %}
 
-<script defer src="{% static '/js/scripts.js' %}"> </script>
 <link rel="stylesheet" type="text/css" href="{% static 'fridge_card.css' %}">
+<link rel="stylesheet" href="{% static 'receipt_upload.css' %}">
+<script>
+    (function (e, t, n) { var r = e.querySelectorAll("html")[0]; r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2") })(document, window, 0);
+</script>
 
 <div class="container-fluid">
     <div class="row d-flex justify-content-center">
         <h1 class="text-center">Upload Your Receipt</h1>
     </div>
     <div class="row d-flex justify-content-center">
-        <div style="width: 70%;">
-            <form method="post" enctype="multipart/form-data">
+        {% if not text %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="file">
+                <a class="nav-link icon" style="margin-top: -5px;"><i class="far fa-plus-square fa-2x"></i></a>
+            </label>
+            <input type="file" name="receipt_image" id="file" class="inputfile inputfile-5" accept="image/*"
+                onchange="this.form.submit()" />
+        </form>
+        {% endif %}
+        <!-- <div style="width: 70%;">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="file" onchange="this.form.submit()" accept="image/*" name="image" id="file">
-                <!-- <input type="file" accept="image/*" name="image" id="file" hidden/>
-                <a class="btn btn-primary btn-lg btn-block" role="button"
-                aria-pressed="false">Upload Receipt Image</a> -->
-
-                <!-- <button type="submit">Upload</button> -->
             </form>
-        </div>
+        </div> -->
     </div>
-    <!-- content block pertaining to the outpout of the OCR API-->
-    <!-- May be needed to be turned into a MODAL later-->
 
-    <!-- View List of Items -->
-
-    <form id = "grocery_survey" action="" method="GET" novalidate>
+    <!-- Form for list of found items -->
+    <form method="POST">
+        {% csrf_token %}
         <div class="container" style="color:initial;">
-
-            
             {% for each in  text %}
             <div class="card form-group">
                 <label>
-                <h5 class="card-header">
-                    <input type="checkbox" style="float:right;" name="ingredient" value="{{ each }}"
-                    data-toggle="collapse"  data-parent="#accordion"
-                    aria-expanded="true" aria-controls="collapse-example" id="heading"
-                    class="collapsed d-block">
-                    {{ each }}
-                            
-                    {% with image_static=each|add:'.png' %}
-                    <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">  
-                    {% endwith %}                    
-                </h5>
+                    <h5 class="card-header">
+                        <input type="checkbox" style="float:right;" name="selected_items" value="{{ each }}"
+                            data-toggle="collapse" data-parent="#accordion" aria-expanded="true"
+                            aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                        {{ each }}
+                        {% with image_static=each|add:'.png' %}
+                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                        {% endwith %}
+                    </h5>
                 </label>
             </div>
             {% endfor %}
-            <!-- submit button-->
-            {%  if text %}
-                <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
-                    <div style="width: 70%;">
-                        <button class="btn btn-primary btn-lg btn-block"
-                         name="validate_items" type="submit" >Next</button>
-                    </div>
-                </div>               
-            {% endif %}
-
-
-
-            
         </div>
+        <!-- Submit button-->
+        {% if text %}
+        <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
+            <div style="width: 70%;">
+                <button class="btn btn-primary btn-lg btn-block" name="validate_items" type="submit"
+                    value="selection">Next</button>
+            </div>
+        </div>
+        {% endif %}
     </form>
-
-    
 </div>
 
 {% endblock %}
