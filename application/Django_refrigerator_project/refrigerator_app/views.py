@@ -108,7 +108,8 @@ def fridge(request):
     current_user = request.user
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
-    # Deleting item with using button
+
+    # Deleting items via trash icon
     try:
         if request.method == 'POST':
             if request.POST.get('delete_item'):
@@ -117,21 +118,23 @@ def fridge(request):
                 fridge_content.eff_end_ts = datetime.now()
                 fridge_content.save()
     except:
-        print('Error from adding deleteing an item')
-    # adding item using Button
+        print('Error deleting item from fridge.')
+
+    # Adding items via text field
     try:
-        if request.method == 'POST':
-            if request.POST.get('add_item'):
-                item_name = request.POST.get('item_name').lower()
-                item = Item.objects.filter(name=item_name).get()
-                item_dict = {item.id: item.age}
-                temp = User.objects.filter(
-                    username=current_user.username).get()
-                Owndfridge_id = int(temp.ownedfridges.split(',')[0])
-                addedby_person_id = temp.id
-                save_to_db(item_dict, Owndfridge_id, addedby_person_id)
+        if request.method == 'POST' and request.POST.get('add_item'):
+            print("ADDING ITEM")
+            item_name = request.POST.get('item_name').lower()
+            item = Item.objects.filter(name=item_name).get()
+            item_dict = {item.id: item.age}
+            temp = User.objects.filter(
+                username=current_user.username).get()
+            Owndfridge_id = int(temp.ownedfridges.split(',')[0])
+            addedby_person_id = temp.id
+            save_to_db(item_dict, Owndfridge_id, addedby_person_id)
     except:
-        print('Add item failed')
+        print('Error adding item.')
+        
     try:
         # Getting primary fridge of logged in user
         temp = User.objects.filter(username=current_user.username).get()
