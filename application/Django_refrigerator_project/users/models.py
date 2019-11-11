@@ -6,6 +6,8 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.db.models import IntegerField, Model
+from django_mysql.models import ListTextField
 
 
 class AuthGroup(models.Model):
@@ -119,12 +121,12 @@ class DjangoSession(models.Model):
 
 
 class User(models.Model):
-    auth_user = models.ForeignKey('AuthUser', models.DO_NOTHING, related_name='users')  
-    username = models.CharField(unique=True, max_length=255)  
-    ownedfridges = models.TextField(blank=True, null=True)  
-    friendedfridges = models.TextField(blank=True, null=True)  
-    personalnotes = models.TextField(blank=True, null=True)  
+    auth_user = models.ForeignKey('AuthUser', models.DO_NOTHING, related_name='users')
+    username = models.CharField(unique=True, max_length=255)
+    #ownedfridges = ListTextField(base_field=IntegerField())
+    ownedfridges = models.TextField(blank=True, null=True)
+    #friendedfridges = ListTextField(base_field=IntegerField())
+    friendedfridges = models.TextField(blank=True, null=True)
+    personalnotes = models.TextField(blank=True, null=True)
     eff_bgn_ts = models.DateTimeField()
     eff_end_ts = models.DateTimeField()
-
-    

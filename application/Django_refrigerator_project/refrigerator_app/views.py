@@ -88,7 +88,11 @@ def profile(request):
     except:
         print("No Selected items.")
 
-    user_info = User.objects.all()
+    #previous line printed all users
+    current_user = request.user
+    user_info = User.objects.filter(username=request.user.username)
+    user_id = User.objects.filter(username=request.user.username).get().id
+    #ownedfridgelist = Fridges.objects.filter(id = )
     return render(request, 'refrigerator_project/profile.html', context={'user_info': user_info})
 
 @login_required
@@ -104,7 +108,7 @@ def fridge(request):
             receipt_upload(request)
     except:
         print("No Selected items.")
-    
+
     current_user = request.user
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
@@ -134,10 +138,11 @@ def fridge(request):
             save_to_db(item_dict, Owndfridge_id, addedby_person_id)
     except:
         print('Error adding item.')
-        
+
     try:
         # Getting primary fridge of logged in user
         temp = User.objects.filter(username=current_user.username).get()
+        #Owndfridge_id = int(temp.ownedfridges[0])   <---- Check this
         Owndfridge_id = int(temp.ownedfridges.split(',')[0])
 
         # Sort items from their fridge based on expiration date
@@ -146,6 +151,9 @@ def fridge(request):
         fridge_name = Fridge.objects.filter(id=Owndfridge_id).get().name
     except:
         print('Error')
+        #temp = User.objects.filter(username=current_user.username).get()   <---- Check this
+        #temp.ownedfridges.append(Fridge.objects.filter(id = 1).get().id)   <---- Check this
+        #temp.save()                                                        <---- Check this
         return render(request, 'refrigerator_project/fridge.html')
     return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'current_date': current_time, 'week_time': week_time})
 

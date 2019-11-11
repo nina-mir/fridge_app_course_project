@@ -23,14 +23,14 @@
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
+          {% for each in ownedfridgelist %}
           <div id="owned" class="collapse" aria-labelledby="heading-example">
             <div class="row">
               <div class="column trash-center">
                 <ul style="list-style-type:none; padding-top: 10px;">
-                  <li>Calories: {{ each.calories }} </li>
-                  <li>Added on: </li>
-                  <li>Expiration: </li>
-                  <li>Added By: {{ each.addedby }} </li>
+                  <li>Name: {{ each.name }} </li>
+                  <li>Owner: {{ each.owner }} </li>
+                  <li>Owner: {{ each.friends }} </li>
                 </ul>
               </div>
               <div class="column trash-center ">
@@ -41,6 +41,7 @@
             </div>
           </div>
         </div>
+        {% endfor %}
 
         <div class="card">
           <h5 class="card-header">
