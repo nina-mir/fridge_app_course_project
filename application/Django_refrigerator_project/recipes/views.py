@@ -8,6 +8,7 @@ from refrigerator_app.models import Item,Fridge
 from users.models import User
 from django.db.models import Q
 from refrigerator_app import views as fridge_views
+from django.shortcuts import redirect
 
 @login_required
 def recipe_landing(request):
@@ -16,12 +17,13 @@ def recipe_landing(request):
         if request.method == 'POST' and request.FILES['receipt_image']:
             return fridge_views.receipt_upload(request)
     except:
-        print("No image.")
+        pass
     try:
         if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
             fridge_views.receipt_upload(request)
+            return redirect('/fridge/')
     except:
-        print("No Selected items.")
+        pass
 
     current_user = request.user
     try:
@@ -47,12 +49,13 @@ def recipe_search(request):
         if request.method == 'POST' and request.FILES['receipt_image']:
             return fridge_views.receipt_upload(request)
     except:
-        print("No image.")
+        pass
     try:
         if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
             fridge_views.receipt_upload(request)
+            return redirect('/fridge/')
     except:
-        print("No Selected items.")
+        pass
 
     inventory_items = Item.objects.all()
     return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
@@ -64,12 +67,13 @@ def recipe_search_results(request):
         if request.method == 'POST' and request.FILES['receipt_image']:
             return fridge_views.receipt_upload(request)
     except:
-        print("No image.")
+        pass
     try:
         if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
             fridge_views.receipt_upload(request)
+            return redirect('/fridge/')
     except:
-        print("No Selected items.")
+        pass
 
     if request.method == 'GET':
         response = request.GET

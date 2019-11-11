@@ -25,8 +25,8 @@
     <script src="https://kit.fontawesome.com/5316448d7f.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="{% static 'base.css' %}">
-    <link rel="stylesheet" href="{% static '/recipe/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'receipt_upload.css' %}">
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static '/css/receipt_upload.css' %}">
 
     <script>
         /* Set the width of the side navigation to 250px */
@@ -55,11 +55,11 @@
 
             {% if user.is_authenticated %}
             <a class="navbar-brand" href="{% url 'fridge' %}">
-                <img src="{% static 'logo_gray.png' %}" height="30" alt="">
+                <img src="{% static '/logo_icons/logo_gray.png' %}" height="30" alt="">
             </a>
             {% else %}
             <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="{% static 'logo_gray.png' %}" height="30" alt="">
+                <img src="{% static '/logo_icons/logo_gray.png' %}" height="30" alt="">
             </a>
             {% endif %}
 
@@ -167,7 +167,7 @@
     <nav class="navbar fixed-bottom justify-content-center navbar-dark bg-dark">
         <ul class="navbar-nav" style="height: 35px;">
             <li class="nav-item">
-                <a href="{% url 'fridge' %}"><img src="{% static 'fridge_gray.png' %}"
+                <a href="{% url 'fridge' %}"><img src="{% static '/logo_icons/fridge_gray.png' %}"
                         style="height: 30px; vertical-align: middle;" title="Refrigerator" alt="Refrigerator"></a>
             </li>
             <li class="nav-item">
