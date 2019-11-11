@@ -37,7 +37,7 @@
       {% if each.expirationdate.date < current_date.date %}
       <!-- Expired Items (RED) -->
       <div id="accordion" role="tablist" aria-multiselectable="true">
-        <div class="card" style="background-color: #ff8080;">
+        <div class="card" style="background-color: #ff8080; color: black;">
           <h5 class="card-header">
             <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
               aria-controls="collapse-example" id="heading" class="collapsed d-block">
@@ -72,7 +72,7 @@
       {% elif each.expirationdate.date > week_time.date %}
       <!-- Good Items (GREEN) -->
       <div id="accordion" role="tablist" aria-multiselectable="true">
-        <div class="card" style="background-color: #c6f1d6;">
+        <div class="card" style="background-color: #c6f1d6; color: black;">
           <h5 class="card-header">
             <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
               aria-controls="collapse-example" id="heading" class="collapsed d-block">
@@ -86,7 +86,7 @@
               <div class="column trash-center">
                 <ul style="list-style-type:none; padding-top: 10px;">
                   <li>Calories: {{ each.item.calories }} </li>
-                  <li>Added on: {{ each.creation_date.date.date }} </li>
+                  <li>Added on: {{ each.creation_date.date }} </li>
                   <li>Expiration: {{ each.expirationdate.date }} </li>
                   <li>Added By: {{ each.addedby.username }} </li>
                 </ul>
@@ -107,7 +107,7 @@
       {% else %}
       <!-- Near Expiration Items (YELLOW) -->
       <div id="accordion" role="tablist" aria-multiselectable="true">
-        <div class="card" style="background-color: #ffba92;">
+        <div class="card" style="background-color: #ffba92; color: black;">
           <h5 class="card-header">
             <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
               aria-controls="collapse-example" id="heading" class="collapsed d-block">

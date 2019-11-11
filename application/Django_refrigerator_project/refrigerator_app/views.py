@@ -41,8 +41,8 @@ def groceries(request):
         current_user = request.user
         user_id = User.objects.filter(username=request.user.username).get().id
         fridge = Fridge.objects.filter(owner_id=user_id).get()
-        tracked_items = fridge.auto_gen_grocery_list.split(',')
-        manual_items = fridge.manually_added_list.split(',')
+        tracked_item_list = fridge.auto_gen_grocery_list.split(',')
+        manual_item_list = fridge.manually_added_list.split(',')
         temp = User.objects.filter(username=current_user.username).get()
         Owndfridge_id =temp.ownedfridges[0]
         inventory_items = FridgeContent.objects.filter(
@@ -50,10 +50,10 @@ def groceries(request):
 
         # Check for Tracked items missing from fridge
         missing_items = []
-        for tItems in tracked_items:
+        for tItems in tracked_item_list:
             inFridge = False
             for iItems in inventory_items:
-                if (tItems == iItems):
+                if (tItems == iItems.item.name):
                     inFridge = True
             if (inFridge == False):
                 missing_items.append(tItems)
@@ -65,8 +65,8 @@ def groceries(request):
                 match = Item.objects.filter(Q(name__icontains=srch) | Q(
                     id__icontains=srch) | Q(calories__icontains=srch))
                 if match:
-                    return render(request, 'refrigerator_project/groceries.html', {'sr': match, 'missing_items': missing_items,  'manual_items': manual_items})
-        return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'missing_items': missing_items,  'manual_items': manual_items})
+                    return render(request, 'refrigerator_project/groceries.html', {'sr': match, 'missing_items': missing_items,  'manual_items': manual_item_list})
+        return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'missing_items': missing_items,  'manual_items': manual_item_list})
     except:
         print('Error Finding Grocery Lists')
     return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items})
