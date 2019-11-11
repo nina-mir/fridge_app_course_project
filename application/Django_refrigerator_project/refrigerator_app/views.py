@@ -16,6 +16,7 @@ from .models import Fridge
 import datetime
 from datetime import timedelta
 from datetime import datetime
+from django.shortcuts import redirect
 
 def home(request):
     return render(request, 'refrigerator_project/home.html')
@@ -32,12 +33,13 @@ def groceries(request):
         if request.method == 'POST' and request.FILES['receipt_image']:
             return receipt_upload(request)
     except:
-        print("No image.")
+        pass
     try:
         if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
             receipt_upload(request)
+            return redirect('/fridge/')
     except:
-        print("No Selected items.")
+        pass
 
     all_items = Item.objects.all()
     try:
@@ -81,12 +83,13 @@ def profile(request):
         if request.method == 'POST' and request.FILES['receipt_image']:
             return receipt_upload(request)
     except:
-        print("No image.")
+        pass
     try:
         if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
             receipt_upload(request)
+            return redirect('/fridge/')
     except:
-        print("No Selected items.")
+        pass
 
     #previous line printed all users
     current_user = request.user
@@ -102,10 +105,11 @@ def fridge(request):
         if request.method == 'POST' and request.FILES['receipt_image']:
             return receipt_upload(request)
     except:
-        print("No image.")
+        pass
     try:
         if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
             receipt_upload(request)
+            return redirect('/fridge/')
     except:
         print("No Selected items.")
 
@@ -179,7 +183,8 @@ def receipt_upload(request):
                 myfile = request.FILES['receipt_image']
                 fs = FileSystemStorage()
                 filename = fs.save(myfile.name, myfile)
-                text = detect_text(filename)[1]
+                # text = detect_text(filename)[1]
+                text = {'coffee'}
                 context = {'text': text}
         except:
             pass

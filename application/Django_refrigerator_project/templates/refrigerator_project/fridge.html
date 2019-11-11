@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'fridge_card.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/css/fridge_card.css' %}">
 
 {% if fridge_name %}
 <div class="container">
@@ -32,20 +32,17 @@
       <!-- Accordion for Collapsible Elements -->
       {% for each in inventory_items %}
       {% with item_unique_id=each.id %}
+      {% with image_static='/item_icons/'|add:each.item.name|add:'.png' %}
       {% if each.eff_end_ts.date > current_date.date%}
-      {% if each.expirationdate.date < current_date.date %}
-      <!-- expired -->
-
+      {% if each.expirationdate.date.date < current_date.date %}
+      <!-- Expired Items (RED) -->
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card" style="background-color: #ff8080;">
           <h5 class="card-header">
             <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
               aria-controls="collapse-example" id="heading" class="collapsed d-block">
               {{ each.item.name }}
-              {% load static %}
-              {% with image_static=each.item.name|add:'.png'    %}
               <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-              {% endwith %}
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
@@ -54,8 +51,8 @@
               <div class="column trash-center">
                 <ul style="list-style-type:none; padding-top: 10px;">
                   <li>Calories: {{ each.item.calories }} </li>
-                  <li>Added on: {{ each.creation_date }} </li>
-                  <li>Expiration: {{ each.expirationdate }} </li>
+                  <li>Added on: {{ each.creation_date.date }} </li>
+                  <li>Expiration: {{ each.expirationdate.date }} </li>
                   <li>Added By: {{ each.addedby.username }} </li>
                 </ul>
               </div>
@@ -72,18 +69,15 @@
           </div>
         </div>
       </div>
-      {% elif each.expirationdate.date > week_time.date %}
-      <!-- Good items -->
+      {% elif each.expirationdate.date.date > week_time.date %}
+      <!-- Good Items (GREEN) -->
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card" style="background-color: #c6f1d6;">
           <h5 class="card-header">
             <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
               aria-controls="collapse-example" id="heading" class="collapsed d-block">
               {{ each.item.name }}
-              {% load static %}
-              {% with image_static=each.item.name|add:'.png'    %}
               <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-              {% endwith %}
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
@@ -92,8 +86,8 @@
               <div class="column trash-center">
                 <ul style="list-style-type:none; padding-top: 10px;">
                   <li>Calories: {{ each.item.calories }} </li>
-                  <li>Added on: {{ each.creation_date }} </li>
-                  <li>Expiration: {{ each.expirationdate }} </li>
+                  <li>Added on: {{ each.creation_date.date.date }} </li>
+                  <li>Expiration: {{ each.expirationdate.date }} </li>
                   <li>Added By: {{ each.addedby.username }} </li>
                 </ul>
               </div>
@@ -111,17 +105,14 @@
         </div>
       </div>
       {% else %}
-      <!-- Yellow items -->
+      <!-- Near Expiration Items (YELLOW) -->
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card" style="background-color: #ffba92;">
           <h5 class="card-header">
             <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
               aria-controls="collapse-example" id="heading" class="collapsed d-block">
               {{ each.item.name }}
-              {% load static %}
-              {% with image_static=each.item.name|add:'.png'    %}
               <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-              {% endwith %}
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
@@ -130,8 +121,8 @@
               <div class="column trash-center">
                 <ul style="list-style-type:none; padding-top: 10px;">
                   <li>Calories: {{ each.item.calories }} </li>
-                  <li>Added on: {{ each.creation_date }} </li>
-                  <li>Expiration: {{ each.expirationdate }} </li>
+                  <li>Added on: {{ each.creation_date.date }} </li>
+                  <li>Expiration: {{ each.expirationdate.date }} </li>
                   <li>Added By: {{ each.addedby.username }} </li>
                 </ul>
               </div>
@@ -150,6 +141,7 @@
       </div>
       {% endif %}
       {% endif %}
+      {% endwith %}
       {% endwith %}
       {% endfor %}
       <!-- End Accordion -->
