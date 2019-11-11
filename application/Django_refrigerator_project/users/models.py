@@ -123,10 +123,8 @@ class DjangoSession(models.Model):
 class User(models.Model):
     auth_user = models.ForeignKey('AuthUser', models.DO_NOTHING, related_name='users')
     username = models.CharField(unique=True, max_length=255)
-    #ownedfridges = ListTextField(base_field=IntegerField())
-    ownedfridges = models.TextField(blank=True, null=True)
-    #friendedfridges = ListTextField(base_field=IntegerField())
-    friendedfridges = models.TextField(blank=True, null=True)
+    ownedfridges = ListTextField(base_field=IntegerField())
+    friendedfridges = ListTextField(base_field=IntegerField())
     personalnotes = models.TextField(blank=True, null=True)
     eff_bgn_ts = models.DateTimeField()
     eff_end_ts = models.DateTimeField()

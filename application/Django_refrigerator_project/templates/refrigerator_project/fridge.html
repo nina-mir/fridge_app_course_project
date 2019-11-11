@@ -34,7 +34,7 @@
       {% with item_unique_id=each.id %}
       {% with image_static='/item_icons/'|add:each.item.name|add:'.png' %}
       {% if each.eff_end_ts.date > current_date.date%}
-      {% if each.expirationdate.date.date < current_date.date %}
+      {% if each.expirationdate.date < current_date.date %}
       <!-- Expired Items (RED) -->
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card" style="background-color: #ff8080;">
@@ -69,7 +69,7 @@
           </div>
         </div>
       </div>
-      {% elif each.expirationdate.date.date > week_time.date %}
+      {% elif each.expirationdate.date > week_time.date %}
       <!-- Good Items (GREEN) -->
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card" style="background-color: #c6f1d6;">
@@ -151,6 +151,12 @@
 {% else %}
 <!-- Show when user has no fridges -->
 <h1 style="text-align: center;"> No Fridges.</h1>
+<form method="POST">
+        {% csrf_token %}
+        <input type="text" name="fridge_name">
+        <input type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-primary btn-lg btn-block" role="button"
+          aria-pressed="true">
+</form>
 {% endif %}
 
 {% endblock %}
