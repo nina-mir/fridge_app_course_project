@@ -52,7 +52,7 @@
 
             <!-- View List of Items -->
 
-            <form id = "ingredients_survey" action="{% url 'next' %}" method="GET" novalidate>
+            <form id = "ingredients_survey" action="{% url 'recipe_search_results' %}" method="GET" novalidate>
             <div class="container" style="color:initial;">
                 {% for each in inventory_items %}
                 <div class="card form-group">

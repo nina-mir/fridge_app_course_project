@@ -7,20 +7,19 @@ from django.contrib.auth.decorators import login_required  #for using @login_req
 from refrigerator_app.models import Item,Fridge
 from users.models import User
 from django.db.models import Q
-
-# Create your views here.
+from refrigerator_app import views as fridge_views
 
 @login_required
 def recipe_landing(request):
-        # Send user to receipt upload page upon "+" button click
+    # Send user to receipt upload page upon "+" button click
     try:
         if request.method == 'POST' and request.FILES['receipt_image']:
-            return receipt_upload(request)
+            return fridge_views.receipt_upload(request)
     except:
         print("No image.")
     try:
         if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
-            receipt_upload(request)
+            fridge_views.receipt_upload(request)
     except:
         print("No Selected items.")
 
@@ -43,15 +42,15 @@ def recipe_landing(request):
 
 @login_required
 def recipe_search(request):
-        # Send user to receipt upload page upon "+" button click
+    # Send user to receipt upload page upon "+" button click
     try:
         if request.method == 'POST' and request.FILES['receipt_image']:
-            return receipt_upload(request)
+            return fridge_views.receipt_upload(request)
     except:
         print("No image.")
     try:
         if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
-            receipt_upload(request)
+            fridge_views.receipt_upload(request)
     except:
         print("No Selected items.")
 
@@ -59,14 +58,26 @@ def recipe_search(request):
     return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
 
 @login_required
-def next(request):
+def recipe_search_results(request):
+    # Send user to receipt upload page upon "+" button click
+    try:
+        if request.method == 'POST' and request.FILES['receipt_image']:
+            return fridge_views.receipt_upload(request)
+    except:
+        print("No image.")
+    try:
+        if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
+            fridge_views.receipt_upload(request)
+    except:
+        print("No Selected items.")
+
     if request.method == 'GET':
         response = request.GET
         list =response.getlist('ingredient', default=None)
         print(response)
         print(list)
         # Using for loop 
-        kompi =""
+        kompi = ""
         for i in list: 
             kompi = i + "," + kompi 
         print(kompi)
@@ -74,16 +85,13 @@ def next(request):
         context = process_recipes(get_recipes)
         print(context['count'])
         print(type(context))
-    
-    #print(context) 
     return render(request, 'recipes/recipe_search_results.html', {'count':context['count'],
     'recipes':context['recipes']} )
 
 # method to mkae API call to food2fork recipe API
 def food2fork_call(list):
-
-# you have to sign up for an API key, which has some allowances. 
-# Check the API documentation for further details:
+    # you have to sign up for an API key, which has some allowances. 
+    # Check the API documentation for further details:
     url = 'https://www.food2fork.com/api/search'
 
     key = '6e81eadfd535b092815e395bcc38be11' 
@@ -103,9 +111,7 @@ def food2fork_call(list):
         result = responsePost.json()      
     except ValueError:
         result = {'error': 'No JSON content returned'}
-        
     return responsePost.text
-
 
 def process_recipes(str):
     toSee = json.loads(str)

@@ -74,7 +74,6 @@ def groceries(request):
         print('Error Finding Grocery Lists')
     return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items})
 
-
 @login_required
 def profile(request):
     # Send user to receipt upload page upon "+" button click
@@ -91,7 +90,6 @@ def profile(request):
 
     user_info = User.objects.all()
     return render(request, 'refrigerator_project/profile.html', context={'user_info': user_info})
-
 
 @login_required
 def fridge(request):
