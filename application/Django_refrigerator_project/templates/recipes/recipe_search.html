@@ -40,7 +40,7 @@
                             aria-expanded="true" aria-controls="collapse-example" id="heading"
                             class="collapsed d-block">
                             {{ each.name }}
-                            {% with image_static=each.name|add:'.png' %}
+                            {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
                             <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                             {% endwith %}
                         </a>
@@ -62,9 +62,8 @@
                         data-toggle="collapse"  data-parent="#accordion"
                         aria-expanded="true" aria-controls="collapse-example" id="heading"
                         class="collapsed d-block">
-                        {{ each.name }}
-                                
-                        {% with image_static=each.name|add:'.png' %}
+                        {{ each.name }}  
+                        {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
                         <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">  
                         {% endwith %}
                             <!--input type="checkbox" style="float:right;" name="ingredient" value="{{ each.name }}">

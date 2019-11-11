@@ -165,8 +165,8 @@ def receipt_upload(request):
                 myfile = request.FILES['receipt_image']
                 fs = FileSystemStorage()
                 filename = fs.save(myfile.name, myfile)
-                # text = detect_text(filename)[1]
-                text = {'coffee'}
+                text = detect_text(filename)[1]
+                # text = {'coffee'} #used for testing
                 context = {'text': text}
         except:
             pass

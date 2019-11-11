@@ -43,7 +43,7 @@
                             data-toggle="collapse" data-parent="#accordion" aria-expanded="true"
                             aria-controls="collapse-example" id="heading" class="collapsed d-block">
                         {{ each }}
-                        {% with image_static=each|add:'.png' %}
+                        {% with image_static='/item_icons/'|add:each|add:'.png' %}
                         <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                         {% endwith %}
                     </h5>
