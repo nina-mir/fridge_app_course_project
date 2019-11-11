@@ -12,6 +12,18 @@ from django.db.models import Q
 
 @login_required
 def recipe_landing(request):
+        # Send user to receipt upload page upon "+" button click
+    try:
+        if request.method == 'POST' and request.FILES['receipt_image']:
+            return receipt_upload(request)
+    except:
+        print("No image.")
+    try:
+        if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
+            receipt_upload(request)
+    except:
+        print("No Selected items.")
+
     current_user = request.user
     try:
         #Getting all fridges of logged in user
@@ -31,6 +43,18 @@ def recipe_landing(request):
 
 @login_required
 def recipe_search(request):
+        # Send user to receipt upload page upon "+" button click
+    try:
+        if request.method == 'POST' and request.FILES['receipt_image']:
+            return receipt_upload(request)
+    except:
+        print("No image.")
+    try:
+        if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
+            receipt_upload(request)
+    except:
+        print("No Selected items.")
+
     inventory_items = Item.objects.all()
     return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
 
@@ -84,7 +108,6 @@ def food2fork_call(list):
 
 
 def process_recipes(str):
-
     toSee = json.loads(str)
     print(type(toSee))
     print("string value: %s" % toSee["count"])

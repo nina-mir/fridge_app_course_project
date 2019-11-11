@@ -16,22 +16,29 @@ from .models import Fridge
 import datetime
 from datetime import timedelta
 from datetime import datetime
-# Create your views here.
-
 
 def home(request):
     return render(request, 'refrigerator_project/home.html')
 
-
 @login_required
 def delete_item(request):
     inventory_items = Item.objects.all()
-
     return render(request, 'refrigerator_project/home.html', context={'inventory_items': inventory_items})
-
 
 @login_required
 def groceries(request):
+    # Send user to receipt upload page upon "+" button click
+    try:
+        if request.method == 'POST' and request.FILES['receipt_image']:
+            return receipt_upload(request)
+    except:
+        print("No image.")
+    try:
+        if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
+            receipt_upload(request)
+    except:
+        print("No Selected items.")
+
     all_items = Item.objects.all()
     try:
         current_user = request.user
@@ -70,6 +77,18 @@ def groceries(request):
 
 @login_required
 def profile(request):
+    # Send user to receipt upload page upon "+" button click
+    try:
+        if request.method == 'POST' and request.FILES['receipt_image']:
+            return receipt_upload(request)
+    except:
+        print("No image.")
+    try:
+        if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
+            receipt_upload(request)
+    except:
+        print("No Selected items.")
+
     user_info = User.objects.all()
     return render(request, 'refrigerator_project/profile.html', context={'user_info': user_info})
 
@@ -180,17 +199,13 @@ def receipt_upload(request):
 def detect_text(filename):
     post_processing_results = []
     tmp_id_exp_age_store = {}
-
-    """Detects text in the file."""
+    # Detects text in the file.
     from google.cloud import vision
     import io
     client = vision.ImageAnnotatorClient()
-
     with io.open(filename, 'rb') as image_file:
         content = image_file.read()
-
     image = vision.types.Image(content=content)
-
     response = client.text_detection(image=image)
     texts = response.text_annotations
     nina = next(iter(texts))
@@ -206,7 +221,6 @@ def detect_text(filename):
                     tmp_id_exp_age_store[each.id] = each.age
                     break
     return tmp_id_exp_age_store, post_processing_results
-
 
 @login_required
 def search(request):
