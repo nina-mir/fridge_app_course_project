@@ -184,7 +184,8 @@ def receipt_upload(request):
                 # text = {'coffee'} #used for testing
                 context = {'text': text}
         except:
-            pass
+            print("Either missing a fridge or nothing detected")
+            return redirect('/fridge/')
     # Get list of selected found items and save it to db
     if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
         print("submitted")

@@ -10,21 +10,21 @@ from users.models import User
 from users.models import AuthUser
 
 class Fridge(models.Model):
-    name = models.CharField(max_length=255)  
-    owner = models.ForeignKey(User, models.DO_NOTHING, related_name='fridges')  
-    friends = models.TextField(blank=True, null=True)  
-    auto_gen_grocery_list = models.TextField(blank=True, null=True)  
-    manually_added_list = models.TextField(blank=True, null=True)  
+    name = models.CharField(max_length=255)
+    owner = models.ForeignKey(User, models.DO_NOTHING, related_name='fridges')
+    friends = models.TextField(blank=True, null=True)  #Should be changed to ListTextField (Internally use integer)
+    auto_gen_grocery_list = models.TextField(blank=True, null=True)  #Should be changed to ListTextField (Internally use text)
+    manually_added_list = models.TextField(blank=True, null=True)  #Should be changed to ListTextField (Internally use text)
     creation_date = models.DateTimeField()
     modified_date = models.DateTimeField()
     eff_bgn_ts = models.DateTimeField()
     eff_end_ts = models.DateTimeField()
 
 class Item(models.Model):
-    name = models.CharField(max_length=255)  
-    age = models.BigIntegerField(blank=True, null=True)  
-    isperishable = models.IntegerField()  
-    calories = models.IntegerField(blank=True, null=True)  
+    name = models.CharField(max_length=255)
+    age = models.BigIntegerField(blank=True, null=True)
+    isperishable = models.IntegerField()
+    calories = models.IntegerField(blank=True, null=True)
     creation_date = models.DateTimeField()
     modified_date = models.DateTimeField()
     eff_bgn_ts = models.DateTimeField()
@@ -32,11 +32,11 @@ class Item(models.Model):
 
 
 class FridgeContent(models.Model):
-    fridge = models.ForeignKey(Fridge, models.DO_NOTHING, related_name='fridge_contents')  
-    item = models.ForeignKey(Item, models.DO_NOTHING, related_name='fridge_content')  
-    addedby = models.ForeignKey(User, models.DO_NOTHING, related_name='fridge_contents')  
-    expirationdate = models.DateTimeField()  
-    size = models.IntegerField(blank=True, null=True)  
+    fridge = models.ForeignKey(Fridge, models.DO_NOTHING, related_name='fridge_contents')
+    item = models.ForeignKey(Item, models.DO_NOTHING, related_name='fridge_content')
+    addedby = models.ForeignKey(User, models.DO_NOTHING, related_name='fridge_contents')
+    expirationdate = models.DateTimeField()
+    size = models.IntegerField(blank=True, null=True)
     creation_date = models.DateTimeField()
     modified_date = models.DateTimeField()
     eff_bgn_ts = models.DateTimeField()
@@ -45,12 +45,10 @@ class FridgeContent(models.Model):
 
 
 class Recipe(models.Model):
-    fridge = models.ForeignKey(Fridge, models.DO_NOTHING, related_name='recipes')  
+    fridge = models.ForeignKey(Fridge, models.DO_NOTHING, related_name='recipes')
     user = models.ForeignKey(User, models.DO_NOTHING, related_name='recipes')
-    title = models.TextField()  
-    sourceurl = models.TextField()  
+    title = models.TextField()
+    sourceurl = models.TextField()
+    #imageurl = models.TextField() - Saving image URL for recipes
     eff_bgn_ts = models.DateTimeField()
     eff_end_ts = models.DateTimeField()
-
-
-
