@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<link rel="stylesheet" type="text/css" href="{% static '/css/fridge_card.css' %}">
+<link rel="stylesheet" href="{% static '/css/fridge_card.css' %}">
 <link rel="stylesheet" href="{% static '/css/receipt_upload.css' %}">
 <script>
     (function (e, t, n) { var r = e.querySelectorAll("html")[0]; r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2") })(document, window, 0);
@@ -36,19 +36,20 @@
         {% csrf_token %}
         <div class="container" style="color:initial;">
             {% for each in  text %}
-            <div class="card form-group">
+            <div class="card" style="height: 4rem; color: black; background-color: #f2f2f2;">
                 <label>
-                    <h5 class="card-header">
-                        <input type="checkbox" style="float:right;" name="selected_items" value="{{ each }}"
-                            data-toggle="collapse" data-parent="#accordion" aria-expanded="true"
-                            aria-controls="collapse-example" id="heading" class="collapsed d-block">
-                        {{ each }}
-                        {% with image_static='/item_icons/'|add:each|add:'.png' %}
-                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                        {% endwith %}
-                    </h5>
+                    <div class="card-body">
+                        <input type="checkbox" style="float:right;" name="selected_items" value="{{ each }}">
+                        <h5 class="card-title">
+                            {% with image_static='/item_icons/'|add:each|add:'.png' %}
+                            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                            {% endwith %}
+                            {{ each }}
+                        </h5>
+                    </div>
                 </label>
             </div>
+            <div style="padding-top: 4px;"></div>
             {% endfor %}
         </div>
         <!-- Submit button-->

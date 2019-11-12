@@ -16,19 +16,12 @@
       <!-- Add Item Form -->
       <form class="navbar-form navbar-left" role="search" method="POST">
         {% csrf_token %}
-        <div class="form-group" >
-          <input type="text" class="form-control" placeholder="Search" 
-          style="width: 65%;float:left" name="item_name">
-          <button type="submit" name="add_item" value="ADD ITEM" 
-          class="btn btn-primary btn-block" style="width:30%;float:right"
-          aria-pressed="true" >submit</button>
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Item Name" style="width: 65%;float:left" name="item_name">
+          <button type="submit" name="add_item" value="ADD ITEM" class="btn btn-primary btn-block"
+            style="width:30%;float:right" aria-pressed="true">Add Item</button>
         </div>
-        
       </form>
-
-
-
-
       <!-- <form method="POST">
         {% csrf_token %}
         <input type="text" name="item_name">
@@ -57,8 +50,8 @@
           <h5 class="card-header">
             <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
               aria-controls="collapse-example" id="heading" class="collapsed d-block">
-              {{ each.item.name }}
               <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+              {{ each.item.name }}
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
@@ -92,8 +85,8 @@
           <h5 class="card-header">
             <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
               aria-controls="collapse-example" id="heading" class="collapsed d-block">
-              {{ each.item.name }}
               <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+              {{ each.item.name }}
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
@@ -127,8 +120,8 @@
           <h5 class="card-header">
             <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
               aria-controls="collapse-example" id="heading" class="collapsed d-block">
-              {{ each.item.name }}
               <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+              {{ each.item.name }}
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
@@ -168,10 +161,10 @@
 <!-- Show when user has no fridges -->
 <h1 style="text-align: center;"> No Fridges.</h1>
 <form method="POST">
-        {% csrf_token %}
-        <input type="text" name="fridge_name">
-        <input type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-primary btn-lg btn-block" role="button"
-          aria-pressed="true">
+  {% csrf_token %}
+  <input type="text" name="fridge_name">
+  <input type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-primary btn-lg btn-block" role="button"
+    aria-pressed="true">
 </form>
 {% endif %}
 
