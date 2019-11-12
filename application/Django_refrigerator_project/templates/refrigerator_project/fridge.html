@@ -14,12 +14,28 @@
   <div class="row">
     <div class="col">
       <!-- Add Item Form -->
-      <form method="POST">
+      <form class="navbar-form navbar-left" role="search" method="POST">
+        {% csrf_token %}
+        <div class="form-group" >
+          <input type="text" class="form-control" placeholder="Search" 
+          style="width: 65%;float:left" name="item_name">
+          <button type="submit" name="add_item" value="ADD ITEM" 
+          class="btn btn-primary btn-block" style="width:30%;float:right"
+          aria-pressed="true" >submit</button>
+        </div>
+        
+      </form>
+
+
+
+
+      <!-- <form method="POST">
         {% csrf_token %}
         <input type="text" name="item_name">
-        <input type="submit" name="add_item" value="ADD ITEM" class="btn btn-primary btn-lg btn-block" role="button"
+        <input type="submit" name="add_item" value="ADD ITEM" 
+        class="btn btn-primary btn-lg btn-block" role="button"
           aria-pressed="true">
-      </form>
+      </form> -->
     </div>
   </div>
   <div class="row">
