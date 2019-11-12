@@ -119,6 +119,19 @@ def fridge(request):
             add_fridge(request.POST.get('fridge_name'), current_user.username)
     except:
         print('Error adding fridge')
+    # adding fridge
+    try:
+        if request.method == 'POST' and request.POST.get('add_friend_by_email'):
+            print('adding friend')
+            user_id = User.objects.filter(username=current_user.username).get().id
+            friend_mail = request.POST.get('friend_email')
+            friend_auth_user_username = AuthUser.objects.filter(email=friend_mail).get().username
+            friend_user = User.objects.filter(username=friend_auth_user_username).get()
+            fridge_id = Fridge.objects.filter(owner_id=user_id).get().id
+            friend_user.friendedfridges.append(fridge_id)
+            friend_user.save()
+    except:
+        print('Error adding friend')
     # Deleting items via trash icon
     try:
         if request.method == 'POST' and request.POST.get('delete_item'):
@@ -250,8 +263,5 @@ def add_fridge(fridge_name, current_username):
     fridge = Fridge(name = fridge_name, owner = user, creation_date=datetime.now(), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31))
     fridge.save()
     # adding fridge to the owner
-    print(user.ownedfridges)
     user.ownedfridges.append(fridge.id)
-    print(user.ownedfridges)
     user.save()
-    

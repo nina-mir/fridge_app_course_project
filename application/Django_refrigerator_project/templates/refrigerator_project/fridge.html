@@ -22,6 +22,14 @@
             style="width:30%;float:right" aria-pressed="true">Add Item</button>
         </div>
       </form>
+      <form class="navbar-form navbar-left" role="search" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Friend Email" style="width: 65%;float:left" name="friend_email">
+          <button type="submit" name="add_friend_by_email" value="ADD Friend" class="btn btn-primary btn-block"
+            style="width:30%;float:right" aria-pressed="true">Add Friend</button>
+        </div>
+      </form>
       <!-- <form method="POST">
         {% csrf_token %}
         <input type="text" name="item_name">
