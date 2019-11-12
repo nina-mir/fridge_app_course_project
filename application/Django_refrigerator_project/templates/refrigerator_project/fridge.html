@@ -33,7 +33,7 @@
       {% for each in inventory_items %}
       {% with item_unique_id=each.id %}
       {% with image_static='/item_icons/'|add:each.item.name|add:'.png' %}
-      {% if each.eff_end_ts.date > current_date.date%}
+      {% if each.eff_end_ts.date > current_date.date %}
       {% if each.expirationdate.date < current_date.date %}
       <!-- Expired Items (RED) -->
       <div id="accordion" role="tablist" aria-multiselectable="true">

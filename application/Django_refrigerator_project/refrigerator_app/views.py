@@ -50,11 +50,13 @@ def groceries(request):
 
         # Check for Tracked items missing from fridge
         missing_items = []
+        current_time = datetime.now()
         for tItems in tracked_item_list:
             inFridge = False
             for iItems in inventory_items:
-                if (tItems == iItems.item.name):
-                    inFridge = True
+                if (iItems.eff_end_ts > current_time):
+                    if (tItems == iItems.item.name):
+                        inFridge = True
             if (inFridge == False):
                 missing_items.append(tItems)
 
