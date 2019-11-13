@@ -36,13 +36,28 @@ def groceries(request):
     except:
         pass
 
+    # Variables
     all_items = Item.objects.all()
+    match = None
+    missing_items = None
+    manual_item_list = None
+
+    # Get list of manual items
+    try:
+        current_user = request.user
+        user_id = User.objects.filter(username=request.user.username).get().id
+        fridge = Fridge.objects.filter(owner_id=user_id).get()
+        manual_item_list = fridge.manually_added_list.split(',')
+    except:
+        print(("Error getting manual groceries."))  
+
+    # Compute list of missing items   
     try:
         current_user = request.user
         user_id = User.objects.filter(username=request.user.username).get().id
         fridge = Fridge.objects.filter(owner_id=user_id).get()
         tracked_item_list = fridge.auto_gen_grocery_list.split(',')
-        manual_item_list = fridge.manually_added_list.split(',')
+        
         temp = User.objects.filter(username=current_user.username).get()
         Owndfridge_id =temp.ownedfridges[0]
         inventory_items = FridgeContent.objects.filter(
@@ -59,19 +74,20 @@ def groceries(request):
                         inFridge = True
             if (inFridge == False):
                 missing_items.append(tItems)
+    except:
+        print('Error getting tracked groceries.')
 
-        # Search for item functionality
+    # Search for item functionality
+    try:
         if(request.method == 'POST'):
             srch = request.POST['itemname']
             if srch:
                 match = Item.objects.filter(Q(name__icontains=srch) | Q(
                     id__icontains=srch) | Q(calories__icontains=srch))
-                if match:
-                    return render(request, 'refrigerator_project/groceries.html', {'sr': match, 'missing_items': missing_items,  'manual_items': manual_item_list})
-        return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'missing_items': missing_items,  'manual_items': manual_item_list})
     except:
-        print('Error Finding Grocery Lists')
-    return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items})
+        print("Error searching for items.")
+
+    return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'sr': match, 'missing_items': missing_items,  'manual_items': manual_item_list})
 
 @login_required
 def profile(request):
@@ -113,13 +129,13 @@ def fridge(request):
     current_user = request.user
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
-    # adding fridge
+    # Adding Fridge
     try:
         if request.method == 'POST' and request.POST.get('add_fridge'):
             add_fridge(request.POST.get('fridge_name'), current_user.username)
     except:
         print('Error adding fridge')
-    # adding fridge
+    # Adding Friends
     try:
         if request.method == 'POST' and request.POST.get('add_friend_by_email'):
             print('adding friend')
