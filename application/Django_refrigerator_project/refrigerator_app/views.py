@@ -209,15 +209,23 @@ def fridge(request):
         print('Error')
         return render(request, 'refrigerator_project/fridge.html')
     try:
+        # Rename current primary fridge name :: to be added checks on ownership.
         if request.method == 'POST' and request.POST.get('rename_fridge'):
             user_id = User.objects.filter(username=current_user.username).get().id
-            fridge_obj = Fridge.objects.filter(owner_id=user_id).get()
-            fridge_obj.name = request.POST.get('rename_fridge')
-            fridge_obj.save()           
-            return render(request,'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_obj.name, 'current_date': current_time, 'week_time': week_time})
+            print(user_id)
+            # Getting primary fridge of logged in user
+            temp = User.objects.filter(username=current_user.username).get()
+            Owndfridge_id = temp.ownedfridges[0]
+            fridge_primary_obj = Fridge.objects.filter(id=Owndfridge_id).get()
+
+#            fridge_obj = Fridge.objects.filter(owner_id=user_id).get()
+#            print( fridge_obj)
+            fridge_primary_obj.name = request.POST.get('rename_fridge')
+            fridge_primary_obj.save()           
+            return render(request,'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_primary_obj.name, 'current_date': current_time, 'week_time': week_time})
     except:
-        print('Error')
-        return render(request, 'refrigerator_project/fridge.html')
+        print('Error Renaming Fridge')
+        return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'current_date': current_time, 'week_time': week_time})
     return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'current_date': current_time, 'week_time': week_time})
 
 
