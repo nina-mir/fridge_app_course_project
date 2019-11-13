@@ -3,7 +3,8 @@
 {% block content %}
 
 <style>
-    .modal-dialog, .modal-content {
+    .modal-dialog,
+    .modal-content {
         /* overflow-y: initial !important; */
         height: 95%;
     }
@@ -44,7 +45,6 @@
             {% else %}
             <p>none</p>
             {% endif %}
-
         </div>
     </div>
     <div class="row">
@@ -68,12 +68,23 @@
             {% for each in manual_items %}
             <div class="card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
                 <div class="card-body">
-                    <h5 class="card-text">
-                        {% with image_static='/item_icons/'|add:each|add:'.png' %}
-                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                        {% endwith %}
-                        {{ each }}
-                    </h5>
+                    <div class="row">
+                        <div class="col-1">
+                            {% with image_static='/item_icons/'|add:each|add:'.png' %}
+                            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                            {% endwith %}
+                        </div>
+                        <div class="col-9">
+                            <h5 class="card-text">{{ each }}</h5>
+                        </div>
+                        <div class="col-2">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
+                                    value={{each}}></button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div style="padding-top: 4px;"></div>
@@ -123,19 +134,22 @@
                         </div>
                     </form>
                     <hr size="3" width="100%" color="gray">
+                </div>
+                <!-- View List of Items -->
+                <form id="grocery_selector" method="POST">
+                    {% csrf_token %}
                     <!-- Display Search Results if Applicable -->
                     {% if sr %}
-                    <h6>Found Items:</h6>
-                    {% endif %}
+                    <h6 style="color: black;">Found Items:</h6>
                     {% for each in sr %}
                     <div class="card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
                         <label>
                             <div class="card-body">
-                                <input type="checkbox" style="float:right;" name="ingredient" value="{{ each.name }}"
+                                <input type="checkbox" style="float:right;" name="grocery_items" value="{{ each.name }}"
                                     id="heading">
                                 <h5 class="card-title">
                                     {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
-                                    <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                                    <img src="{% static image_static %}" alt="grocery_items" style="height: 30px;">
                                     {% endwith %}
                                     {{ each.name }}
                                 </h5>
@@ -144,17 +158,14 @@
                     </div>
                     <div style="padding-top: 4px;"></div>
                     {% endfor %}
-                    </form>
-                </div>
-                <!-- View List of Items -->
-                <form id="ingredients_survey" method="POST">
-                    {% csrf_token %}
+                    {% else %}
+                    <!-- Display All Items Available -->
                     <div class="container-fluid">
                         {% for each in all_items %}
                         <div class="card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
                             <label>
                                 <div class="card-body">
-                                    <input type="checkbox" style="float:right;" name="ingredient"
+                                    <input type="checkbox" style="float:right;" name="grocery_items"
                                         value="{{ each.name }}" id="heading">
                                     <h5 class="card-title">
                                         {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
@@ -168,15 +179,14 @@
                         <div style="padding-top: 4px;"></div>
                         {% endfor %}
                     </div>
+                    {% endif %}
                 </form>
             </div>
             <!-- Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <form>
-                    {% csrf_token %}
-                    <button class="btn btn-primary" name="next" type="submit">Save Selection</button>
-                </form>
+                <button class="btn btn-primary" name="grocery_selector_submit" type="submit" value="selection"
+                    form="grocery_selector">Save Selection</button>
             </div>
         </div>
     </div>

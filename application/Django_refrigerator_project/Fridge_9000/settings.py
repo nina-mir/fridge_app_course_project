@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'Fridge_9000.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 
-if(PROD):    
+if(PROD):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',

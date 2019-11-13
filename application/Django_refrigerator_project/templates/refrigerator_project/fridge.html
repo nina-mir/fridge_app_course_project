@@ -4,6 +4,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static '/css/fridge_card.css' %}">
 
+<!-- Show when user has a fridge -->
 {% if fridge_name %}
 <div class="container">
   <div class="row">
@@ -20,6 +21,14 @@
           <input type="text" class="form-control" placeholder="Item Name" style="width: 65%;float:left" name="item_name">
           <button type="submit" name="add_item" value="ADD ITEM" class="btn btn-primary btn-block"
             style="width:30%;float:right" aria-pressed="true">Add Item</button>
+        </div>
+      </form>
+      <form class="navbar-form navbar-left" role="search" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Friend Email" style="width: 65%;float:left" name="friend_email">
+          <button type="submit" name="add_friend_by_email" value="ADD Friend" class="btn btn-primary btn-block"
+            style="width:30%;float:right" aria-pressed="true">Add Friend</button>
         </div>
       </form>
       <!-- <form method="POST">
@@ -159,13 +168,26 @@
 </div>
 {% else %}
 <!-- Show when user has no fridges -->
-<h1 style="text-align: center;"> No Fridges.</h1>
-<form method="POST">
-  {% csrf_token %}
-  <input type="text" name="fridge_name">
-  <input type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-primary btn-lg btn-block" role="button"
-    aria-pressed="true">
-</form>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1 style="text-align: center;"> You have no fridges.</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="text" name="fridge_name" class="form-control" placeholder="Fridge Name"
+            style="width: 65%;float:left">
+          <button type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-primary btn-block" style="width:30%;float:right"
+            aria-pressed="true">Create Fridge</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endif %}
 
 {% endblock %}
