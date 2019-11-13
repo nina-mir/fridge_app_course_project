@@ -8,13 +8,14 @@
 from django.db import models
 from users.models import User
 from users.models import AuthUser
-
+from django.db.models import IntegerField, Model, CharField
+from django_mysql.models import ListTextField, ListCharField
 class Fridge(models.Model):
     name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, models.DO_NOTHING, related_name='fridges')
-    friends = models.TextField(blank=True, null=True)  #Should be changed to ListTextField (Internally use integer)
-    auto_gen_grocery_list = models.TextField(blank=True, null=True)  #Should be changed to ListTextField (Internally use text)
-    manually_added_list = models.TextField(blank=True, null=True)  #Should be changed to ListTextField (Internally use text)
+    friends = ListTextField(base_field=IntegerField())  
+    auto_gen_grocery_list = ListTextField(base_field=CharField(max_length=15))  
+    manually_added_list = ListTextField(base_field=CharField(max_length=15)) 
     creation_date = models.DateTimeField()
     modified_date = models.DateTimeField()
     eff_bgn_ts = models.DateTimeField()
