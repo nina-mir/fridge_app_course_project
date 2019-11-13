@@ -13,9 +13,9 @@ from django_mysql.models import ListTextField, ListCharField
 class Fridge(models.Model):
     name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, models.DO_NOTHING, related_name='fridges')
-    friends = ListTextField(base_field=IntegerField())  
-    auto_gen_grocery_list = ListTextField(base_field=CharField(max_length=15))  
-    manually_added_list = ListTextField(base_field=CharField(max_length=15)) 
+    friends = ListTextField(base_field=IntegerField(), default=[])  
+    auto_gen_grocery_list = ListTextField(base_field=CharField(max_length=15), default=[])  
+    manually_added_list = ListTextField(base_field=CharField(max_length=15), default=[]) 
     creation_date = models.DateTimeField()
     modified_date = models.DateTimeField()
     eff_bgn_ts = models.DateTimeField()
