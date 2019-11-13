@@ -143,6 +143,14 @@ def fridge(request):
     except:
         print('Error')
         return render(request, 'refrigerator_project/fridge.html')
+    try:
+        if request.method == 'POST' and request.POST.get('rename_fridge'):
+            print('nina is here 148')
+            return HttpResponse(status=204)
+#            return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'current_date': current_time, 'week_time': week_time})
+    except:
+        print('Error')
+        return render(request, 'refrigerator_project/fridge.html')
     return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'current_date': current_time, 'week_time': week_time})
 
 
@@ -254,4 +262,21 @@ def add_fridge(fridge_name, current_username):
     user.ownedfridges.append(fridge.id)
     print(user.ownedfridges)
     user.save()
+
+def rename_fridge(new_fridge_name, current_username):
+    # creating fridge
+    user = User.objects.filter(username=current_username).get()
+    fridge = Fridge(name = fridge_name, owner = user, creation_date=datetime.now(), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31))
+    fridge.save()
+    # adding fridge to the owner
+    print(user.ownedfridges)
+    user.ownedfridges.append(fridge.id)
+    print(user.ownedfridges)
+    user.save()
     
+    item = Item.objects.filter(name=item_name).get()
+    item_dict = {item.id: item.age}
+    temp = User.objects.filter(username=current_username).get()
+    Owndfridge_id = temp.ownedfridges[0]
+    addedby_person_id = temp.id
+    save_to_db(item_dict, Owndfridge_id, addedby_person_id)
