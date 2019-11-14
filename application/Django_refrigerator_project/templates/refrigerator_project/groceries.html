@@ -66,19 +66,18 @@
             <!-- Manual Items For Loop -->
             {% if manual_items %}
             {% for each in manual_items %}
-            <div class="card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
+            <div class="card" style="color: black; background-color: #f2f2f2;">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-1">
+                        <div class="col">
+                            <h5 class="card-text">
                             {% with image_static='/item_icons/'|add:each|add:'.png' %}
                             <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                             {% endwith %}
+                            {{ each }}</h5>
                         </div>
-                        <div class="col-9">
-                            <h5 class="card-text">{{ each }}</h5>
-                        </div>
-                        <div class="col-2">
-                            <form method="POST">
+                        <div class="col-3">
+                            <form method="POST" class="float-right">
                                 {% csrf_token %}
                                 <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
                                     value={{each}}></button>
