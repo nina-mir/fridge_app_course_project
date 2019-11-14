@@ -10,6 +10,7 @@ from users.models import User
 from users.models import AuthUser
 from django.db.models import IntegerField, Model, CharField
 from django_mysql.models import ListTextField, ListCharField
+
 class Fridge(models.Model):
     name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, models.DO_NOTHING, related_name='fridges')

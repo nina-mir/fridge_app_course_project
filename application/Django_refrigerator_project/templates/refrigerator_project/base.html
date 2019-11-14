@@ -25,7 +25,8 @@
     <script src="https://kit.fontawesome.com/5316448d7f.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="{% static '/css/base.css' %}">
-    {% comment %} <link rel="stylesheet" href="{% static '/css/styles.css' %}"> {% endcomment %}
+    {% comment %}
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static '/css/receipt_upload.css' %}">
 
     <script>
@@ -73,15 +74,20 @@
 
     <!-- Sidebar (Active on Fridge Page Only) -->
     <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#" data-toggle="modal" data-target="#selectRef">Select Refrigerator</a>
-        <a href="#">Set Primary</a>
-        <a href="#" data-toggle="modal" data-target="#editFriends">Edit Friends</a>
-        <a href="#" data-toggle="modal" data-target="#rename">Rename Fridge</a>
-        <a href="#" data-toggle="modal" data-target="#delete">Delete Fridge</a>
+        <div style="height: 100%; width: 250px;">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a style="text-align: center;"><img src="{% static '/logo_icons/fridge_gray.png' %}"
+                style="height: 30px; vertical-align: middle;">{{ fridge_name }}</a>
+            <a href="#" data-toggle="modal" data-target="#selectRef">Select Refrigerator</a>
+            <a href="#">Set Primary</a>
+            <a href="#" data-toggle="modal" data-target="#editFriends">Edit Friends</a>
+            <a href="#" data-toggle="modal" data-target="#rename">Rename Fridge</a>
+            <a href="#" data-toggle="modal" data-target="#delete">Delete Fridge</a>
+        </div>
     </div>
     <!-- Modals for Sidebar -->
     <div>
+        <!-- Select Current Fridge -->
         <div class="modal fade" id="selectRef" tabindex="-1" role="dialog" aria-labelledby="selectRef"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -127,7 +133,7 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <form method="POST" action="">
-                                {% csrf_token %}
+                            {% csrf_token %}
                             <label for="fridge_name">Enter name: </label>
                             <input id="fridge_name" type="text" name="rename_fridge">
                             <input type="submit">
@@ -136,7 +142,7 @@
                 </div>
             </div>
         </div>
-        <!-- Delete -->
+        <!-- Delete Fridge -->
         <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -157,7 +163,7 @@
         </div>
     </div>
 
-    <!-- Footer (not shown on home and login pages) -->
+    <!-- Footer (disabled on home and login pages) -->
     {% if not "auth" in request.path and request.path != "/" %}
     <nav class="navbar fixed-bottom justify-content-center navbar-dark bg-dark">
         <ul class="navbar-nav" style="height: 35px;">

@@ -15,6 +15,24 @@
     }
 </style>
 
+<script>
+    function search(input, ul) {
+        var input, filter, ul, li, a, i, txtValue;
+        input = document.getElementById(input);
+        filter = input.value.toUpperCase();
+        ul = document.getElementById(ul);
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            txtValue = li[i].id
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
 <div class="container">
     <div class="row d-flex justify-content-center">
         <div class="col">
@@ -25,87 +43,162 @@
         <hr size="6" width="100%" color="black">
     </div>
     <div class="row">
-        <div class="col">
-            <h4>Missing These Items:</h4>
+        <div class="col align-self-center">
+            <h4>Missing Items:</h4>
+        </div>
+        <div class="col align-self-center">
+            <div class="float-right">
+                <a data-toggle="modal" data-target="#tracked_items_modal" class="btn btn-primary btn-lg" role="button"
+                    aria-pressed="true">Tracked Items</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col" style="padding-top: 15px;"">
             <!-- Missing Items For Loop -->
             {% if missing_items %}
             {% for each in missing_items %}
-            <div class="card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
-                <div class="card-body">
-                    <h5 class="card-text">
-                        {% with image_static='/item_icons/'|add:each|add:'.png' %}
-                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                        {% endwith %}
-                        {{ each }}
-                    </h5>
-                </div>
-            </div>
-            <div style="padding-top: 4px;"></div>
-            {% endfor %}
-            {% else %}
-            <p>none</p>
-            {% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <hr size="6" width="100%" color="black">
-    </div>
-    <div class="row">
-        <div class="col-10 align-self-center">
-            <h4>Manual Items:</h4>
-        </div>
-        <div class="col-2 align-self-center">
-            <div class="float-right">
-                <a data-toggle="modal" data-target="#addItem" class="btn btn-primary btn-lg" role="button"
-                    aria-pressed="true">+</a>
+            <div class=" card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
+            <div class="card-body">
+                <h5 class="card-text">
+                    {% with image_static='/item_icons/'|add:each|add:'.png' %}
+                    <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                    {% endwith %}
+                    {{ each }}
+                </h5>
             </div>
         </div>
+        <div style="padding-top: 4px;"></div>
+        {% endfor %}
+        {% else %}
+        <p>none</p>
+        {% endif %}
     </div>
-    <div class="row">
-        <div class="col" style="padding-top: 15px;">
-            <!-- Manual Items For Loop -->
-            {% if manual_items %}
-            {% for each in manual_items %}
-            <div class="card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-1">
+</div>
+
+<div class="row">
+    <div class="col">
+        <p style="text-align: center; color: black;">Tracked items not found in the current fridge are displayed here as
+            missing.</p>
+    </div>
+    <hr size="6" width="100%" color="black">
+</div>
+<div class="row">
+    <div class="col align-self-center">
+        <h4>Manual Items:</h4>
+    </div>
+    <div class="col align-self-center">
+        <div class="float-right">
+            <a data-toggle="modal" data-target="#addItem" class="btn btn-primary btn-lg" role="button"
+                aria-pressed="true">Add Items</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col" style="padding-top: 15px;">
+        <!-- Manual Items For Loop -->
+        {% if manual_items %}
+        {% for each in manual_items %}
+        <div class="card" style="color: black; background-color: #f2f2f2;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-text">
                             {% with image_static='/item_icons/'|add:each|add:'.png' %}
                             <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                             {% endwith %}
-                        </div>
-                        <div class="col-9">
-                            <h5 class="card-text">{{ each }}</h5>
-                        </div>
-                        <div class="col-2">
-                            <form method="POST">
-                                {% csrf_token %}
-                                <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
-                                    value={{each}}></button>
-                            </form>
-                        </div>
+                            {{ each }}</h5>
+                    </div>
+                    <div class="col-3">
+                        <form method="POST" class="float-right">
+                            {% csrf_token %}
+                            <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
+                                value={{each}}></button>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div style="padding-top: 4px;"></div>
-            {% endfor %}
-            {% else %}
-            <p>none</p>
-            {% endif %}
+        </div>
+        <div style="padding-top: 4px;"></div>
+        {% endfor %}
+        {% else %}
+        <p>none</p>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+<!-- Modal: Tracked Items -->
+<div class="modal fade" id="tracked_items_modal" tabindex="-1" role="dialog" aria-labelledby="tracked_items_modal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header" style="color: black;">
+                <h4 class="modal-title">Select Tracked Items</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <!-- Search For Items -->
+                <div class="container">
+                    <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+                        <div class="input-group">
+                            <input type="text" id="trackedInput" onkeyup="search('trackedInput', 'tracked_item_ul')"
+                                placeholder="Item Name" aria-describedby="button-addon1"
+                                class="form-control border-0 bg-light">
+                            <div class="input-group-append">
+                                <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i
+                                        class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr size="3" width="100%" color="gray">
+                </div>
+                <!-- List of Items -->
+                <form id="tracked_selector" method="POST">
+                    {% csrf_token %}
+                    <ul class="container-fluid" id="tracked_item_ul">
+                        {% for each in all_items %}
+                        <li id="{{each.name}}" style="padding-top: 4px;">
+                            <div class="card" x style="height: 4.3em; color: black; background-color: #f2f2f2;">
+                                <label>
+                                    <div class="card-body">
+                                        {% if each.name in tracked_items %}
+                                        <input type="checkbox" style="float:right;" name="tracked_items"
+                                            value="{{ each.name }}" id="heading" checked>
+                                        {% else %}
+                                        <input type="checkbox" style="float:right;" name="tracked_items"
+                                            value="{{ each.name }}" id="heading">
+                                        {% endif %}
+                                        <h5 class="card-title">
+                                            {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
+                                            <img src="{% static image_static %}" alt="tracked_item"
+                                                style="height: 30px;">
+                                            {% endwith %}
+                                            {{ each.name }}
+                                        </h5>
+                                    </div>
+                                </label>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </form>
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" name="tracked_selector_submit" type="submit" value="selection"
+                    form="tracked_selector">Save Selection</button>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Show Modal if Search has been initiated -->
-{% if sr %}
-<script type="text/javascript">
-    $(window).on('load', function () {
-        $('#addItem').modal('show');
-    });
-</script>
-{% endif %}
-
-<!-- Modal for the addition of manual items -->
+<!-- Modal: Manual items -->
 <div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="addItem" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -120,69 +213,46 @@
             <div class="modal-body">
                 <!-- Search For Items -->
                 <div class="container">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="col">
-                                Search by Name, ID, or Calories: <input type="text" name="itemname" size="35"><br>
+                    <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+                        <div class="input-group">
+                            <input type="text" id="manualInput" onkeyup="search('manualInput', 'manual_item_ul')"
+                                placeholder="Item Name" aria-describedby="button-addon1"
+                                class="form-control border-0 bg-light">
+                            <div class="input-group-append">
+                                <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i
+                                        class="fa fa-search"></i></button>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <input type="submit" value="Search" name="search">
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                     <hr size="3" width="100%" color="gray">
                 </div>
                 <!-- View List of Items -->
                 <form id="grocery_selector" method="POST">
                     {% csrf_token %}
-                    <!-- Display Search Results if Applicable -->
-                    {% if sr %}
-                    <h6 style="color: black;">Found Items:</h6>
-                    {% for each in sr %}
-                    <div class="card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
-                        <label>
-                            <div class="card-body">
-                                <input type="checkbox" style="float:right;" name="grocery_items" value="{{ each.name }}"
-                                    id="heading">
-                                <h5 class="card-title">
-                                    {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
-                                    <img src="{% static image_static %}" alt="grocery_items" style="height: 30px;">
-                                    {% endwith %}
-                                    {{ each.name }}
-                                </h5>
-                            </div>
-                        </label>
-                    </div>
-                    <div style="padding-top: 4px;"></div>
-                    {% endfor %}
-                    {% else %}
-                    <!-- Display All Items Available -->
-                    <div class="container-fluid">
+                    <ul class="container-fluid" id="manual_item_ul">
                         {% for each in all_items %}
-                        <div class="card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
-                            <label>
-                                <div class="card-body">
-                                    <input type="checkbox" style="float:right;" name="grocery_items"
-                                        value="{{ each.name }}" id="heading">
-                                    <h5 class="card-title">
-                                        {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
-                                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                                        {% endwith %}
-                                        {{ each.name }}
-                                    </h5>
-                                </div>
-                            </label>
-                        </div>
-                        <div style="padding-top: 4px;"></div>
+                        <li id="{{each.name}}" style="padding-top: 4px;">
+                            <div class="card" x style="height: 4.3em; color: black; background-color: #f2f2f2;">
+                                <label>
+                                    <div class="card-body">
+                                        <input type="checkbox" style="float:right;" name="grocery_items"
+                                            value="{{ each.name }}" id="heading">
+                                        <h5 class="card-title">
+                                            {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
+                                            <img src="{% static image_static %}" alt="grocery_item"
+                                                style="height: 30px;">
+                                            {% endwith %}
+                                            {{ each.name }}
+                                        </h5>
+                                    </div>
+                                </label>
+                            </div>
+                        </li>
                         {% endfor %}
-                    </div>
-                    {% endif %}
+                    </ul>
                 </form>
             </div>
-            <!-- Footer -->
+            <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button class="btn btn-primary" name="grocery_selector_submit" type="submit" value="selection"
@@ -191,5 +261,7 @@
         </div>
     </div>
 </div>
+
+
 
 {% endblock %}
