@@ -260,8 +260,7 @@ def receipt_upload(request):
                 # text = {'coffee'} #used for testing
                 context = {'text': text}
         except:
-            print("Either missing a fridge or nothing detected")
-            return redirect('/fridge/')
+            print("No items detected.")
     # Get list of selected found items and save it to db
     if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
         print("submitted")
@@ -279,6 +278,7 @@ def receipt_upload(request):
             Owndfridge_id = user.ownedfridges[0]
             # Save to fridgeContent Table
             save_to_db(selected_items, Owndfridge_id, user.id)
+            return redirect('/fridge/')
         except:
             print("Error saving selected items to fridge.")
     return render(request, 'refrigerator_project/receipt_upload.html', context)
