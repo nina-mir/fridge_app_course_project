@@ -1,23 +1,26 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
-# for using @login_required decorator on top of a function
-from django.contrib.auth.decorators import login_required
 import io
-from io import BytesIO
 import sys
 import math
-from .models import Item, FridgeContent
-from users.models import User
-from users.models import AuthUser
-from django.db.models import Q
-from .models import Fridge
 import datetime
-from datetime import timedelta
-from datetime import datetime
-from django.shortcuts import redirect
 
+from io import BytesIO
+
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
+
+from .models import Fridge, Item, FridgeContent
+
+from users.models import AuthUser
+from users.models import User
+
+from datetime import datetime
+from datetime import timedelta
+# for using @login_required decorator on top of a function
 
 def home(request):
     return render(request, 'refrigerator_project/home.html')
@@ -118,7 +121,7 @@ def groceries(request):
             return redirect('/groceries/')
         except:
             print("Error removing selected items to grocery list.")
-    
+
     return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'sr': match, 'missing_items': missing_items, 'tracked_items': tracked_item_list, 'manual_items': manual_item_list})
 
 
@@ -223,7 +226,7 @@ def fridge(request):
 #            fridge_obj = Fridge.objects.filter(owner_id=user_id).get()
 #            print( fridge_obj)
             fridge_primary_obj.name = request.POST.get('rename_fridge')
-            fridge_primary_obj.save()           
+            fridge_primary_obj.save()
             return render(request,'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_primary_obj.name, 'current_date': current_time, 'week_time': week_time})
     except:
         print('Error Renaming Fridge')
