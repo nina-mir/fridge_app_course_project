@@ -43,6 +43,7 @@ def groceries(request):
     match = None
     missing_items = None
     manual_item_list = None
+    tracked_item_list = None
 
     # Get list of manual items
     try:
@@ -50,7 +51,6 @@ def groceries(request):
         user_id = User.objects.filter(username=request.user.username).get().id
         fridge = Fridge.objects.filter(owner_id=user_id).get()
         manual_item_list = fridge.manually_added_list
-        print(manual_item_list)
     except:
         print(("Error getting manual groceries."))
 
@@ -59,7 +59,7 @@ def groceries(request):
         current_user = request.user
         user_id = User.objects.filter(username=request.user.username).get().id
         fridge = Fridge.objects.filter(owner_id=user_id).get()
-        tracked_item_list = fridge.auto_gen_grocery_list.split(',')
+        tracked_item_list = fridge.auto_gen_grocery_list
 
         temp = User.objects.filter(username=current_user.username).get()
         Owndfridge_id = temp.ownedfridges[0]
@@ -80,15 +80,19 @@ def groceries(request):
     except:
         print('Error getting tracked groceries.')
 
-    # Search functionality
-    try:
-        if request.method == 'POST':
-            srch = request.POST['itemname']
-            if srch:
-                match = Item.objects.filter(Q(name__icontains=srch) | Q(
-                    id__icontains=srch) | Q(calories__icontains=srch))
-    except:
-        print("Error searching for items.")
+    # Tracked item selection
+    if request.method == 'POST' and request.POST.get('tracked_selector_submit') == 'selection':
+        try:
+            user_id = User.objects.filter(username=request.user.username).get().id
+            fridge = Fridge.objects.filter(owner_id=user_id).get()
+            list = request.POST.getlist('tracked_items', default=None)
+            fridge.auto_gen_grocery_list.clear()
+            for each in list:
+                fridge.auto_gen_grocery_list.append(each)
+            fridge.save()
+            return redirect('/groceries/')
+        except:
+            print("Error saving selected items to grocery list.")
 
     # Selected items added to manual list
     if request.method == 'POST' and request.POST.get('grocery_selector_submit') == 'selection':
@@ -114,10 +118,8 @@ def groceries(request):
             return redirect('/groceries/')
         except:
             print("Error removing selected items to grocery list.")
-
-
     
-    return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'sr': match, 'missing_items': missing_items,  'manual_items': manual_item_list})
+    return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'sr': match, 'missing_items': missing_items, 'tracked_items': tracked_item_list, 'manual_items': manual_item_list})
 
 
 @login_required
@@ -279,8 +281,6 @@ def receipt_upload(request):
     return render(request, 'refrigerator_project/receipt_upload.html', context)
 
 # Google Vision
-
-
 def detect_text(filename):
     post_processing_results = []
     tmp_id_exp_age_store = {}
