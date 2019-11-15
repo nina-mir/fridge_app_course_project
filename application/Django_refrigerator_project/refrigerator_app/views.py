@@ -169,7 +169,8 @@ def fridge(request):
     # Adding Fridge
     try:
         if request.method == 'POST' and request.POST.get('add_fridge'):
-            add_fridge(request.POST.get('fridge_name'), current_user.username)
+            if request.POST.get('fridge_name') != '':
+                add_fridge(request.POST.get('fridge_name'), current_user.username)
     except:
         print('Error adding fridge')
     # Adding Friends
