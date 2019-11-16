@@ -86,6 +86,7 @@
             <a href="#" data-toggle="modal" data-target="#editFriends">Edit Friends</a>
             <a href="#" data-toggle="modal" data-target="#rename">Rename Fridge</a>
             <a href="#" data-toggle="modal" data-target="#delete">Delete Fridge</a>
+            <a href="#" data-toggle="modal" data-target="#add">Add Fridge</a>
         </div>
     </div>
     <!-- Modals for Sidebar -->
@@ -171,13 +172,16 @@
         <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
                     <div class="modal-body">
-                        <h3>Modal Body select fridge modal stuff</h3>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                              <input type="text" name="fridge_name" class="form-control" placeholder="Fridge Name"
+                                style="width: 65%;float:left">
+                              <button type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-primary btn-block" style="width:30%;float:right"
+                                aria-pressed="true">Create Fridge</button>
+                            </div>
+                          </form>
                     </div>
                 </div>
             </div>
