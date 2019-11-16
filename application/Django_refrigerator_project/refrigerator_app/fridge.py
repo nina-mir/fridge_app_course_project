@@ -145,3 +145,10 @@ def get_all_the_related_fridges(current_user):
     user_fridges.update(friends)
     print(user_fridges)
     return user_fridges
+
+class fridge_Object:
+    def __init__(self, name, created_on, friend_name_list, id):
+        self.name = name
+        self.created_on: created_on
+        self.friends_name_list = friend_name_list
+        self.id = id
