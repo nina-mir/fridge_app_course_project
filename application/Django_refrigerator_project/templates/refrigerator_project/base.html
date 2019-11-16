@@ -25,6 +25,9 @@
     <script src="https://kit.fontawesome.com/5316448d7f.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="{% static '/css/base.css' %}">
+    <link rel="stylesheet" href="{% static '/css/modal_checkbox.css' %}">
+
+
     {% comment %}
     <link rel="stylesheet" href="{% static '/css/styles.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static '/css/receipt_upload.css' %}">
@@ -95,8 +98,14 @@
                     <div class="modal-body" style="color: blue;">
                         <form action=""> 
                             {% for key, value in all_fridges.items %}
-                            {% csrf_token %}
+                            <label class="containerM">One
                                 <input type="checkbox" name="list_fridges"> {{ key }}
+                                <span class="checkmarkM"></span>
+                            </label>
+
+
+                            {% csrf_token %}
+                                <!-- <input type="checkbox" name="list_fridges"> {{ key }} -->
                             {% endfor %}
 
                         </form>
