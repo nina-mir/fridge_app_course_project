@@ -1,12 +1,12 @@
 /* a tag is for links */
 
 a{
-  color: #eeeeee;
+  color: black;
 }
 /* a:hover is the color of links when hovered over with mouse */
 
 a:hover{
-  color: #eeeeee;
+  color: black;
 }
 /* a:active, when link clicked, color change flashes */
 
