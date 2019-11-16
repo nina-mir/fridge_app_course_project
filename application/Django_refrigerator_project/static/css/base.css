@@ -25,6 +25,8 @@
 body {
   font-family: "Lato", sans-serif;
   padding-top: 50px;
+  color: #eeeeee;
+  background-color: #303841;
 }
 
 /* The side navigation menu */
