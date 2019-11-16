@@ -371,8 +371,10 @@ def add_fridge(fridge_name, current_username):
     fridge.save()
     # adding fridge to the owner
     user.ownedfridges.append(fridge.id)
+    if(user.ownedfridges):
+        user.primary_fridge = fridge.id
     user.save()
-
+    
 # Get all the fridges a user has access to
 def get_all_the_related_fridges(current_user):
     owned = {}
