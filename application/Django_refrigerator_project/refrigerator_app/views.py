@@ -252,7 +252,7 @@ def receipt_upload(request):
             user = User.objects.filter(username=current_user.username).get()
             Owndfridge_id = user.ownedfridges[0]
             # Save to fridgeContent Table
-            save_to_db(selected_items, Owndfridge_id, user.id)
+            fridge_manager.save_to_db(selected_items, Owndfridge_id, user.id)
             return redirect('/fridge/')
         except:
             print("Error saving selected items to fridge.")
