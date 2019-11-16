@@ -144,8 +144,25 @@ def profile(request):
     current_user = request.user
     user_info = User.objects.filter(username=request.user.username)
     user_id = User.objects.filter(username=request.user.username).get().id
-    # ownedfridgelist = Fridges.objects.filter(id = )
-    return render(request, 'refrigerator_project/profile.html', context={'user_info': user_info})
+    ownedfridgelist = Fridge.objects.filter(owner_id = user_id)
+
+    #for friended fridges column I will assume that it will be a list of fridge ids
+    friendedfridgeidlist = User.objects.filter(username=request.user.username).get().friendedfridges
+
+    #this is a list of the actual fridge objects matching the friendedfridgeidlist; note the __in allows us to query by list  
+    friendedfridgelist = Fridge.objects.filter(id__in = friendedfridgeidlist)
+    
+    #print(User.objects.filter(id=1).get().username)
+    #print(friendedfridgelist)
+
+
+    context = {
+        'user_info': user_info,
+        'ownedfridgelist': ownedfridgelist,
+        'friendedfridgelist': friendedfridgelist
+    }
+
+    return render(request, 'refrigerator_project/profile.html', context)
 
 
 @login_required
@@ -371,8 +388,10 @@ def add_fridge(fridge_name, current_username):
     fridge.save()
     # adding fridge to the owner
     user.ownedfridges.append(fridge.id)
+    if(user.ownedfridges):
+        user.primary_fridge = fridge.id
     user.save()
-
+    
 # Get all the fridges a user has access to
 def get_all_the_related_fridges(current_user):
     owned = {}
