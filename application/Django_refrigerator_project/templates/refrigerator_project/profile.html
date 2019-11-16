@@ -12,8 +12,11 @@
       <h2> Email: {{ user.email }} </h2>
     </div>
   </div>
+
   <div class="row">
     <div class="col">
+
+      <!-- Owned Fridges Accordian -->
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
           <h5 class="card-header">
@@ -23,14 +26,28 @@
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
+          <!-- looks for if the query is empty -->
+          {% if ownedfridgelist %}
+            
+          {% else %}
+          <div id="owned" class="collapse" style="color: black;" aria-labelledby="heading-example">
+            <div class="row">
+              <div class="column trash-center">
+                <h2>No fridges</h2>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!--  if the query is not empty, it will display the owned fridges -->
           {% for each in ownedfridgelist %}
-          <div id="owned" class="collapse" aria-labelledby="heading-example">
+          <div id="owned" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
               <div class="column trash-center">
                 <ul style="list-style-type:none; padding-top: 10px;">
                   <li>Name: {{ each.name }} </li>
-                  <li>Owner: {{ each.owner }} </li>
-                  <li>Owner: {{ each.friends }} </li>
+                  <li>Created on: {{ each.creation_date }} </li>
+                  <li>Friends: {{ each.friends }} </li>
                 </ul>
               </div>
               <div class="column trash-center ">
@@ -40,9 +57,12 @@
               </div>
             </div>
           </div>
+          {% endfor %}
         </div>
-        {% endfor %}
+        </div>
 
+        <!-- Friended Fridges Accordian -->
+        <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
           <h5 class="card-header">
             <a data-toggle="collapse" href="#friended" data-parent="#accordion" aria-expanded="true"
@@ -51,14 +71,28 @@
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
-          <div id="friended" class="collapse" aria-labelledby="heading-example">
+          <!-- looks for if the query is empty -->
+          {% if friendedfridgelist %}
+            
+          {% else %}
+          <div id="friended" class="collapse" style="color: black;" aria-labelledby="heading-example">
+            <div class="row">
+              <div class="column trash-center">
+                <h2>No friended fridges</h2>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!--  if the query is not empty, it will display the friended fridges -->
+          {% for each in friendedfridgelist %}
+          <div id="friended" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
               <div class="column trash-center">
                 <ul style="list-style-type:none; padding-top: 10px;">
-                  <li>Calories: {{ each.calories }} </li>
-                  <li>Added on: </li>
-                  <li>Expiration: </li>
-                  <li>Added By: {{ each.addedby }} </li>
+                  <li>Name: {{ each.name }} </li>
+                  <li>Created on: {{ each.creation_date }} </li>
+                  <li>Friends: {{ each.friends }} </li>
                 </ul>
               </div>
               <div class="column trash-center ">
@@ -68,8 +102,13 @@
               </div>
             </div>
           </div>
+          {% endfor %}
+        </div>
         </div>
 
+
+        <!-- Personal Notes Accordian -->
+        <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
           <h5 class="card-header">
             <a data-toggle="collapse" href="#notePad" data-parent="#accordion" aria-expanded="true"
@@ -82,9 +121,11 @@
             <textarea placeholder="Personal Notes" id="myTextArea" rows="5" cols="44" class="textarea"></textarea>
           </div>
         </div>
-      </div>
+        </div>
+    
     </div>
   </div>
+
 </div>
 
 {% endblock %}

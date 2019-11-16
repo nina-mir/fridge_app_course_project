@@ -130,9 +130,26 @@ def profile(request):
     # previous line printed all users
     # current_user = request.user
     user_info = User.objects.filter(username=request.user.username)
-    # user_id = User.objects.filter(username=request.user.username).get().id
-    # ownedfridgelist = Fridges.objects.filter(id = )
-    return render(request, 'refrigerator_project/profile.html', context={'user_info': user_info})
+    user_id = User.objects.filter(username=request.user.username).get().id
+    ownedfridgelist = Fridge.objects.filter(owner_id = user_id)
+
+    #for friended fridges column I will assume that it will be a list of fridge ids
+    friendedfridgeidlist = User.objects.filter(username=request.user.username).get().friendedfridges
+
+    #this is a list of the actual fridge objects matching the friendedfridgeidlist; note the __in allows us to query by list  
+    friendedfridgelist = Fridge.objects.filter(id__in = friendedfridgeidlist)
+    
+    #print(User.objects.filter(id=1).get().username)
+    #print(friendedfridgelist)
+
+
+    context = {
+        'user_info': user_info,
+        'ownedfridgelist': ownedfridgelist,
+        'friendedfridgelist': friendedfridgelist
+    }
+
+    return render(request, 'refrigerator_project/profile.html', context)
 
 
 @login_required
@@ -152,7 +169,10 @@ def fridge(request):
 
     current_user = request.user
     current_time = datetime.now()
-    week_time = current_time + timedelta(days=7)
+    week_time = current_time + timedelta(days=7)  
+
+    all_fridges = get_all_the_related_fridges(current_user)
+    
     # Adding Fridge
     if request.method == 'POST' and request.POST.get('add_fridge'):
         try:
