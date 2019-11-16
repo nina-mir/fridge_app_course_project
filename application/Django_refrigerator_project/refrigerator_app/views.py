@@ -165,7 +165,10 @@ def fridge(request):
 
     current_user = request.user
     current_time = datetime.now()
-    week_time = current_time + timedelta(days=7)
+    week_time = current_time + timedelta(days=7)  
+
+    all_fridges = get_all_the_related_fridges(current_user)
+    
     # Adding Fridge
     try:
         if request.method == 'POST' and request.POST.get('add_fridge'):
@@ -217,22 +220,43 @@ def fridge(request):
     try:
         # Rename current primary fridge name :: to be added checks on ownership.
         if request.method == 'POST' and request.POST.get('rename_fridge'):
-            user_id = User.objects.filter(username=current_user.username).get().id
+            temp = User.objects.filter(username=current_user.username).get()
+            user_id = temp.id
             print(user_id)
             # Getting primary fridge of logged in user
-            temp = User.objects.filter(username=current_user.username).get()
             Owndfridge_id = temp.ownedfridges[0]
             fridge_primary_obj = Fridge.objects.filter(id=Owndfridge_id).get()
-
-#            fridge_obj = Fridge.objects.filter(owner_id=user_id).get()
-#            print( fridge_obj)
             fridge_primary_obj.name = request.POST.get('rename_fridge')
             fridge_primary_obj.save()
-            return render(request,'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_primary_obj.name, 'current_date': current_time, 'week_time': week_time})
+            return render(request,'refrigerator_project/fridge.html', {'inventory_items': inventory_items,
+             'fridge_name': fridge_primary_obj.name, 
+             'current_date': current_time, 'week_time': week_time})
     except:
         print('Error Renaming Fridge')
-        return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'current_date': current_time, 'week_time': week_time})
-    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'current_date': current_time, 'week_time': week_time})
+        return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items,
+         'fridge_name': fridge_name, 
+         'current_date': current_time, 'week_time': week_time})
+    try:
+        # List all the fridges a user has access to: Own + friend.
+        if request.method == 'POST' and request.POST.get('list_fridges'):
+            temp = User.objects.filter(username=current_user.username).get()
+            user_id = temp.id
+            print(user_id)
+            return render(request,'refrigerator_project/fridge.html', {'inventory_items': inventory_items,
+            'fridge_name': fridge_name,
+            'current_date': current_time, 'week_time': week_time, 'all_fridges':all_fridges})
+    except:
+        print('Error Listing Fridges')
+        return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items,
+        'fridge_name': fridge_name,
+        'current_date': current_time, 'week_time': week_time, 'all_fridges':all_fridges})
+    
+    
+    
+    
+    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items,
+     'fridge_name': fridge_name, 
+     'current_date': current_time, 'week_time': week_time, 'all_fridges':all_fridges})
 
 
 def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):
@@ -348,3 +372,31 @@ def add_fridge(fridge_name, current_username):
     # adding fridge to the owner
     user.ownedfridges.append(fridge.id)
     user.save()
+
+# Get all the fridges a user has access to
+def get_all_the_related_fridges(current_user):
+    owned = {}
+    friends = {}
+    temp = User.objects.filter(username=current_user.username).get()
+    Owndfridge_id   = temp.ownedfridges
+    Friendfridge_id = temp.friendedfridges
+
+    try:
+        for i in Owndfridge_id:
+            fridge_obj = Fridge.objects.filter(id=i).get()
+            owned[fridge_obj.name] = fridge_obj.id
+    except:
+        print('Error in 387')
+    try:
+        for i in Friendfridge_id:
+            fridge_obj = Fridge.objects.filter(id=i).get()
+            friends[fridge_obj.name] = fridge_obj.id
+    except:
+        print('Error in 397')
+
+    print("owned",owned)
+    print(friends)
+    user_fridges = owned.copy()
+    user_fridges.update(friends)
+    print(user_fridges)
+    return user_fridges
