@@ -29,7 +29,6 @@ def initialCurrentFridge(request):
             current_fridge_id = None
             print("No Fridges found.")
             return redirect('/fridge/')
-        #current_fridge_id = Fridge.objects.filter(owner_id=user_id).get().id
     except:
         print("No Fridges found.")
     return redirect('/fridge/')
