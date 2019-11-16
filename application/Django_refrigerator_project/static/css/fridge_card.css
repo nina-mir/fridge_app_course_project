@@ -1,3 +1,18 @@
+/* a tag is for links */
+
+a{
+  color: #eeeeee;
+}
+/* a:hover is the color of links when hovered over with mouse */
+
+a:hover{
+  color: #eeeeee;
+}
+/* a:active, when link clicked, color change flashes */
+
+a:active{
+  color: #3a4750;
+}
 /*.card-header and .fa for drop down ability*/
 
 .card-header .fa {
@@ -10,12 +25,13 @@
   transform: rotate(-90deg);
 }
 
-/*card resizing*/
+/*card resizing and change default color*/
 
 .card {
   margin-left: 15px;
   margin-right: 15px;
   margin-top: 10px;
+  background-color: 00adb5;
 }
 
 /*.column and .row are for inside the dropdown card*/
