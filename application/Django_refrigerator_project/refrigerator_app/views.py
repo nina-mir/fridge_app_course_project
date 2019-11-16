@@ -170,7 +170,10 @@ def fridge(request):
     current_user = request.user
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)  
-    
+    all_fridges = fridge_manager.get_all_the_related_fridges(current_user)
+
+
+
     # Adding Fridge
     if request.method == 'POST' and request.POST.get('add_fridge'):
         try:
@@ -212,7 +215,9 @@ def fridge(request):
     except:
         print('Error')
         return render(request, 'refrigerator_project/fridge.html')
-    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'current_date': current_time, 'week_time': week_time})
+    return render(request, 'refrigerator_project/fridge.html', 
+    {'inventory_items': inventory_items, 'fridge_name': fridge_name, 
+    'current_date': current_time, 'week_time': week_time, 'all_fridges':all_fridges})
 
 @login_required
 def receipt_upload(request):

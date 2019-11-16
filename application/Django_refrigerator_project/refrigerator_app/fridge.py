@@ -118,3 +118,30 @@ def createFridge(fridge_name, current_username):
 def getAllItems():
     return Item.objects.all()
 
+    # Get all the fridges a user has access to
+def get_all_the_related_fridges(current_user):
+    owned = {}
+    friends = {}
+    temp = User.objects.filter(username=current_user.username).get()
+    Owndfridge_id   = temp.ownedfridges
+    Friendfridge_id = temp.friendedfridges
+
+    try:
+        for i in Owndfridge_id:
+            fridge_obj = Fridge.objects.filter(id=i).get()
+            owned[fridge_obj.name] = fridge_obj.id
+    except:
+        print('Error in 130')
+    try:
+        for i in Friendfridge_id:
+            fridge_obj = Fridge.objects.filter(id=i).get()
+            friends[fridge_obj.name] = fridge_obj.id
+    except:
+        print('Error in 136')
+
+    print("owned",owned)
+    print(friends)
+    user_fridges = owned.copy()
+    user_fridges.update(friends)
+    print(user_fridges)
+    return user_fridges
