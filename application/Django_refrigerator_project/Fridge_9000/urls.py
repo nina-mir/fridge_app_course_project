@@ -20,9 +20,11 @@ from refrigerator_app import views
 from recipes import views as recipe_views
 from django.contrib.auth import views as auth_views      #view from django, we will use for our login and logout
 from users import views as user_views       #view from our users apps
+from refrigerator_app import fridge as fridge_manager
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('fridge/check/', fridge_manager.initialCurrentFridge, name='fridge_init'),
     path('fridge/', views.fridge, name='fridge'), 
     path('groceries/', views.groceries, name='groceries'),
     path('recipes/', recipe_views.recipe_landing, name='recipes'), 
