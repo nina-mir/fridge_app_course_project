@@ -1,23 +1,26 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
-# for using @login_required decorator on top of a function
-from django.contrib.auth.decorators import login_required
 import io
-from io import BytesIO
 import sys
 import math
-from .models import Item, FridgeContent
-from users.models import User
-from users.models import AuthUser
-from django.db.models import Q
-from .models import Fridge
 import datetime
-from datetime import timedelta
-from datetime import datetime
-from django.shortcuts import redirect
 
+from io import BytesIO
+
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
+
+from .models import Fridge, Item, FridgeContent
+
+from users.models import AuthUser
+from users.models import User
+
+from datetime import datetime
+from datetime import timedelta
+# for using @login_required decorator on top of a function
 
 def home(request):
     return render(request, 'refrigerator_project/home.html')
@@ -118,7 +121,7 @@ def groceries(request):
             return redirect('/groceries/')
         except:
             print("Error removing selected items to grocery list.")
-    
+
     return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'sr': match, 'missing_items': missing_items, 'tracked_items': tracked_item_list, 'manual_items': manual_item_list})
 
 
@@ -179,11 +182,15 @@ def fridge(request):
 
     current_user = request.user
     current_time = datetime.now()
-    week_time = current_time + timedelta(days=7)
+    week_time = current_time + timedelta(days=7)  
+
+    all_fridges = get_all_the_related_fridges(current_user)
+    
     # Adding Fridge
     try:
         if request.method == 'POST' and request.POST.get('add_fridge'):
-            add_fridge(request.POST.get('fridge_name'), current_user.username)
+            if request.POST.get('fridge_name') != '':
+                add_fridge(request.POST.get('fridge_name'), current_user.username)
     except:
         print('Error adding fridge')
     # Adding Friends
@@ -230,22 +237,43 @@ def fridge(request):
     try:
         # Rename current primary fridge name :: to be added checks on ownership.
         if request.method == 'POST' and request.POST.get('rename_fridge'):
-            user_id = User.objects.filter(username=current_user.username).get().id
+            temp = User.objects.filter(username=current_user.username).get()
+            user_id = temp.id
             print(user_id)
             # Getting primary fridge of logged in user
-            temp = User.objects.filter(username=current_user.username).get()
             Owndfridge_id = temp.ownedfridges[0]
             fridge_primary_obj = Fridge.objects.filter(id=Owndfridge_id).get()
-
-#            fridge_obj = Fridge.objects.filter(owner_id=user_id).get()
-#            print( fridge_obj)
             fridge_primary_obj.name = request.POST.get('rename_fridge')
-            fridge_primary_obj.save()           
-            return render(request,'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_primary_obj.name, 'current_date': current_time, 'week_time': week_time})
+            fridge_primary_obj.save()
+            return render(request,'refrigerator_project/fridge.html', {'inventory_items': inventory_items,
+             'fridge_name': fridge_primary_obj.name, 
+             'current_date': current_time, 'week_time': week_time})
     except:
         print('Error Renaming Fridge')
-        return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'current_date': current_time, 'week_time': week_time})
-    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'current_date': current_time, 'week_time': week_time})
+        return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items,
+         'fridge_name': fridge_name, 
+         'current_date': current_time, 'week_time': week_time})
+    try:
+        # List all the fridges a user has access to: Own + friend.
+        if request.method == 'POST' and request.POST.get('list_fridges'):
+            temp = User.objects.filter(username=current_user.username).get()
+            user_id = temp.id
+            print(user_id)
+            return render(request,'refrigerator_project/fridge.html', {'inventory_items': inventory_items,
+            'fridge_name': fridge_name,
+            'current_date': current_time, 'week_time': week_time, 'all_fridges':all_fridges})
+    except:
+        print('Error Listing Fridges')
+        return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items,
+        'fridge_name': fridge_name,
+        'current_date': current_time, 'week_time': week_time, 'all_fridges':all_fridges})
+    
+    
+    
+    
+    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items,
+     'fridge_name': fridge_name, 
+     'current_date': current_time, 'week_time': week_time, 'all_fridges':all_fridges})
 
 
 def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):
@@ -274,8 +302,7 @@ def receipt_upload(request):
                 # text = {'coffee'} #used for testing
                 context = {'text': text}
         except:
-            print("Either missing a fridge or nothing detected")
-            return redirect('/fridge/')
+            print("No items detected.")
     # Get list of selected found items and save it to db
     if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
         print("submitted")
@@ -293,6 +320,7 @@ def receipt_upload(request):
             Owndfridge_id = user.ownedfridges[0]
             # Save to fridgeContent Table
             save_to_db(selected_items, Owndfridge_id, user.id)
+            return redirect('/fridge/')
         except:
             print("Error saving selected items to fridge.")
     return render(request, 'refrigerator_project/receipt_upload.html', context)
@@ -361,3 +389,31 @@ def add_fridge(fridge_name, current_username):
     # adding fridge to the owner
     user.ownedfridges.append(fridge.id)
     user.save()
+
+# Get all the fridges a user has access to
+def get_all_the_related_fridges(current_user):
+    owned = {}
+    friends = {}
+    temp = User.objects.filter(username=current_user.username).get()
+    Owndfridge_id   = temp.ownedfridges
+    Friendfridge_id = temp.friendedfridges
+
+    try:
+        for i in Owndfridge_id:
+            fridge_obj = Fridge.objects.filter(id=i).get()
+            owned[fridge_obj.name] = fridge_obj.id
+    except:
+        print('Error in 387')
+    try:
+        for i in Friendfridge_id:
+            fridge_obj = Fridge.objects.filter(id=i).get()
+            friends[fridge_obj.name] = fridge_obj.id
+    except:
+        print('Error in 397')
+
+    print("owned",owned)
+    print(friends)
+    user_fridges = owned.copy()
+    user_fridges.update(friends)
+    print(user_fridges)
+    return user_fridges
