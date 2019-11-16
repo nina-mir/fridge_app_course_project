@@ -170,8 +170,6 @@ def fridge(request):
     current_user = request.user
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)  
-
-    all_fridges = get_all_the_related_fridges(current_user)
     
     # Adding Fridge
     if request.method == 'POST' and request.POST.get('add_fridge'):
