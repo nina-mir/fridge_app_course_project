@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'Fridge_9000.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 
-if(PROD):    
+if(PROD):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -126,13 +126,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Los_Angeles'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

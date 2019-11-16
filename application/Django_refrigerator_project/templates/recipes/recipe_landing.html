@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<div class="container-fluid">
+<div class="container">
     <div class="row">
         <div class="col">
             <h1 class="text-center">Recipes</h1>
@@ -45,7 +45,7 @@
                     <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
                         aria-controls="collapse-example" id="heading" class="collapsed d-block">
                         {{ each.name }}
-                        {% with image_static=each.name|add:'.jpg' %}
+                        {% with image_static=each.name|add:'.png' %}
                         <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                         {% endwith %}
                     </a>

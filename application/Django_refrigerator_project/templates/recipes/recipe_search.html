@@ -2,7 +2,9 @@
 {% load static %}
 {% block content %}
 
-<div class="container-fluid">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200&display=swap" rel="stylesheet">
+
+<div class="container">
     <div class="row">
         <div class="col">
             <h2 class="text-center">Select the items you'd like to use</h2>
@@ -24,7 +26,6 @@
                             <input type="submit" value="Search" name="search">
                         </div>
                     </div>
-
                 </form>
                 <hr size="3" width="100%" color="gray">
                 <!-- Display Search Results if Applicable -->
@@ -38,7 +39,7 @@
                             aria-expanded="true" aria-controls="collapse-example" id="heading"
                             class="collapsed d-block">
                             {{ each.name }}
-                            {% with image_static=each.name|add:'.jpg' %}
+                            {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
                             <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
                             {% endwith %}
                         </a>
@@ -47,48 +48,50 @@
                 {% endfor %}
                 </form>
             </div>
+
             <!-- View List of Items -->
-            <div class="container">
-                {% for each in inventory_items %}
-                <div class="card">
-                    <h5 class="card-header">
-                        <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
-                            aria-expanded="true" aria-controls="collapse-example" id="heading"
-                            class="collapsed d-block">
-                            {{ each.name }}
-                            {% with image_static=each.name|add:'.jpg' %}
-                            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                            {% endwith %}
-                        </a>
-                    </h5>
+            <form id="ingredients_survey" action="{% url 'recipe_search_results' %}" method="GET" novalidate>
+                <div class="container">
+                    {% for each in inventory_items %}
+                    <div class="card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
+                        <label>
+                            <div class="card-body">
+                                <input type="checkbox" style="float:right;" name="ingredient" value="{{ each.name }}">
+                                <h5 class="card-text">
+                                    {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
+                                    <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                                    {% endwith %}
+                                    {{ each.name }}
+                                </h5>
+                            </div>
+                        </label>
+                    </div>
+                    <div style="padding-top: 4px;"></div>
+                    <!-- <div class="card form-group">
+                        <label>
+                            <h5 class="card-header">
+                                <input type="checkbox" style="float:right;" name="ingredient" value="{{ each.name }}"
+                                    data-toggle="collapse" data-parent="#accordion" aria-expanded="true"
+                                    aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                                {{ each.name }}
+                                {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
+                                <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                                {% endwith %}
+                            </h5>
+                        </label>
+                    </div> -->
+                    {% endfor %}
+                    <!-- submit button-->
+                    <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
+                        <div style="width: 70%;">
+                            <button class="btn btn-primary btn-lg btn-block" name="next" type="submit">Next</button>
+                        </div>
+                    </div>
                 </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="container">
-                {% for each in inventory_items %}
-                <div class="card">
-                    <h5 class="card-header">
-                        <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
-                            aria-expanded="true" aria-controls="collapse-example" id="heading"
-                            class="collapsed d-block">
-                            {{ each.name }}
-                            {% with image_static=each.name|add:'.jpg' %}
-                            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                            {% endwith %}
-                        </a>
-                    </h5>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
-        <div style="width: 70%;">
-            <a href="#" class="btn btn-primary btn-lg btn-block" role="button" aria-pressed="true">Next</a>
+            </form>
+            <span id="user-responses">
+                <p><b>You included the following grocery items:</b></p>
+            </span>
         </div>
     </div>
 </div>

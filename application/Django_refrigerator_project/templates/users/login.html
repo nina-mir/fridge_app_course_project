@@ -2,9 +2,9 @@
 {% load static %}
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'login.css' %}">
+<link rel="stylesheet" href="{% static '/css/login.css' %}">
 
-<div class="container main">
+<div class="container main" style="color: black;">
     <form method="POST">
         {% csrf_token %}
         <fieldset class="form-group">
