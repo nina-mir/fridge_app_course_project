@@ -12,6 +12,7 @@ current_fridge_id = None
 
 def initialCurrentFridge(request):
     global current_fridge_id
+    current_fridge_id = None
     # Set current fridge as primary fridge (if available)
     try:
         pass
@@ -19,15 +20,26 @@ def initialCurrentFridge(request):
         print("No primary fridge found.")
     # Set current fridge as first fridge found with user's id
     try:
-        user_id = User.objects.filter(username=request.user.username).get().id
-        current_fridge_id = Fridge.objects.filter(owner_id=user_id).get().id
+        user_id = User.objects.filter(username=request.user.username).get()
+        if user_id.ownedfridges[0]: 
+            current_fridge_id = user_id.ownedfridges[0] 
+        elif user_id.friendedfridges[0]:
+            current_fridge_id = user_id.friendedfridges[0] 
+        else:
+            current_fridge_id = None
+            print("No Fridges found.")
+            return redirect('/fridge/')
+        #current_fridge_id = Fridge.objects.filter(owner_id=user_id).get().id
     except:
         print("No Fridges found.")
     return redirect('/fridge/')
 
 def getCurrentFridge():
-    current_fridge = Fridge.objects.filter(id=current_fridge_id).get()
-    return current_fridge
+    if(current_fridge_id):
+        current_fridge = Fridge.objects.filter(id=current_fridge_id).get()
+        return current_fridge
+    else:
+        return None
 
 def getCurrentFridgeContent():
     fridge_content = FridgeContent.objects.filter(Q(fridge_id=current_fridge_id))
