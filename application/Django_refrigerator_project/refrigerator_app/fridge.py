@@ -15,13 +15,15 @@ current_user_id = None
 def initialCurrentFridge(request):
     global current_fridge_id, current_user_id
     current_fridge_id = None
-    current_user_id = User.objects.filter(username=request.user.username).get().id
+    current_user_id = User.objects.filter(
+        username=request.user.username).get().id
     # Get user
     user = User.objects.filter(id=current_user_id).get()
     # Set current fridge as primary fridge (if available)
     if user.primary_fridge != -1:
         try:
-            current_fridge_id = Fridge.objects.filter(id=user.primary_fridge).get().id
+            current_fridge_id = Fridge.objects.filter(
+                id=user.primary_fridge).get().id
         except:
             print("No primary fridge found.")
     # Set current fridge as first fridge found with user's id
@@ -35,6 +37,7 @@ def initialCurrentFridge(request):
             print("No Fridges found.")
     return redirect('/fridge/')
 
+
 def refindCurrentFridge():
     global current_fridge_id
     current_fridge_id = None
@@ -43,7 +46,8 @@ def refindCurrentFridge():
     # Set current fridge as primary fridge (if available)
     if user.primary_fridge != -1:
         try:
-            current_fridge_id = Fridge.objects.filter(id=user.primary_fridge).get().id
+            current_fridge_id = Fridge.objects.filter(
+                id=user.primary_fridge).get().id
         except:
             print("No primary fridge found.")
     # Set current fridge as first fridge found with user's id
@@ -94,9 +98,11 @@ def setPrimaryFridge():
     else:
         user.primary_fridge = current_fridge_id
         user.save()
-    
+
+
 def checkIfPrimaryFridge():
-    user_primary_fridge = User.objects.filter(id=current_user_id).get().primary_fridge
+    user_primary_fridge = User.objects.filter(
+        id=current_user_id).get().primary_fridge
     return user_primary_fridge == current_fridge_id
 
 
@@ -105,6 +111,7 @@ def renameCurrentFridge(new_name):
     current_fridge.name = new_name
     current_fridge.save()
     return None
+
 
 def delete_current_fridge():
     # Set fridge as End of Life
@@ -131,6 +138,7 @@ def delete_current_fridge():
     # Refind Current Fridge
     refindCurrentFridge()
 
+
 def deleteItem(item_id):
     fridge_content = FridgeContent.objects.get(id=item_id)
     fridge_content.eff_end_ts = datetime.now()
@@ -138,11 +146,10 @@ def deleteItem(item_id):
     return None
 
 
-def addItem(item_name, current_username):
+def addItem(item_name):
     item = Item.objects.filter(name=item_name).get()
     item_dict = {item.id: item.age}
-    user_id = User.objects.filter(username=current_username).get().id
-    save_to_db(item_dict, current_fridge_id, user_id)
+    save_to_db(item_dict, current_fridge_id, current_user_id)
     return None
 
 
@@ -178,9 +185,9 @@ def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):
     return None
 
 
-def createFridge(fridge_name, current_username):
+def createFridge(fridge_name):
     global current_fridge_id
-    user = User.objects.filter(username=current_username).get()
+    user = User.objects.filter(id=current_user_id).get()
     fridge = Fridge(name=fridge_name, owner=user, creation_date=datetime.now(
     ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31))
     fridge.save()
@@ -193,13 +200,12 @@ def createFridge(fridge_name, current_username):
 def getAllItems():
     return Item.objects.all()
 
+
+def get_all_the_related_fridges():
     # Get all the fridges a user has access to
-
-
-def get_all_the_related_fridges(current_user):
     owned = {}
     friends = {}
-    temp = User.objects.filter(username=current_user.username).get()
+    temp = User.objects.filter(id=current_user_id).get()
     Owndfridge_id = temp.ownedfridges
     Friendfridge_id = temp.friendedfridges
 
@@ -231,18 +237,17 @@ class fridge_Object:
         self.friends_name_list = friends_name_list
         self.id = id
 
+
 def get_name_list_from_id_list(id_list):
     name_list = []
     for i in id_list:
         name_list.append(User.objects.filter(id=i).get().username)
-    
     return name_list
+
 
 def make_verified_fridge_list(fridge_list):
     new_fridge_list = []
     for fridge in fridge_list:
         if fridge.eff_end_ts > datetime.now():
             new_fridge_list.append(fridge)
-    
     return new_fridge_list
-    

@@ -87,8 +87,10 @@
                 <form method="POST" class="custom-control custom-switch checkbox-inline float-right">
                     {% csrf_token %}
                     <input type="checkbox" class="custom-control-input" id="customSwitch1" onclick="this.form.submit()"
-                        name="primary_checkbox" value="check" {% if is_primary_fridge %} checked {% endif %}>
-                    <label class="custom-control-label" for="customSwitch1" onclick="this.form.submit()"></label>
+                        name="primary_checkbox" value="check" {% if is_primary_fridge %} checked {% endif %}
+                        {% if not current_fridge %} disabled {% endif %}>
+                    <label class="custom-control-label" for="customSwitch1" onclick="this.form.submit()"
+                        {% if not current_fridge %} disabled {% endif %}></label>
                 </form>
             </a>
             <a href="#" data-toggle="modal" data-target="#editFriends">Edit Friends</a>
@@ -165,8 +167,11 @@
                         <form method="POST" action="">
                             {% csrf_token %}
                             <div class="form-group">
-                                <p class="form-control" placeholder="Fridge Name" style="width: 65%;float:left">Are you sure about that?</p>
-                                <button type="submit" name="delete_fridge" value="DELETE FRIDGE" class="btn btn-primary btn-block" style="width:30%;float:right"aria-pressed="true">Sure</button>
+                                <p class="form-control" placeholder="Fridge Name" style="width: 65%;float:left">Are you
+                                    sure about that?</p>
+                                <button type="submit" name="delete_fridge" value="DELETE FRIDGE"
+                                    class="btn btn-primary btn-block" style="width:30%;float:right"
+                                    aria-pressed="true">Sure</button>
                             </div>
                         </form>
                     </div>

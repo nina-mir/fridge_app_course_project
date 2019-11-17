@@ -196,14 +196,14 @@ def fridge(request):
     is_primary_fridge = None
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
-    all_fridges = fridge_manager.get_all_the_related_fridges(current_user)
+    all_fridges = fridge_manager.get_all_the_related_fridges()
 
     # Adding Fridge
     if request.method == 'POST' and request.POST.get('add_fridge'):
         try:
             if request.POST.get('fridge_name') != '':
                 fridge_manager.createFridge(request.POST.get(
-                    'fridge_name'), current_user.username)
+                    'fridge_name'))
                 return redirect('/fridge/')
         except:
             print('Error adding fridge')
@@ -228,8 +228,7 @@ def fridge(request):
     # Adding items via text field
     if request.method == 'POST' and request.POST.get('add_item'):
         try:
-            fridge_manager.addItem(request.POST.get(
-                'item_name').lower(), current_user.username)
+            fridge_manager.addItem(request.POST.get('item_name').lower())
             return redirect('/fridge/')
         except:
             print('Error adding item.')
@@ -245,7 +244,6 @@ def fridge(request):
     if request.method == 'POST' and request.POST.get('primary_checkbox')  == 'check':
         try:
             fridge_manager.setPrimaryFridge()
-            return redirect('/fridge/')
         except:
             print('Failed setting primary fridge.')
     # Check if Primary Fridge
