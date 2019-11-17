@@ -64,6 +64,14 @@ def renameCurrentFridge(new_name):
     current_fridge.save()
     return None
 
+def delete_current_fridge(request):
+    current_user = request.user
+    current_fridge = Fridge.objects.filter(id=current_fridge_id).get()
+    current_fridge.eff_end_ts = datetime.now()
+    current_fridge.save()
+    # user = User.object.filter(username = current_user.username).get()  gotta make decision which fridge should be next primary fridge for the user after deletion
+    # user.primary_fridge = -1
+
 def deleteItem(item_id):
     fridge_content = FridgeContent.objects.get(id=item_id)
     fridge_content.eff_end_ts = datetime.now()
