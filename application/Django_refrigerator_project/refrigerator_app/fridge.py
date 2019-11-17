@@ -27,17 +27,17 @@ def initialCurrentFridge(request):
     # Set current fridge as first fridge found with user's id
     else:
         try:
-            user_object = User.objects.filter(username=request.user.username).get()
-            if user_object.ownedfridges[0]:
-                current_fridge_id = user_object.ownedfridges[0]
-            elif user_object.friendedfridges[0]:
-                current_fridge_id = user_object.friendedfridges[0]
+            if user.ownedfridges[0]:
+                current_fridge_id = user.ownedfridges[0]
+            elif user.friendedfridges[0]:
+                current_fridge_id = user.friendedfridges[0]
         except:
             print("No Fridges found.")
     return redirect('/fridge/')
 
 def refindCurrentFridge():
     global current_fridge_id
+    current_fridge_id = None
     # Get user
     user = User.objects.filter(id=current_user_id).get()
     # Set current fridge as primary fridge (if available)
@@ -49,11 +49,10 @@ def refindCurrentFridge():
     # Set current fridge as first fridge found with user's id
     else:
         try:
-            user_object = User.objects.filter(username=request.user.username).get()
-            if user_object.ownedfridges[0]:
-                current_fridge_id = user_object.ownedfridges[0]
-            elif user_object.friendedfridges[0]:
-                current_fridge_id = user_object.friendedfridges[0]
+            if user.ownedfridges[0]:
+                current_fridge_id = user.ownedfridges[0]
+            elif user.friendedfridges[0]:
+                current_fridge_id = user.friendedfridges[0]
         except:
             print("No Fridges found.")
     return redirect('/fridge/')
@@ -87,10 +86,6 @@ def changeCurrentFridge(fridge_id):
 
 def setPrimaryFridge():
     user = User.objects.filter(id=current_user_id).get()
-    print("SET PRIMARY")
-    print(user.primary_fridge)
-    print(current_fridge_id)
-    
     # Checks if primary fridge is current fridge. If not set primary as current.
     if user.primary_fridge == current_fridge_id:
         user.primary_fridge = (-1)
@@ -100,8 +95,6 @@ def setPrimaryFridge():
         user.primary_fridge = current_fridge_id
         user.save()
     
-
-
 def checkIfPrimaryFridge():
     user_primary_fridge = User.objects.filter(id=current_user_id).get().primary_fridge
     return user_primary_fridge == current_fridge_id
@@ -113,13 +106,30 @@ def renameCurrentFridge(new_name):
     current_fridge.save()
     return None
 
-def delete_current_fridge(request):
-    current_user = request.user
+def delete_current_fridge():
+    # Set fridge as End of Life
     current_fridge = Fridge.objects.filter(id=current_fridge_id).get()
     current_fridge.eff_end_ts = datetime.now()
     current_fridge.save()
-    # user = User.object.filter(username = current_user.username).get()  gotta make decision which fridge should be next primary fridge for the user after deletion
-    # user.primary_fridge = -1
+    # Remove Fridge from friend's accounts
+    try:
+        friends_list = current_fridge.friends
+        for each in friends_list:
+            friend = User.object.filter(id=each).get()
+            friend.friendedfridges.remove(current_fridge_id)
+            friend.save()
+    except:
+        pass
+    # Reset Primary Fridge (if necessary)
+    user = User.objects.filter(id=current_user_id).get()
+    if user.primary_fridge == current_fridge_id:
+        user.primary_fridge = -1
+        user.save()
+    # Remove Fridge from user's account
+    user.ownedfridges.remove(current_fridge_id)
+    user.save()
+    # Refind Current Fridge
+    refindCurrentFridge()
 
 def deleteItem(item_id):
     fridge_content = FridgeContent.objects.get(id=item_id)

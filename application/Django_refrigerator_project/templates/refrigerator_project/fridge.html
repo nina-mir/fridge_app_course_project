@@ -5,11 +5,11 @@
 <link rel="stylesheet" type="text/css" href="{% static '/css/fridge_card.css' %}">
 
 <!-- Show when user has a fridge -->
-{% if fridge and fridge.eff_end_ts.date > current_date.date %}
+{% if current_fridge %}
 <div class="container">
   <div class="row">
     <div class="col">
-      <h2 class="text-center">{{ fridge.name }}</h2>
+      <h2 class="text-center">{{ current_fridge.name }}</h2>
     </div>
   </div>
   <div class="row">

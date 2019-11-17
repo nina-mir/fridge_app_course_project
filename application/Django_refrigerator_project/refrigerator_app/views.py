@@ -188,9 +188,13 @@ def fridge(request):
     except:
         print("No Selected items.")
 
+    # Variables
     current_user = request.user
-    current_time = datetime.now()
+
+    inventory_items = None
+    current_fridge = None
     is_primary_fridge = None
+    current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
     all_fridges = fridge_manager.get_all_the_related_fridges(current_user)
 
@@ -206,8 +210,7 @@ def fridge(request):
     # Deleting Fridge
     if request.method == 'POST' and request.POST.get('delete_fridge'):
         try:
-            fridge_manager.delete_current_fridge(request)
-            return redirect ('/fridge/')
+            fridge_manager.delete_current_fridge()
         except:
             print("Error deleting fridge")
     # Adding Friends
@@ -253,12 +256,11 @@ def fridge(request):
     # Get current fridge data
     try:
         inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
-        fridge = fridge_manager.getCurrentFridge()
+        current_fridge = fridge_manager.getCurrentFridge()
     except:
         print('Error')
         return render(request, 'refrigerator_project/fridge.html')
-    return render(request, 'refrigerator_project/fridge.html',
-                  {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'is_primary_fridge': is_primary_fridge,
+    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'is_primary_fridge': is_primary_fridge,
                    'current_date': current_time, 'week_time': week_time, 'all_fridges': all_fridges})
 
 
