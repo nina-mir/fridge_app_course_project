@@ -182,6 +182,13 @@ def fridge(request):
                 return redirect ('/fridge/')
         except:
             print('Error adding fridge')
+    # Deleting Fridge
+    if request.method == 'POST' and request.POST.get('delete_fridge'):
+        try:
+            fridge_manager.delete_current_fridge(request)
+            return redirect ('/fridge/')
+        except:
+            print("Error deleting fridge")
     # Adding Friends
     if request.method == 'POST' and request.POST.get('add_friend_by_email'):
         try:
@@ -211,12 +218,12 @@ def fridge(request):
     # Get current fridge data
     try:
         inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
-        fridge_name = fridge_manager.getCurrentFridge().name
+        fridge = fridge_manager.getCurrentFridge()
     except:
         print('Error')
         return render(request, 'refrigerator_project/fridge.html')
     return render(request, 'refrigerator_project/fridge.html', 
-    {'inventory_items': inventory_items, 'fridge_name': fridge_name, 
+    {'inventory_items': inventory_items, 'fridge': fridge, 
     'current_date': current_time, 'week_time': week_time, 'all_fridges':all_fridges})
 
 @login_required
