@@ -80,9 +80,17 @@
         <div style="height: 100%; width: 250px;">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <a style="text-align: center;"><img src="{% static '/logo_icons/fridge_gray.png' %}"
-                style="height: 30px; vertical-align: middle;">{{ fridge_name }}</a>
+                    style="height: 30px; vertical-align: middle;">{{ fridge_name }}</a>
             <a href="#" data-toggle="modal" data-target="#selectRef">Select Fridge</a>
-            <a href="#">Set Primary</a>
+            <a>
+                Set Primary
+                <form method="POST" class="custom-control custom-switch checkbox-inline float-right">
+                    {% csrf_token %}
+                    <input type="checkbox" class="custom-control-input" id="customSwitch1" onclick="this.form.submit()"
+                        name="primary_checkbox" value="check" {% if is_primary_fridge %} checked {% endif %}>
+                    <label class="custom-control-label" for="customSwitch1" onclick="this.form.submit()"></label>
+                </form>
+            </a>
             <a href="#" data-toggle="modal" data-target="#editFriends">Edit Friends</a>
             <a href="#" data-toggle="modal" data-target="#rename">Rename Fridge</a>
             <a href="#" data-toggle="modal" data-target="#delete">Delete Fridge</a>
@@ -97,7 +105,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body" style="color: blue;">
-                        <form action=""> 
+                        <form action="">
                             {% for key, value in all_fridges.items %}
                             <label class="containerM">One
                                 <input type="checkbox" name="list_fridges"> {{ key }}
@@ -106,7 +114,7 @@
 
 
                             {% csrf_token %}
-                                <!-- <input type="checkbox" name="list_fridges"> {{ key }} -->
+                            <!-- <input type="checkbox" name="list_fridges"> {{ key }} -->
                             {% endfor %}
 
                         </form>
@@ -176,12 +184,13 @@
                         <form method="POST">
                             {% csrf_token %}
                             <div class="form-group">
-                              <input type="text" name="fridge_name" class="form-control" placeholder="Fridge Name"
-                                style="width: 65%;float:left">
-                              <button type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-primary btn-block" style="width:30%;float:right"
-                                aria-pressed="true">Create Fridge</button>
+                                <input type="text" name="fridge_name" class="form-control" placeholder="Fridge Name"
+                                    style="width: 65%;float:left">
+                                <button type="submit" name="add_fridge" value="ADD FRIDGE"
+                                    class="btn btn-primary btn-block" style="width:30%;float:right"
+                                    aria-pressed="true">Create Fridge</button>
                             </div>
-                          </form>
+                        </form>
                     </div>
                 </div>
             </div>

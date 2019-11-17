@@ -23,8 +23,10 @@ from datetime import datetime
 from datetime import timedelta
 # for using @login_required decorator on top of a function
 
+
 def home(request):
     return render(request, 'refrigerator_project/home.html')
+
 
 @login_required
 def groceries(request):
@@ -131,17 +133,17 @@ def profile(request):
     # current_user = request.user
     user_info = User.objects.filter(username=request.user.username)
     user_id = User.objects.filter(username=request.user.username).get().id
-    ownedfridgelist = Fridge.objects.filter(owner_id = user_id)
+    ownedfridgelist = Fridge.objects.filter(owner_id=user_id)
 
-    #for friended fridges column I will assume that it will be a list of fridge ids
-    friendedfridgeidlist = User.objects.filter(username=request.user.username).get().friendedfridges
+    # for friended fridges column I will assume that it will be a list of fridge ids
+    friendedfridgeidlist = User.objects.filter(
+        username=request.user.username).get().friendedfridges
 
-    #this is a list of the actual fridge objects matching the friendedfridgeidlist; note the __in allows us to query by list  
-    friendedfridgelist = Fridge.objects.filter(id__in = friendedfridgeidlist)
-    
-    #print(User.objects.filter(id=1).get().username)
-    #print(friendedfridgelist)
+    # this is a list of the actual fridge objects matching the friendedfridgeidlist; note the __in allows us to query by list
+    friendedfridgelist = Fridge.objects.filter(id__in=friendedfridgeidlist)
 
+    # print(User.objects.filter(id=1).get().username)
+    # print(friendedfridgelist)
 
     context = {
         'user_info': user_info,
@@ -169,17 +171,17 @@ def fridge(request):
 
     current_user = request.user
     current_time = datetime.now()
-    week_time = current_time + timedelta(days=7)  
+    is_primary_fridge = None
+    week_time = current_time + timedelta(days=7)
     all_fridges = fridge_manager.get_all_the_related_fridges(current_user)
-
-
 
     # Adding Fridge
     if request.method == 'POST' and request.POST.get('add_fridge'):
         try:
             if request.POST.get('fridge_name') != '':
-                fridge_manager.createFridge(request.POST.get('fridge_name'), current_user.username)
-                return redirect ('/fridge/')
+                fridge_manager.createFridge(request.POST.get(
+                    'fridge_name'), current_user.username)
+                return redirect('/fridge/')
         except:
             print('Error adding fridge')
     # Adding Friends
@@ -197,17 +199,31 @@ def fridge(request):
     # Adding items via text field
     if request.method == 'POST' and request.POST.get('add_item'):
         try:
-            fridge_manager.addItem(request.POST.get('item_name').lower(), current_user.username)
-            return redirect ('/fridge/')
+            fridge_manager.addItem(request.POST.get(
+                'item_name').lower(), current_user.username)
+            return redirect('/fridge/')
         except:
             print('Error adding item.')
     # Rename current primary fridge name :: to be added checks on ownership.
     if request.method == 'POST' and request.POST.get('rename_fridge'):
         try:
-            fridge_manager.renameCurrentFridge(request.POST.get('rename_fridge'))
+            fridge_manager.renameCurrentFridge(
+                request.POST.get('rename_fridge'))
             return redirect('/fridge/')
         except:
             print('Error Renaming Fridge')
+    # Setting Primary Fridge
+    if request.method == 'POST' and request.POST.get('primary_checkbox')  == 'check':
+        try:
+            fridge_manager.setPrimaryFridge()
+            return redirect('/fridge/')
+        except:
+            print('Failed setting primary fridge.')
+    # Check if Primary Fridge
+    if fridge_manager.checkIfPrimaryFridge():
+        is_primary_fridge = True
+    else:
+        is_primary_fridge = False
     # Get current fridge data
     try:
         inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
@@ -215,9 +231,10 @@ def fridge(request):
     except:
         print('Error')
         return render(request, 'refrigerator_project/fridge.html')
-    return render(request, 'refrigerator_project/fridge.html', 
-    {'inventory_items': inventory_items, 'fridge_name': fridge_name, 
-    'current_date': current_time, 'week_time': week_time, 'all_fridges':all_fridges})
+    return render(request, 'refrigerator_project/fridge.html',
+                  {'inventory_items': inventory_items, 'fridge_name': fridge_name, 'is_primary_fridge': is_primary_fridge,
+                   'current_date': current_time, 'week_time': week_time, 'all_fridges': all_fridges})
+
 
 @login_required
 def receipt_upload(request):
@@ -259,6 +276,8 @@ def receipt_upload(request):
     return render(request, 'refrigerator_project/receipt_upload.html', context)
 
 # Google Vision
+
+
 def detect_text(filename):
     post_processing_results = []
     tmp_id_exp_age_store = {}
