@@ -27,7 +27,7 @@
             </a>
           </h5>
           <!-- looks for if the query is empty -->
-          {% if ownedfridgelist %}
+          {% if ownedfridge_objectlist %}
             
           {% else %}
           <div id="owned" class="collapse" style="color: black;" aria-labelledby="heading-example">
@@ -40,14 +40,14 @@
           {% endif %}
 
           <!--  if the query is not empty, it will display the owned fridges -->
-          {% for each in ownedfridgelist %}
+          {% for each in ownedfridge_objectlist %}
           <div id="owned" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
               <div class="column trash-center">
                 <ul style="list-style-type:none; padding-top: 10px;">
                   <li>Name: {{ each.name }} </li>
                   <li>Created on: {{ each.creation_date }} </li>
-                  <li>Friends: {{ each.friends }} </li>
+                  <li>Friends: {{ each.friends_name_list }} </li>
                 </ul>
               </div>
               <div class="column trash-center ">
@@ -72,7 +72,7 @@
             </a>
           </h5>
           <!-- looks for if the query is empty -->
-          {% if friendedfridgelist %}
+          {% if friendedfridge_objectlist %}
             
           {% else %}
           <div id="friended" class="collapse" style="color: black;" aria-labelledby="heading-example">
@@ -85,14 +85,14 @@
           {% endif %}
 
           <!--  if the query is not empty, it will display the friended fridges -->
-          {% for each in friendedfridgelist %}
+          {% for each in friendedfridge_objectlist %}
           <div id="friended" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
               <div class="column trash-center">
                 <ul style="list-style-type:none; padding-top: 10px;">
                   <li>Name: {{ each.name }} </li>
                   <li>Created on: {{ each.creation_date }} </li>
-                  <li>Friends: {{ each.friends }} </li>
+                  <li>Friends: {{ each.friends_name_list }} </li>
                 </ul>
               </div>
               <div class="column trash-center ">
@@ -118,7 +118,7 @@
             </a>
           </h5>
           <div id="notePad" class="collapse" aria-labelledby="heading-example">
-            <textarea placeholder="Personal Notes" id="myTextArea" rows="5" cols="44" class="textarea"></textarea>
+            <textarea placeholder="Personal Notes" id="myTextArea" rows="5" cols="30" class="textarea"></textarea>
           </div>
         </div>
         </div>

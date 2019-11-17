@@ -139,14 +139,32 @@ def profile(request):
     #this is a list of the actual fridge objects matching the friendedfridgeidlist; note the __in allows us to query by list  
     friendedfridgelist = Fridge.objects.filter(id__in = friendedfridgeidlist)
     
-    #print(User.objects.filter(id=1).get().username)
-    #print(friendedfridgelist)
+    #account for the deleted fridges
+    actualownedfridges = fridge_manager.make_verified_fridge_list(ownedfridgelist)
+    actualfriendedfridges = fridge_manager.make_verified_fridge_list(friendedfridgelist)
 
+    #An object that holds the info from fridges in ownedfridgelist, except the there is a friends_name_list to hold names
+    ownedfridge_objectlist = []
+    #parameters: name, creation_date, friends_name_list, id
+    for fridge in actualownedfridges:
+        f_obj = fridge_manager.fridge_Object(fridge.name, fridge.creation_date, fridge_manager.get_name_list_from_id_list(fridge.friends), fridge.id)
+        ownedfridge_objectlist.append(f_obj)
 
+    
+    #An object that holds the info from fridges in friendedfridgelist, except the there is a friends_name_list to hold names
+    friendedfridge_objectlist = []
+    #parameters: name, creation_date, friends_name_list, id
+    for fridge in actualfriendedfridges:
+        f_obj = fridge_manager.fridge_Object(fridge.name, fridge.creation_date, fridge_manager.get_name_list_from_id_list(fridge.friends), fridge.id)
+        friendedfridge_objectlist.append(f_obj)
+
+    actualownedfridges = fridge_manager.make_verified_fridge_list(ownedfridgelist)
+    actualfriendedfridges = fridge_manager.make_verified_fridge_list(friendedfridgelist)
+    
     context = {
         'user_info': user_info,
-        'ownedfridgelist': ownedfridgelist,
-        'friendedfridgelist': friendedfridgelist
+        'ownedfridge_objectlist': ownedfridge_objectlist,
+        'friendedfridge_objectlist': friendedfridge_objectlist
     }
 
     return render(request, 'refrigerator_project/profile.html', context)

@@ -147,8 +147,24 @@ def get_all_the_related_fridges(current_user):
     return user_fridges
 
 class fridge_Object:
-    def __init__(self, name, created_on, friend_name_list, id):
+    def __init__(self, name, creation_date, friends_name_list, id):
         self.name = name
-        self.created_on: created_on
-        self.friends_name_list = friend_name_list
+        self.creation_date = creation_date
+        self.friends_name_list = friends_name_list
         self.id = id
+
+def get_name_list_from_id_list(id_list):
+    name_list = []
+    for i in id_list:
+        name_list.append(User.objects.filter(id=i).get().username)
+    
+    return name_list
+
+def make_verified_fridge_list(fridge_list):
+    new_fridge_list = []
+    for fridge in fridge_list:
+        if fridge.eff_end_ts > datetime.now():
+            new_fridge_list.append(fridge)
+    
+    return new_fridge_list
+    
