@@ -12,6 +12,11 @@ from django.shortcuts import redirect
 
 @login_required
 def recipe_landing(request):
+    if request.method == 'POST' and request.POST.get('dropdown_menu_option'):
+        saved_recipes = Item.objects.all()
+        print(saved_recipes)
+
+
     # Send user to receipt upload page upon "+" button click
     try:
         if request.method == 'POST' and request.FILES['receipt_image']:
@@ -29,10 +34,9 @@ def recipe_landing(request):
     try:
         #Getting all fridges of logged in user
         temp = User.objects.filter(username = current_user.username).get()
-        Owndfridge_id = temp.ownedfridges.split(',')
-        Owndfridge_id = [int(x) for x in Owndfridge_id]
+        Owndfridge_id = temp.ownedfridges
 
-        fridge_list = Fridge.objects.filter(id = Owndfridge_id)
+        fridge_list = Fridge.objects.filter(id__in = Owndfridge_id)
         print(fridge_list)
         context={
         'fridge_list':fridge_list
@@ -80,10 +84,10 @@ def recipe_search_results(request):
         list =response.getlist('ingredient', default=None)
         print(response)
         print(list)
-        # Using for loop 
+        # Using for loop
         kompi = ""
-        for i in list: 
-            kompi = i + "," + kompi 
+        for i in list:
+            kompi = i + "," + kompi
         print(kompi)
         get_recipes = food2fork_call(kompi)
         context = process_recipes(get_recipes)
@@ -94,25 +98,25 @@ def recipe_search_results(request):
 
 # method to mkae API call to food2fork recipe API
 def food2fork_call(list):
-    # you have to sign up for an API key, which has some allowances. 
+    # you have to sign up for an API key, which has some allowances.
     # Check the API documentation for further details:
     url = 'https://www.food2fork.com/api/search'
 
-    key = '6e81eadfd535b092815e395bcc38be11' 
+    key = '6e81eadfd535b092815e395bcc38be11'
     #key = '57604ca61ce33d68532bb9af7f0472f9'
-    paramsPost = { 
+    paramsPost = {
         'key': key,
         'q': list,
         'sort': 'r', #(optional) How the results should be sorted. See Below for details.
-        'page': '0' #(optional) Used to get additional results} 
+        'page': '0' #(optional) Used to get additional results}
     }
-    
+
     responsePost = requests.post(url, paramsPost)
     if responsePost.status_code == 202: # everything went well!
         print('food2dork: all good!')
     #print(responsePost.content)
     try:
-        result = responsePost.json()      
+        result = responsePost.json()
     except ValueError:
         result = {'error': 'No JSON content returned'}
     return responsePost.text
