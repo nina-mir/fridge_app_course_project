@@ -100,7 +100,7 @@ def setPrimaryFridge():
         user.save()
 
 
-def checkIfPrimaryFridge(current_user_id):
+def checkIfPrimaryFridge():
     user_primary_fridge = User.objects.filter(
         id=current_user_id).get().primary_fridge
     return user_primary_fridge == current_fridge_id
@@ -110,7 +110,6 @@ def renameCurrentFridge(new_name):
     current_fridge = Fridge.objects.filter(id=current_fridge_id).get()
     current_fridge.name = new_name
     current_fridge.save()
-    return None
 
 
 def delete_current_fridge():
@@ -143,14 +142,12 @@ def deleteItem(item_id):
     fridge_content = FridgeContent.objects.get(id=item_id)
     fridge_content.eff_end_ts = datetime.now()
     fridge_content.save()
-    return None
 
 
 def addItem(item_name):
     item = Item.objects.filter(name=item_name).get()
     item_dict = {item.id: item.age}
     save_to_db(item_dict)
-    return None
 
 
 def addFriend(friend_email):
@@ -171,7 +168,6 @@ def addFriend(friend_email):
     if friends_id not in current_fridge.friends:
         current_fridge.friends.append(friends_id)
         current_fridge.save()
-    return None
 
 
 def save_to_db(id_age_list):
@@ -182,7 +178,6 @@ def save_to_db(id_age_list):
             fridge_content.save()
     except:
         print("Error saving item to db")
-    return None
 
 
 def createFridge(fridge_name):
@@ -194,14 +189,13 @@ def createFridge(fridge_name):
     user.ownedfridges.append(fridge.id)
     user.save()
     current_fridge_id = fridge.id
-    return None
 
 
 def getAllItems():
     return Item.objects.all()
 
 
-def get_all_the_related_fridges(current_user_id):
+def get_all_the_related_fridges():
     # Get all the fridges a user has access to
     owned = {}
     friends = {}

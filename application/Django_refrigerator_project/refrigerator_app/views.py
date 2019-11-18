@@ -195,11 +195,7 @@ def fridge(request):
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
 
-    current_user_id = User.objects.filter(
-        username=request.user.username).get().id
-
-
-    all_fridges = fridge_manager.get_all_the_related_fridges(current_user_id)
+    all_fridges = fridge_manager.get_all_the_related_fridges()
 
     # Select a fridge to view
     if request.method == 'POST' and request.POST.get('SET'):
@@ -261,7 +257,7 @@ def fridge(request):
         except:
             print('Failed setting primary fridge.')
     # Check if Primary Fridge
-    if fridge_manager.checkIfPrimaryFridge(current_user_id):
+    if fridge_manager.checkIfPrimaryFridge():
         is_primary_fridge = True
     else:
         is_primary_fridge = False
