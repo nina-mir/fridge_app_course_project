@@ -194,7 +194,23 @@ def fridge(request):
     is_primary_fridge = None
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
-    all_fridges = fridge_manager.get_all_the_related_fridges()
+
+    current_user_id = User.objects.filter(
+        username=request.user.username).get().id
+
+
+    all_fridges = fridge_manager.get_all_the_related_fridges(current_user_id)
+
+    # Select a fridge to view
+    if request.method == 'POST' and request.POST.get('SET'):
+        try:
+            resp = request.POST.get('SET')
+            print('nina : ', resp)
+            fridge_manager.changeCurrentFridge(resp)
+        except:
+            print('Error 206')
+
+
 
     # Adding Fridge
     if request.method == 'POST' and request.POST.get('add_fridge'):
@@ -245,16 +261,17 @@ def fridge(request):
         except:
             print('Failed setting primary fridge.')
     # Check if Primary Fridge
-    if fridge_manager.checkIfPrimaryFridge():
+    if fridge_manager.checkIfPrimaryFridge(current_user_id):
         is_primary_fridge = True
     else:
         is_primary_fridge = False
     # Get current fridge data
     try:
         inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
+        print('nina 271')
         current_fridge = fridge_manager.getCurrentFridge()
     except:
-        print('Error')
+        print('Error 274')
         return render(request, 'refrigerator_project/fridge.html')
     return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'is_primary_fridge': is_primary_fridge,
                    'current_date': current_time, 'week_time': week_time, 'all_fridges': all_fridges})

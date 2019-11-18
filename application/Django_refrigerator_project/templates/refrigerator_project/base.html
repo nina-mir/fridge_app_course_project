@@ -107,18 +107,16 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body" style="color: blue;">
-                        <form action="">
+                        <form action="" method="POST" novalidate>  
                             {% for key, value in all_fridges.items %}
-                            <label class="containerM">One
-                                <input type="checkbox" name="list_fridges"> {{ key }}
-                                <span class="checkmarkM"></span>
+                            <label>
+                                <input type="checkbox" 
+                                name="SET" value="{{ value }}"> {{ key }}
                             </label>
-
-
                             {% csrf_token %}
-                            <!-- <input type="checkbox" name="list_fridges"> {{ key }} -->
                             {% endfor %}
-
+                            <button class="btn btn-primary btn-lg btn-block" 
+                            value=""  type="submit">SET</button>
                         </form>
                     </div>
                 </div>

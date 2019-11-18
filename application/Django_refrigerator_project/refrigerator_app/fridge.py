@@ -85,7 +85,7 @@ def getCurrentFridgeContentByExpiration():
 def changeCurrentFridge(fridge_id):
     global current_fridge_id
     current_fridge_id = fridge_id
-    return None
+    return current_fridge_id
 
 
 def setPrimaryFridge():
@@ -100,7 +100,7 @@ def setPrimaryFridge():
         user.save()
 
 
-def checkIfPrimaryFridge():
+def checkIfPrimaryFridge(current_user_id):
     user_primary_fridge = User.objects.filter(
         id=current_user_id).get().primary_fridge
     return user_primary_fridge == current_fridge_id
@@ -201,7 +201,7 @@ def getAllItems():
     return Item.objects.all()
 
 
-def get_all_the_related_fridges():
+def get_all_the_related_fridges(current_user_id):
     # Get all the fridges a user has access to
     owned = {}
     friends = {}
