@@ -149,7 +149,7 @@ def deleteItem(item_id):
 def addItem(item_name):
     item = Item.objects.filter(name=item_name).get()
     item_dict = {item.id: item.age}
-    save_to_db(item_dict, current_fridge_id, current_user_id)
+    save_to_db(item_dict)
     return None
 
 
@@ -174,11 +174,11 @@ def addFriend(friend_email):
     return None
 
 
-def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):
+def save_to_db(id_age_list):
     try:
         for item_id in id_age_list:
             fridge_content = FridgeContent(expirationdate=(datetime.now()+timedelta(hours=id_age_list[item_id])), size=1, creation_date=datetime.now(
-            ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31), addedby_id=addedby_person_id, fridge_id=Owndfridge_id, item_id=item_id)
+            ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31), addedby_id=current_user_id, fridge_id=current_fridge_id, item_id=item_id)
             fridge_content.save()
     except:
         print("Error saving item to db")

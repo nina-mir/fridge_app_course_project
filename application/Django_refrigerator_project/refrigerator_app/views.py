@@ -189,8 +189,6 @@ def fridge(request):
         print("No Selected items.")
 
     # Variables
-    current_user = request.user
-
     inventory_items = None
     current_fridge = None
     is_primary_fridge = None
@@ -265,7 +263,7 @@ def fridge(request):
 @login_required
 def receipt_upload(request):
     context = {}
-    current_user = request.user
+
     # Display found receipt content upon image receipt
     print(request.POST)
     if request.method == 'POST':
@@ -292,10 +290,8 @@ def receipt_upload(request):
                     if j.name.lower() == i.lower():
                         selected_items[j.id] = j.age
                         break
-            user = User.objects.filter(username=current_user.username).get()
-            Owndfridge_id = user.ownedfridges[0]
             # Save to fridgeContent Table
-            fridge_manager.save_to_db(selected_items, Owndfridge_id, user.id)
+            fridge_manager.save_to_db(selected_items)
             return redirect('/fridge/')
         except:
             print("Error saving selected items to fridge.")
