@@ -48,7 +48,7 @@
         </div>
         <div class="col align-self-center">
             <div class="float-right">
-                <a data-toggle="modal" data-target="#tracked_items_modal" class="btn btn-primary btn-lg" role="button"
+                <a data-toggle="modal" data-target="#tracked_items_modal" class="btn btn-info btn-sm btn-rounded waves-effect" role="button"
                     aria-pressed="true">Tracked Items</a>
             </div>
         </div>
@@ -58,7 +58,7 @@
             <!-- Missing Items For Loop -->
             {% if missing_items %}
             {% for each in missing_items %}
-            <div class=" card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
+            <div class=" card" style="height: 4.3em; background-color: #f2f2f2;">
             <div class="card-body">
                 <h5 class="card-text">
                     {% with image_static='/item_icons/'|add:each|add:'.png' %}
@@ -78,7 +78,7 @@
 
 <div class="row">
     <div class="col">
-        <p style="text-align: center; color: black;">Tracked items not found in the current fridge are displayed here as
+        <p style="text-align: center">Tracked items not found in the current fridge are displayed here as
             missing.</p>
     </div>
     <hr size="6" width="100%" color="black">
@@ -89,7 +89,7 @@
     </div>
     <div class="col align-self-center">
         <div class="float-right">
-            <a data-toggle="modal" data-target="#addItem" class="btn btn-primary btn-lg" role="button"
+            <a data-toggle="modal" data-target="#addItem" class="btn btn-info btn-sm btn-rounded waves-effect" role="button"
                 aria-pressed="true">Add Items</a>
         </div>
     </div>
@@ -99,7 +99,7 @@
         <!-- Manual Items For Loop -->
         {% if manual_items %}
         {% for each in manual_items %}
-        <div class="card" style="color: black; background-color: #f2f2f2;">
+        <div class="card" style="background-color: #f2f2f2;">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -134,7 +134,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <!-- Header -->
-            <div class="modal-header" style="color: black;">
+            <div class="modal-header">
                 <h4 class="modal-title">Select Tracked Items</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -163,7 +163,7 @@
                     <ul class="container-fluid" id="tracked_item_ul">
                         {% for each in all_items %}
                         <li id="{{each.name}}" style="padding-top: 4px;">
-                            <div class="card" x style="height: 4.3em; color: black; background-color: #f2f2f2;">
+                            <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
                                 <label>
                                     <div class="card-body">
                                         {% if each.name in tracked_items %}
@@ -203,7 +203,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <!-- Header -->
-            <div class="modal-header" style="color: black;">
+            <div class="modal-header">
                 <h4 class="modal-title">Select Manual Items</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -232,7 +232,7 @@
                     <ul class="container-fluid" id="manual_item_ul">
                         {% for each in all_items %}
                         <li id="{{each.name}}" style="padding-top: 4px;">
-                            <div class="card" x style="height: 4.3em; color: black; background-color: #f2f2f2;">
+                            <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
                                 <label>
                                     <div class="card-body">
                                         <input type="checkbox" style="float:right;" name="grocery_items"

@@ -19,8 +19,9 @@
         {% csrf_token %}
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Item Name" style="width: 65%;float:left" name="item_name">
-          <button type="submit" name="add_item" value="ADD ITEM" class="btn btn-primary btn-block"
+          <button type="submit" name="add_item" value="ADD ITEM" class="btn btn-info btn-sm btn-rounded waves-effect"
             style="width:30%;float:right" aria-pressed="true">Add Item</button>
+            <br>
         </div>
       </form>
       <!-- Add Friend Form -->
@@ -28,7 +29,7 @@
         {% csrf_token %}
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Friend's Email" style="width: 65%;float:left" name="friend_email">
-          <button type="submit" name="add_friend_by_email" value="ADD Friend" class="btn btn-primary btn-block"
+          <button type="submit" name="add_friend_by_email" value="ADD Friend" class="btn btn-info btn-sm btn-rounded waves-effect"
             style="width:30%;float:right" aria-pressed="true">Add Friend</button>
         </div>
       </form>
