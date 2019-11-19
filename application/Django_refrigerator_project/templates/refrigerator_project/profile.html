@@ -5,13 +5,17 @@
 <link rel="stylesheet" type="text/css" href="{% static '/css/fridge_card.css' %}">
 
 <div class="container">
-  <div class="row">
-    <div class="col">
-      <h1 class="text-center">Profile Page</h1>
-      <h2>NAME: {{ user.username }}</h2>
-      <h2> Email: {{ user.email }} </h2>
+    <div class="row">
+      <div class="col card map border-light mb-3" style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+        <h3 class="text-center">Profile Page</h3>
+      </div>
     </div>
-  </div>
+    <div class="row text-center">
+      <h2 class="text-center">{{ user.username }}</h2>
+   
+        <h2>{{ user.email }} </h2>
+    </div>
+  
 
   <div class="row">
     <div class="col">

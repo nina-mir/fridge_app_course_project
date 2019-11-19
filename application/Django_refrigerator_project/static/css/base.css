@@ -50,6 +50,7 @@ body {
   /* Place content 60px from the top */
   transition: 0.5s;
   /* 0.5 second transition effect to slide in the sidenav */
+  outline: none;
 }
 
 /* The navigation menu links */
@@ -60,11 +61,12 @@ body {
   padding-bottom: 8px;
   padding-left: 20px;
   text-decoration: none;
-  font-size: 25px;
+  font-size: 18px;
   color: #dbd7d7;
   display: block;
   transition: 0.3s;
   white-space: nowrap;
+  outline: none;
 }
 
 /* When you mouse over the navigation links, change their color */
@@ -76,6 +78,7 @@ body {
 /* Position and style the close button (top right corner) */
 
 .sidenav .closebtn {
+  outline: none;
   position: absolute;
   top: 40px;
   right: 25px;
@@ -94,6 +97,7 @@ body {
 
 @media screen and (max-height: 450px) {
   .sidenav {
+    outline: none;
     padding-top: 15px;
   }
   .sidenav a {

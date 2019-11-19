@@ -8,8 +8,8 @@
 {% if current_fridge %}
 <div class="container">
   <div class="row">
-    <div class="col">
-      <h2 class="text-center">{{ current_fridge.name }}</h2>
+    <div class="col card map border-light mb-3" style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+      <h3 class="text-center">{{ current_fridge.name }}</h3>
     </div>
   </div>
   <div class="row">
@@ -27,17 +27,17 @@
       <!-- Add Friend Form -->
       <form class="navbar-form navbar-left" role="search" method="POST">
         {% csrf_token %}
-        <div class="form-group">
+        <div class="form-group" style="padding-bottom: 40px;">
           <input type="text" class="form-control" placeholder="Friend's Email" style="width: 65%;float:left" name="friend_email">
           <button type="submit" name="add_friend_by_email" value="ADD Friend" class="btn btn-info btn-sm btn-rounded waves-effect"
-            style="width:30%;float:right" aria-pressed="true">Add Friend</button>
+            style="width:30%;float:right;" aria-pressed="true">Add Friend</button>
         </div>
       </form>
     </div>
   </div>
   <div class="row">
-    <div class="col">
-      <h4>Items in Inventory: </h4>
+    <div class="col card map border-light mb-3" style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;"">
+      <h3 class="text-center">Items in Refrigerator </h3>
     </div>
   </div>
   <div class="row">
