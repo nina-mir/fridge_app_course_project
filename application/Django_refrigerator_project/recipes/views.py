@@ -12,10 +12,6 @@ from django.shortcuts import redirect
 
 @login_required
 def recipe_landing(request):
-    if request.method == 'POST' and request.POST.get('dropdown_menu_option'):
-        saved_recipes = Item.objects.all()
-        print(saved_recipes)
-
 
     # Send user to receipt upload page upon "+" button click
     try:
@@ -31,20 +27,7 @@ def recipe_landing(request):
         pass
 
     current_user = request.user
-    try:
-        #Getting all fridges of logged in user
-        temp = User.objects.filter(username = current_user.username).get()
-        Owndfridge_id = temp.ownedfridges
-
-        fridge_list = Fridge.objects.filter(id__in = Owndfridge_id)
-        print(fridge_list)
-        context={
-        'fridge_list':fridge_list
-        }
-    except:
-        print('Error')
-        return render(request, 'recipes/recipe_landing.html')
-    return render(request, 'recipes/recipe_landing.html',context = context)
+    return render(request, 'recipes/recipe_landing.html')
 
 @login_required
 def recipe_search(request):
