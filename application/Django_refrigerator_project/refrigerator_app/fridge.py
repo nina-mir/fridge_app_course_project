@@ -206,13 +206,15 @@ def get_all_the_related_fridges():
     try:
         for i in Owndfridge_id:
             fridge_obj = Fridge.objects.filter(id=i).get()
-            owned[fridge_obj.name] = fridge_obj.id
+            if(fridge_obj.eff_end_ts > datetime.now()):
+                owned[fridge_obj.name] = fridge_obj.id
     except:
         print('Error in 130')
     try:
         for i in Friendfridge_id:
             fridge_obj = Fridge.objects.filter(id=i).get()
-            friends[fridge_obj.name] = fridge_obj.id
+            if(fridge_obj.eff_end_ts > datetime.now()):
+                friends[fridge_obj.name] = fridge_obj.id
     except:
         print('Error in 136')
 
