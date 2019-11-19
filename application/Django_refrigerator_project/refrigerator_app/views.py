@@ -175,7 +175,6 @@ def profile(request):
 
 @login_required
 def fridge(request):
-    fridge_manager.initialCurrentFridge(request)
     try:
         if request.method == 'POST' and request.FILES['receipt_image']:
             return receipt_upload(request)
