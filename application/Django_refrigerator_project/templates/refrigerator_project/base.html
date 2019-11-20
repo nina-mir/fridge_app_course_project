@@ -26,15 +26,15 @@
 
     <link rel="stylesheet" href="{% static '/css/base.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/css/modal_checkbox.css' %}">
-  
+
 
     {% comment %}
-    <link rel="stylesheet" href="{% static '/css/styles.css' %}"> 
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}">
     {% endcomment %}
     <link rel="stylesheet" href="{% static '/css/receipt_upload.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/css/modal_checkbox.css' %}">
 
-    
+
 
     <script>
         /* Set the width of the side navigation to 250px */
@@ -83,18 +83,18 @@
     <div id="mySidenav" class="sidenav">
         <div style="height: 100%; width: 250px;">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <a style="text-align: center;"><img src="{% static '/logo_icons/fridge_gray.png' %}"
+            <a href="#" style="text-align: center;"><img src="{% static '/logo_icons/fridge_gray.png' %}"
                     style="height: 30px; vertical-align: middle;">{{ current_fridge.name }}</a>
             <a href="#" data-toggle="modal" data-target="#selectRef">Select Fridge</a>
-            <a>
+            <a href="#">
                 Set Primary
-                <form method="POST" class="custom-control custom-switch checkbox-inline float-right">
+                <form method="POST" class="float-right">
                     {% csrf_token %}
-                    <input type="checkbox" class="custom-control-input" id="customSwitch1" onclick="this.form.submit()"
-                        name="primary_checkbox" value="check" {% if is_primary_fridge %} checked {% endif %}
-                        {% if not current_fridge %} disabled {% endif %}>
-                    <label class="custom-control-label" for="customSwitch1" onclick="this.form.submit()"
-                        {% if not current_fridge %} disabled {% endif %}></label>
+                    <label class="switch">
+                        <input type="checkbox" name="primary_checkbox"
+                        value="check" onclick="this.form.submit()" {% if is_primary_fridge %} checked {% endif %}>
+                        <span class="slider round"></span>
+                    </label>
                 </form>
             </a>
             <a href="#" data-toggle="modal" data-target="#editFriends">Edit Friends</a>
@@ -111,23 +111,21 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <!--span aria-hidden="true">&times;</span-->
-                                Select a fridge to view its content!
-                            </button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <!--span aria-hidden="true">&times;</span-->
+                            Select a fridge to view its content!
+                        </button>
                     </div>
                     <div class="modal-body" style="color: blue;">
-                        <form action="" method="POST" novalidate>  
+                        <form action="" method="POST" novalidate>
                             {% for key, value in all_fridges.items %}
                             <label class="containerRadio">
-                                <input type="radio" 
-                                name="SET" value="{{ value }}"> {{ key }}
-				                <span class="checkmarkRadio"></span>
+                                <input type="radio" name="SET" value="{{ value }}"> {{ key }}
+                                <span class="checkmarkRadio"></span>
                             </label>
                             {% csrf_token %}
                             {% endfor %}
-                            <button class="btn btn-primary btn-lg btn-block" 
-                            value=""  type="submit">SET</button>
+                            <button class="btn btn-primary btn-lg btn-block" value="" type="submit">SET</button>
                         </form>
                     </div>
                 </div>
