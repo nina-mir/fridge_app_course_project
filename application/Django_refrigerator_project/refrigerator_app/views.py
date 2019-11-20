@@ -54,9 +54,9 @@ def groceries(request):
     try:
         manual_item_list = fridge_manager.getCurrentFridge().manually_added_list
     except:
-        fridge_manager.initialCurrentFridge(request)
+        # fridge_manager.initialCurrentFridge(request)
         print('GROCERY VIEW: Error getting manual groceries.')
-        return redirect('/groceries/')
+        # return redirect('/groceries/')
 
     # Compute list of missing items
     try:
@@ -197,15 +197,10 @@ def fridge(request):
     # Variables
     inventory_items = None
     current_fridge = None
-    is_primary_fridge = None
+    primary_fridge_id = None
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
     all_fridges = None
-
-    try:
-        print(request.POST.get('primary_checkbox'))
-    except:
-        print("nopost")
 
     # Get current fridge data
     try:
@@ -219,24 +214,24 @@ def fridge(request):
     # Select a fridge to view
     if request.method == 'POST' and request.POST.get('SET'):
         try:
-            resp = request.POST.get('SET')
-            print('nina : ', resp)
-            fridge_manager.changeCurrentFridge(resp)
+            # resp = request.POST.get('SET')
+            # print('nina : ', resp)
+            fridge_manager.changeCurrentFridge(request.POST.get('SET'))
             return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error Selecting Fridge.')
     # Setting Primary Fridge
-    if request.method == 'POST' and request.POST.get('primary_checkbox'):
-        print("SETTING PRIMARY")
+    if request.method == 'POST' and request.POST.get('primary_fridge_submit'):
         try:
-            fridge_manager.setPrimaryFridge()
+            fridge_manager.setPrimaryFridge(
+                request.POST.get('primary_fridge_selected'))
         except:
             print('FRIDGE VIEW: Failed setting primary fridge.')
     # Check if Primary Fridge
-    if fridge_manager.checkIfPrimaryFridge():
-        is_primary_fridge = True
-    else:
-        is_primary_fridge = False
+    try:
+        primary_fridge_id = fridge_manager.getPrimaryFridge()
+    except:
+        print("FRIDGE VIEW: Error getting primary fridge.")
     # Adding Fridge
     if request.method == 'POST' and request.POST.get('add_fridge'):
         try:
@@ -279,14 +274,13 @@ def fridge(request):
             return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error Renaming Fridge')
-    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'is_primary_fridge': is_primary_fridge,
+    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'primary_fridge_id': primary_fridge_id,
                                                                 'current_date': current_time, 'week_time': week_time, 'all_fridges': all_fridges})
 
 
 @login_required
 def receipt_upload(request):
     context = {}
-
     # Display found receipt content upon image receipt
     print(request.POST)
     if request.method == 'POST':
@@ -320,10 +314,9 @@ def receipt_upload(request):
             print('RECEIPT VIEW: Error saving selected items to fridge.')
     return render(request, 'refrigerator_project/receipt_upload.html', context)
 
-# Google Vision
-
 
 def detect_text(filename):
+    # Google Vision
     post_processing_results = []
     tmp_id_exp_age_store = {}
     # Detects text in the file.
@@ -359,38 +352,3 @@ def search(request):
             if match:
                 return render(request, 'refrigerator_project/search.html', {'sr': match})
     return render(request, 'refrigerator_project/search.html')
-
-
-# def delete_item(content_id):
-#     fridge_content = FridgeContent.objects.get(id=content_id)
-#     fridge_content.eff_end_ts = datetime.now()
-#     fridge_content.save()
-
-
-# def add_item(item_name, current_username):
-#     item = Item.objects.filter(name=item_name).get()
-#     item_dict = {item.id: item.age}
-#     temp = User.objects.filter(username=current_username).get()
-#     Owndfridge_id = temp.ownedfridges[0]
-#     addedby_person_id = temp.id
-#     save_to_db(item_dict, Owndfridge_id, addedby_person_id)
-
-
-# def add_fridge(fridge_name, current_username):
-#     # creating fridge
-#     user = User.objects.filter(username=current_username).get()
-#     fridge = Fridge(name=fridge_name, owner=user, creation_date=datetime.now(
-#     ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31))
-#     fridge.save()
-#     # adding fridge to the owner
-#     user.ownedfridges.append(fridge.id)
-#     user.save()
-
-# def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):
-#     try:
-#         for item_id in id_age_list:
-#             fridge_content = FridgeContent(expirationdate=(datetime.now()+timedelta(hours=id_age_list[item_id])), size=1, creation_date=datetime.now(
-#             ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31), addedby_id=addedby_person_id, fridge_id=Owndfridge_id, item_id=item_id)
-#             fridge_content.save()
-#     except:
-#         print("Error saving item to db")

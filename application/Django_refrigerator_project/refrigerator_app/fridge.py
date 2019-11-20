@@ -88,23 +88,17 @@ def changeCurrentFridge(fridge_id):
     return current_fridge_id
 
 
-def setPrimaryFridge():
+def setPrimaryFridge(fridge_id):
     user = User.objects.filter(id=current_user_id).get()
-    # Checks if primary fridge is current fridge. If not set primary as current.
-    if user.primary_fridge == current_fridge_id:
-        user.primary_fridge = (-1)
-        print(user.primary_fridge)
-        user.save()
-    else:
-        user.primary_fridge = current_fridge_id
-        user.save()
+    user.primary_fridge = fridge_id
+    user.save()
 
 
-def checkIfPrimaryFridge():
+def getPrimaryFridge():
     global current_fridge_id
     user_primary_fridge = User.objects.filter(
         id=current_user_id).get().primary_fridge
-    return user_primary_fridge == current_fridge_id
+    return user_primary_fridge
 
 
 def renameCurrentFridge(new_name):
