@@ -82,19 +82,8 @@
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <a href="#" style="text-align: center;"><img src="{% static '/logo_icons/fridge_gray.png' %}"
                     style="height: 30px; vertical-align: middle;">{{ current_fridge.name }}</a>
-            <a href="#" data-toggle="modal" data-target="#selectRef">Select Fridge</a>
+            <a href="#" data-toggle="modal" data-target="#select_fridge_modal">Select Fridge</a>
             <a href="#" data-toggle="modal" data-target="#primary_fridge_modal">Set Primary Fridge</a>
-            <!-- <a href="#">
-                Set Primary
-                <form method="POST" class="float-right">
-                    {% csrf_token %}
-                    <label class="switch">
-                        <input type="checkbox" name="primary_checkbox" value="check" onclick="this.form.submit()"
-                            {% if is_primary_fridge %} checked {% endif %}>
-                        <span class="slider round"></span>
-                    </label>
-                </form>
-            </a> -->
             <a href="#" data-toggle="modal" data-target="#editFriends">Edit Friends</a>
             <a href="#" data-toggle="modal" data-target="#rename">Rename Fridge</a>
             <a href="#" data-toggle="modal" data-target="#delete">Delete Fridge</a>
@@ -104,27 +93,52 @@
     <!-- Modals for Sidebar -->
     <div>
         <!-- Select Current Fridge -->
-        <div class="modal fade" id="selectRef" tabindex="-1" role="dialog" aria-labelledby="selectRef"
-            aria-hidden="true">
+        <div class="modal fade" id="select_fridge_modal" tabindex="-1" role="dialog"
+            aria-labelledby="tracked_items_modal" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
+                    <!-- Header -->
                     <div class="modal-header">
+                        <h4 class="modal-title">Select Current Fridge</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <!--span aria-hidden="true">&times;</span-->
-                            Select a fridge to view its content!
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body" style="color: blue;">
-                        <form action="" method="POST" novalidate>
-                            {% for key, value in all_fridges.items %}
-                            <label class="containerRadio">
-                                <input type="radio" name="SET" value="{{ value }}"> {{ key }}
-                                <span class="checkmarkRadio"></span>
-                            </label>
+                    <!--Body-->
+                    <div class="modal-body">
+                        <!-- List of Items -->
+                        <form id="select_fridge_form" method="POST">
                             {% csrf_token %}
-                            {% endfor %}
-                            <button class="btn btn-primary btn-lg btn-block" value="" type="submit">SET</button>
+                            <ul class="container-fluid" id="select_fridge_ul">
+                                {% for key, value in all_fridges.items %}
+                                <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
+                                    <label>
+                                        <div class="card-body">
+                                            {% if current_fridge.id == value %}
+                                            <label class="containerRadio">
+                                                <input type="radio" name="select_fridge_selected" value="{{ value }}"
+                                                    checked> {{ key }}
+                                                <span class="checkmarkRadio"></span>
+                                            </label>
+                                            {% else %}
+                                            <label class="containerRadio">
+                                                <input type="radio" name="select_fridge_selected" value="{{ value }}">
+                                                {{ key }}
+                                                <span class="checkmarkRadio"></span>
+                                            </label>
+                                            {% endif %}
+                                        </div>
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </ul>
                         </form>
+                    </div>
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" name="select_fridge_submit" type="submit" value="selection"
+                            form="select_fridge_form">Save Selection</button>
                     </div>
                 </div>
             </div>
@@ -148,7 +162,6 @@
                             {% csrf_token %}
                             <ul class="container-fluid" id="primary_fridge_ul">
                                 {% for key, value in all_fridges.items %}
-                                <li id="{{ key }}" style="padding-top: 4px;">
                                     <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
                                         <label>
                                             <div class="card-body">
@@ -165,7 +178,6 @@
                                             </div>
                                         </label>
                                     </div>
-                                </li>
                                 {% endfor %}
                             </ul>
                         </form>

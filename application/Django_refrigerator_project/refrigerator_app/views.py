@@ -212,11 +212,11 @@ def fridge(request):
         print('FRIDGE VIEW: Error getting fridge data. Resetting current fridge.')
         return redirect('/fridge/')
     # Select a fridge to view
-    if request.method == 'POST' and request.POST.get('SET'):
+    if request.method == 'POST' and request.POST.get('select_fridge_submit'):
         try:
             # resp = request.POST.get('SET')
             # print('nina : ', resp)
-            fridge_manager.changeCurrentFridge(request.POST.get('SET'))
+            fridge_manager.changeCurrentFridge(request.POST.get('select_fridge_selected'))
             return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error Selecting Fridge.')
