@@ -90,7 +90,10 @@ def changeCurrentFridge(fridge_id):
 
 def setPrimaryFridge(fridge_id):
     user = User.objects.filter(id=current_user_id).get()
-    user.primary_fridge = fridge_id
+    if (fridge_id):
+        user.primary_fridge = fridge_id
+    else:
+        user.primary_fridge = -1
     user.save()
 
 
