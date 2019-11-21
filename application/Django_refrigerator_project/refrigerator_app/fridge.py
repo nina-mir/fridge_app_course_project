@@ -256,6 +256,8 @@ def getCurrentFridgeFriendsUsername():
 def remove_friend(username):
     friend = User.objects.filter(username = username).get()
     friend.friendedfridges.remove(current_fridge_id)
+    if(friend.primary_fridge == current_fridge_id):
+        friend.primary_fridge = -1
     current_fridge = Fridge.objects.filter(id = current_fridge_id).get()
     current_fridge.friends.remove(friend.id)
     friend.save()
