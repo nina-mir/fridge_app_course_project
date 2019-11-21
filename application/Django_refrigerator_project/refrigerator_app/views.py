@@ -2,6 +2,7 @@ import io
 import sys
 import math
 import datetime
+import refrigerator_app.fridge as fridge_manager
 
 from io import BytesIO
 
@@ -17,7 +18,6 @@ from .models import Fridge, Item, FridgeContent
 
 from users.models import AuthUser
 from users.models import User
-import refrigerator_app.fridge as fridge_manager
 
 from datetime import datetime
 from datetime import timedelta
@@ -54,7 +54,9 @@ def groceries(request):
     try:
         manual_item_list = fridge_manager.getCurrentFridge().manually_added_list
     except:
-        print(("Error getting manual groceries."))
+        # fridge_manager.initialCurrentFridge(request)
+        print('GROCERY VIEW: Error getting manual groceries.')
+        # return redirect('/groceries/')
 
     # Compute list of missing items
     try:
@@ -73,7 +75,7 @@ def groceries(request):
             if (inFridge == False):
                 missing_items.append(tItems)
     except:
-        print('Error getting tracked groceries.')
+        print('GROCERY VIEW: Error getting tracked groceries.')
 
     # Tracked item selection
     if request.method == 'POST' and request.POST.get('tracked_selector_submit') == 'selection':
@@ -87,7 +89,7 @@ def groceries(request):
             fridge.save()
             return redirect('/groceries/')
         except:
-            print("Error saving selected items to grocery list.")
+            print('GROCERY VIEW: Error saving selected items to grocery list.')
 
     # Selected items added to manual list
     if request.method == 'POST' and request.POST.get('grocery_selector_submit') == 'selection':
@@ -99,7 +101,7 @@ def groceries(request):
             fridge.save()
             return redirect('/groceries/')
         except:
-            print("Error saving selected items to grocery list.")
+            print('GROCERY VIEW: Error saving selected items to grocery list.')
 
     # Delete Item from manual list
     if request.method == 'POST' and request.POST.get('delete_item'):
@@ -110,7 +112,7 @@ def groceries(request):
             fridge.save()
             return redirect('/groceries/')
         except:
-            print("Error removing selected items to grocery list.")
+            print('GROCERY VIEW: Error removing selected items to grocery list.')
     return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'sr': match, 'missing_items': missing_items, 'tracked_items': tracked_item_list, 'manual_items': manual_item_list})
 
 
@@ -139,26 +141,29 @@ def profile(request):
     friendedfridgeidlist = User.objects.filter(
         username=request.user.username).get().friendedfridges
 
-    #this is a list of the actual fridge objects matching the friendedfridgeidlist; note the __in allows us to query by list  
-    friendedfridgelist = Fridge.objects.filter(id__in = friendedfridgeidlist)
-    
-    #account for the deleted fridges
-    actualownedfridges = fridge_manager.make_verified_fridge_list(ownedfridgelist)
-    actualfriendedfridges = fridge_manager.make_verified_fridge_list(friendedfridgelist)
+    # this is a list of the actual fridge objects matching the friendedfridgeidlist; note the __in allows us to query by list
+    friendedfridgelist = Fridge.objects.filter(id__in=friendedfridgeidlist)
 
-    #An object that holds the info from fridges in ownedfridgelist, except the there is a friends_name_list to hold names
+    # account for the deleted fridges
+    actualownedfridges = fridge_manager.make_verified_fridge_list(
+        ownedfridgelist)
+    actualfriendedfridges = fridge_manager.make_verified_fridge_list(
+        friendedfridgelist)
+
+    # An object that holds the info from fridges in ownedfridgelist, except the there is a friends_name_list to hold names
     ownedfridge_objectlist = []
-    #parameters: name, creation_date, friends_name_list, id
+    # parameters: name, creation_date, friends_name_list, id
     for fridge in actualownedfridges:
-        f_obj = fridge_manager.fridge_Object(fridge.name, fridge.creation_date, fridge_manager.get_name_list_from_id_list(fridge.friends), fridge.id)
+        f_obj = fridge_manager.fridge_Object(
+            fridge.name, fridge.creation_date, fridge_manager.get_name_list_from_id_list(fridge.friends), fridge.id)
         ownedfridge_objectlist.append(f_obj)
 
-    
-    #An object that holds the info from fridges in friendedfridgelist, except the there is a friends_name_list to hold names
+    # An object that holds the info from fridges in friendedfridgelist, except the there is a friends_name_list to hold names
     friendedfridge_objectlist = []
-    #parameters: name, creation_date, friends_name_list, id
+    # parameters: name, creation_date, friends_name_list, id
     for fridge in actualfriendedfridges:
-        f_obj = fridge_manager.fridge_Object(fridge.name, fridge.creation_date, fridge_manager.get_name_list_from_id_list(fridge.friends), fridge.id)
+        f_obj = fridge_manager.fridge_Object(
+            fridge.name, fridge.creation_date, fridge_manager.get_name_list_from_id_list(fridge.friends), fridge.id)
         friendedfridge_objectlist.append(f_obj)
 
     actualownedfridges = fridge_manager.make_verified_fridge_list(ownedfridgelist)
@@ -204,23 +209,42 @@ def fridge(request):
     # Variables
     inventory_items = None
     current_fridge = None
-    is_primary_fridge = None
+    primary_fridge_id = None
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
-
-    all_fridges = fridge_manager.get_all_the_related_fridges()
-
+    all_fridges = None
+    current_fridge_friends = None
+    # Get current fridge data
+    try:
+        all_fridges = fridge_manager.get_all_the_related_fridges()
+        inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
+        current_fridge = fridge_manager.getCurrentFridge()
+        current_fridge_friends = fridge_manager.getCurrentFridgeFriendsUsername()
+    except:
+        fridge_manager.initialCurrentFridge(request)
+        print('FRIDGE VIEW: Error getting fridge data. Resetting current fridge.')
+        return redirect('/fridge/')
     # Select a fridge to view
-    if request.method == 'POST' and request.POST.get('SET'):
+    if request.method == 'POST' and request.POST.get('select_fridge_submit'):
         try:
-            resp = request.POST.get('SET')
-            print('nina : ', resp)
-            fridge_manager.changeCurrentFridge(resp)
+            # resp = request.POST.get('SET')
+            # print('nina : ', resp)
+            fridge_manager.changeCurrentFridge(request.POST.get('select_fridge_selected'))
+            return redirect('/fridge/')
         except:
-            print('Error 206')
-
-
-
+            print('FRIDGE VIEW: Error Selecting Fridge.')
+    # Setting Primary Fridge
+    if request.method == 'POST' and request.POST.get('primary_fridge_submit'):
+        try:
+            fridge_manager.setPrimaryFridge(
+                request.POST.get('primary_fridge_selected'))
+        except:
+            print('FRIDGE VIEW: Failed setting primary fridge.')
+    # Check if Primary Fridge
+    try:
+        primary_fridge_id = fridge_manager.getPrimaryFridge()
+    except:
+        print("FRIDGE VIEW: Error getting primary fridge.")
     # Adding Fridge
     if request.method == 'POST' and request.POST.get('add_fridge'):
         try:
@@ -229,32 +253,32 @@ def fridge(request):
                     'fridge_name'))
                 return redirect('/fridge/')
         except:
-            print('Error adding fridge')
+            print('FRIDGE VIEW: Error adding fridge')
     # Deleting Fridge
     if request.method == 'POST' and request.POST.get('delete_fridge'):
         try:
             fridge_manager.delete_current_fridge()
         except:
-            print("Error deleting fridge")
+            print('FRIDGE VIEW: Error deleting fridge')
     # Adding Friends
     if request.method == 'POST' and request.POST.get('add_friend_by_email'):
         try:
             fridge_manager.addFriend(request.POST.get('friend_email'))
         except:
-            print('Error adding friend')
+            print('FRIDGE VIEW: Error adding friend')
     # Deleting items via trash icon
     if request.method == 'POST' and request.POST.get('delete_item'):
         try:
             fridge_manager.deleteItem(request.POST.get('delete_item'))
         except:
-            print('Error deleting item from fridge.')
+            print('FRIDGE VIEW: Error deleting item from fridge.')
     # Adding items via text field
     if request.method == 'POST' and request.POST.get('add_item'):
         try:
             fridge_manager.addItem(request.POST.get('item_name').lower())
             return redirect('/fridge/')
         except:
-            print('Error adding item.')
+            print('FRIDGE VIEW: Error adding item.')
     # Rename current primary fridge name :: to be added checks on ownership.
     if request.method == 'POST' and request.POST.get('rename_fridge'):
         try:
@@ -262,34 +286,19 @@ def fridge(request):
                 request.POST.get('rename_fridge'))
             return redirect('/fridge/')
         except:
-            print('Error Renaming Fridge')
-    # Setting Primary Fridge
-    if request.method == 'POST' and request.POST.get('primary_checkbox')  == 'check':
-        try:
-            fridge_manager.setPrimaryFridge()
-        except:
-            print('Failed setting primary fridge.')
-    # Check if Primary Fridge
-    if fridge_manager.checkIfPrimaryFridge():
-        is_primary_fridge = True
-    else:
-        is_primary_fridge = False
-    # Get current fridge data
-    try:
-        inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
-        print('nina 271')
-        current_fridge = fridge_manager.getCurrentFridge()
-    except:
-        print('Error 274')
-        return render(request, 'refrigerator_project/fridge.html')
-    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'is_primary_fridge': is_primary_fridge,
-                   'current_date': current_time, 'week_time': week_time, 'all_fridges': all_fridges})
+            print('FRIDGE VIEW: Error Renaming Fridge')
+    # Deleting Selected Friend from fridge
+    if request.method == 'POST' and request.POST.get('friend_selected_submit'):
+        username = request.POST.get('select_friend_delete')
+        fridge_manager.remove_friend(username)
+        return redirect('/fridge/')
+    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'primary_fridge_id': primary_fridge_id,
+                                                                'current_date': current_time, 'week_time': week_time, 'all_fridges': all_fridges, 'current_fridge_friends': current_fridge_friends})
 
 
 @login_required
 def receipt_upload(request):
     context = {}
-
     # Display found receipt content upon image receipt
     print(request.POST)
     if request.method == 'POST':
@@ -302,7 +311,7 @@ def receipt_upload(request):
                 # text = {'coffee'} #used for testing
                 context = {'text': text}
         except:
-            print("No items detected.")
+            print('RECEIPT VIEW: No items detected.')
     # Get list of selected found items and save it to db
     if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
         print("submitted")
@@ -320,13 +329,12 @@ def receipt_upload(request):
             fridge_manager.save_to_db(selected_items)
             return redirect('/fridge/')
         except:
-            print("Error saving selected items to fridge.")
+            print('RECEIPT VIEW: Error saving selected items to fridge.')
     return render(request, 'refrigerator_project/receipt_upload.html', context)
-
-# Google Vision
 
 
 def detect_text(filename):
+    # Google Vision
     post_processing_results = []
     tmp_id_exp_age_store = {}
     # Detects text in the file.
@@ -362,38 +370,3 @@ def search(request):
             if match:
                 return render(request, 'refrigerator_project/search.html', {'sr': match})
     return render(request, 'refrigerator_project/search.html')
-
-
-# def delete_item(content_id):
-#     fridge_content = FridgeContent.objects.get(id=content_id)
-#     fridge_content.eff_end_ts = datetime.now()
-#     fridge_content.save()
-
-
-# def add_item(item_name, current_username):
-#     item = Item.objects.filter(name=item_name).get()
-#     item_dict = {item.id: item.age}
-#     temp = User.objects.filter(username=current_username).get()
-#     Owndfridge_id = temp.ownedfridges[0]
-#     addedby_person_id = temp.id
-#     save_to_db(item_dict, Owndfridge_id, addedby_person_id)
-
-
-# def add_fridge(fridge_name, current_username):
-#     # creating fridge
-#     user = User.objects.filter(username=current_username).get()
-#     fridge = Fridge(name=fridge_name, owner=user, creation_date=datetime.now(
-#     ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31))
-#     fridge.save()
-#     # adding fridge to the owner
-#     user.ownedfridges.append(fridge.id)
-#     user.save()
-
-# def save_to_db(id_age_list, Owndfridge_id, addedby_person_id):
-#     try:
-#         for item_id in id_age_list:
-#             fridge_content = FridgeContent(expirationdate=(datetime.now()+timedelta(hours=id_age_list[item_id])), size=1, creation_date=datetime.now(
-#             ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31), addedby_id=addedby_person_id, fridge_id=Owndfridge_id, item_id=item_id)
-#             fridge_content.save()
-#     except:
-#         print("Error saving item to db")

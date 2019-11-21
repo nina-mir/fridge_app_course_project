@@ -25,7 +25,7 @@ def initialCurrentFridge(request):
             current_fridge_id = Fridge.objects.filter(
                 id=user.primary_fridge).get().id
         except:
-            print("No primary fridge found.")
+            print("FRIDGE MANAGER: No primary fridge found.")
     # Set current fridge as first fridge found with user's id
     else:
         try:
@@ -34,7 +34,7 @@ def initialCurrentFridge(request):
             elif user.friendedfridges[0]:
                 current_fridge_id = user.friendedfridges[0]
         except:
-            print("No Fridges found.")
+            print("FRIDGE MANAGER: No Fridges found.")
     return redirect('/fridge/')
 
 
@@ -49,7 +49,7 @@ def refindCurrentFridge():
             current_fridge_id = Fridge.objects.filter(
                 id=user.primary_fridge).get().id
         except:
-            print("No primary fridge found.")
+            print("FRIDGE MANAGER: No primary fridge found.")
     # Set current fridge as first fridge found with user's id
     else:
         try:
@@ -58,7 +58,7 @@ def refindCurrentFridge():
             elif user.friendedfridges[0]:
                 current_fridge_id = user.friendedfridges[0]
         except:
-            print("No Fridges found.")
+            print("FRIDGE MANAGER: No Fridges found.")
     return redirect('/fridge/')
 
 
@@ -88,22 +88,20 @@ def changeCurrentFridge(fridge_id):
     return current_fridge_id
 
 
-def setPrimaryFridge():
+def setPrimaryFridge(fridge_id):
     user = User.objects.filter(id=current_user_id).get()
-    # Checks if primary fridge is current fridge. If not set primary as current.
-    if user.primary_fridge == current_fridge_id:
-        user.primary_fridge = (-1)
-        print(user.primary_fridge)
-        user.save()
+    if (fridge_id):
+        user.primary_fridge = fridge_id
     else:
-        user.primary_fridge = current_fridge_id
-        user.save()
+        user.primary_fridge = -1
+    user.save()
 
 
-def checkIfPrimaryFridge():
+def getPrimaryFridge():
+    global current_fridge_id
     user_primary_fridge = User.objects.filter(
         id=current_user_id).get().primary_fridge
-    return user_primary_fridge == current_fridge_id
+    return user_primary_fridge
 
 
 def renameCurrentFridge(new_name):
@@ -177,7 +175,7 @@ def save_to_db(id_age_list):
             ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31), addedby_id=current_user_id, fridge_id=current_fridge_id, item_id=item_id)
             fridge_content.save()
     except:
-        print("Error saving item to db")
+        print("FRIDGE MANAGER: Error saving item to db")
 
 
 def createFridge(fridge_name):
@@ -209,20 +207,20 @@ def get_all_the_related_fridges():
             if(fridge_obj.eff_end_ts > datetime.now()):
                 owned[fridge_obj.name] = fridge_obj.id
     except:
-        print('Error in 130')
+        print('FRIDGE MANAGER: Error in 130')
     try:
         for i in Friendfridge_id:
             fridge_obj = Fridge.objects.filter(id=i).get()
             if(fridge_obj.eff_end_ts > datetime.now()):
                 friends[fridge_obj.name] = fridge_obj.id
     except:
-        print('Error in 136')
+        print('FRIDGE MANAGER: Error in 136')
 
-    print("owned", owned)
-    print(friends)
+    # print("owned", owned)
+    # print(friends)
     user_fridges = owned.copy()
     user_fridges.update(friends)
-    print(user_fridges)
+    # print(user_fridges)
     return user_fridges
 
 
@@ -256,3 +254,19 @@ def set_personal_notes(notes, user):
     #if there are no notes, do nothing, else update notes and save
     user.personalnotes = notes
     user.save()
+def getCurrentFridgeFriendsUsername():
+    current_fridge_friend = User.objects.filter(friendedfridges = current_fridge_id)
+    friend_list_name = []
+    for each in current_fridge_friend:
+        friend_list_name.append(each.username)
+    return friend_list_name
+
+def remove_friend(username):
+    friend = User.objects.filter(username = username).get()
+    friend.friendedfridges.remove(current_fridge_id)
+    if(friend.primary_fridge == current_fridge_id):
+        friend.primary_fridge = -1
+    current_fridge = Fridge.objects.filter(id = current_fridge_id).get()
+    current_fridge.friends.remove(friend.id)
+    friend.save()
+    current_fridge.save()

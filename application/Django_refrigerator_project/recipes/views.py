@@ -1,10 +1,12 @@
 import json
 import requests
+import refrigerator_app.fridge as fridge_manager
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required  #for using @login_required decorator on top of a function
-from refrigerator_app.models import Item,Fridge
+from refrigerator_app.models import Item,Fridge,FridgeContent
 from users.models import User
 from django.db.models import Q
 from refrigerator_app import views as fridge_views
@@ -12,10 +14,6 @@ from django.shortcuts import redirect
 
 @login_required
 def recipe_landing(request):
-    if request.method == 'POST' and request.POST.get('dropdown_menu_option'):
-        saved_recipes = Item.objects.all()
-        print(saved_recipes)
-
 
     # Send user to receipt upload page upon "+" button click
     try:
@@ -32,19 +30,12 @@ def recipe_landing(request):
 
     current_user = request.user
     try:
-        #Getting all fridges of logged in user
-        temp = User.objects.filter(username = current_user.username).get()
-        Owndfridge_id = temp.ownedfridges
+        current_fridge = fridge_manager.getCurrentFridge()
+        context={'current_fridge':current_fridge}
 
-        fridge_list = Fridge.objects.filter(id__in = Owndfridge_id)
-        print(fridge_list)
-        context={
-        'fridge_list':fridge_list
-        }
+        return render(request, 'recipes/recipe_landing.html',context=context)
     except:
-        print('Error')
         return render(request, 'recipes/recipe_landing.html')
-    return render(request, 'recipes/recipe_landing.html',context = context)
 
 @login_required
 def recipe_search(request):
@@ -61,8 +52,16 @@ def recipe_search(request):
     except:
         pass
 
-    inventory_items = Item.objects.all()
-    return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
+    inventory_items = None
+    fridge_con_items = fridge_manager.getCurrentFridgeContentByExpiration()
+    tmp_list = list(set([x.item.id for x in fridge_con_items]))
+
+    inventory_items = Item.objects.filter(id__in = tmp_list)
+    if inventory_items:
+        return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
+    else:
+        inventory_items = Item.objects.all()
+        return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
 
 @login_required
 def recipe_search_results(request):

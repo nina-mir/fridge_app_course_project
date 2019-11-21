@@ -8,21 +8,13 @@
             <h3 class="text-center">Recipes</h3>
         </div>
     </div>
-    <div class="row justify-content-center">
-        <div class="dropdown ">
-            <button class="btn btn-secondary dropdown-toggle btn-block" type="button" id="dropdownMenuButton"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Fridge Name
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              {% for each in fridge_list %}
-                <a class="dropdown-item" href="#">{{ each.name }}</a>
-              {% endfor %}
-                <a class="dropdown-item" href="#">Fridge #2</a>
-                <a class="dropdown-item" href="#">Fridge #3</a>
-            </div>
+
+    <div class="row">
+        <div class="col card map border-light mb-3" style="outline: none; border-radius: 10px;">
+            <span class="label label-info" style="margin:1%;text-align:center;color:white;background-color: #01B9F5;border-radius: 10px;padding:5px">{{current_fridge.name}}</span>
         </div>
     </div>
+
     <div class="row row d-flex justify-content-center" style="padding-top: 10px;">
         <div style="width: 70%;">
             <a href="{% url 'recipe_search' %}" class="btn btn-info btn-lg btn-block" role="button"
