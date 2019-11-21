@@ -201,7 +201,7 @@ def fridge(request):
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
     all_fridges = None
-    # current_fridge_friend = None
+    current_fridge_friends = None
     # Get current fridge data
     try:
         all_fridges = fridge_manager.get_all_the_related_fridges()
