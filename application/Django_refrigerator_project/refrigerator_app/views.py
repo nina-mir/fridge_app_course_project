@@ -201,12 +201,13 @@ def fridge(request):
     current_time = datetime.now()
     week_time = current_time + timedelta(days=7)
     all_fridges = None
-
+    # current_fridge_friend = None
     # Get current fridge data
     try:
         all_fridges = fridge_manager.get_all_the_related_fridges()
         inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
         current_fridge = fridge_manager.getCurrentFridge()
+        current_fridge_friends = fridge_manager.getCurrentFridgeFriendsUsername(current_fridge.id)
     except:
         fridge_manager.initialCurrentFridge(request)
         print('FRIDGE VIEW: Error getting fridge data. Resetting current fridge.')
@@ -274,8 +275,13 @@ def fridge(request):
             return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error Renaming Fridge')
+    # Deleting Selected Friend from fridge
+    if request.method == 'POST' and request.POST.get('friend_selected_submit'):
+        username = request.POST.get('select_friend_delete')
+        fridge_manager.remove_friend(username)
+        return redirect('/fridge/')
     return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'primary_fridge_id': primary_fridge_id,
-                                                                'current_date': current_time, 'week_time': week_time, 'all_fridges': all_fridges})
+                                                                'current_date': current_time, 'week_time': week_time, 'all_fridges': all_fridges, 'current_fridge_friends': current_fridge_friends})
 
 
 @login_required

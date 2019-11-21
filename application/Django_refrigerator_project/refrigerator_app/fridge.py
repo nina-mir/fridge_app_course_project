@@ -245,3 +245,18 @@ def make_verified_fridge_list(fridge_list):
         if fridge.eff_end_ts > datetime.now():
             new_fridge_list.append(fridge)
     return new_fridge_list
+
+def getCurrentFridgeFriendsUsername(current_fridge_id):
+    current_fridge_friend = User.objects.filter(friendedfridges = current_fridge_id)
+    friend_list_name = []
+    for each in current_fridge_friend:
+        friend_list_name.append(each.username)
+    return friend_list_name
+
+def remove_friend(username):
+    friend = User.objects.filter(username = username).get()
+    friend.friendedfridges.remove(current_fridge_id)
+    current_fridge = Fridge.objects.filter(id = current_fridge_id).get()
+    current_fridge.friends.remove(friend.id)
+    friend.save()
+    current_fridge.save()
