@@ -163,11 +163,25 @@ def profile(request):
 
     actualownedfridges = fridge_manager.make_verified_fridge_list(ownedfridgelist)
     actualfriendedfridges = fridge_manager.make_verified_fridge_list(friendedfridgelist)
-    
+
+    # Setting Personal Notes
+    if request.method == 'POST' and request.POST.get('add_personal_notes'):
+        try:
+            fridge_manager.set_personal_notes(request.POST.get('personal_notes'), User.objects.filter(username=request.user.username).get())
+        except:
+            print('Error setting personal notes')
+
+
+    personalnotes = User.objects.filter(username=request.user.username).get().personalnotes
+
+    if personalnotes is None:
+        personalnotes = ''
+
     context = {
         'user_info': user_info,
         'ownedfridge_objectlist': ownedfridge_objectlist,
-        'friendedfridge_objectlist': friendedfridge_objectlist
+        'friendedfridge_objectlist': friendedfridge_objectlist,
+        'personalnotes': personalnotes
     }
 
     return render(request, 'refrigerator_project/profile.html', context)

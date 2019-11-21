@@ -247,3 +247,12 @@ def make_verified_fridge_list(fridge_list):
         if fridge.eff_end_ts > datetime.now():
             new_fridge_list.append(fridge)
     return new_fridge_list
+
+def set_personal_notes(notes, user):
+    print(notes)
+    # Get user
+    #user = User.objects.filter(id=current_user_id).get()
+    print(user)
+    #if there are no notes, do nothing, else update notes and save
+    user.personalnotes = notes
+    user.save()
