@@ -2,6 +2,7 @@ import io
 import sys
 import math
 import datetime
+import refrigerator_app.fridge as fridge_manager
 
 from io import BytesIO
 
@@ -17,7 +18,6 @@ from .models import Fridge, Item, FridgeContent
 
 from users.models import AuthUser
 from users.models import User
-import refrigerator_app.fridge as fridge_manager
 
 from datetime import datetime
 from datetime import timedelta

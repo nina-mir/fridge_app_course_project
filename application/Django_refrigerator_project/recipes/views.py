@@ -1,5 +1,7 @@
 import json
 import requests
+import refrigerator_app.fridge as fridge_manager
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
@@ -27,7 +29,13 @@ def recipe_landing(request):
         pass
 
     current_user = request.user
-    return render(request, 'recipes/recipe_landing.html')
+    try:
+        current_fridge = fridge_manager.getCurrentFridge()
+        context={'current_fridge':current_fridge}
+
+        return render(request, 'recipes/recipe_landing.html',context=context)
+    except:
+        return render(request, 'recipes/recipe_landing.html')
 
 @login_required
 def recipe_search(request):
