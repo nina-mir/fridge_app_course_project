@@ -246,27 +246,32 @@ def make_verified_fridge_list(fridge_list):
             new_fridge_list.append(fridge)
     return new_fridge_list
 
-def set_personal_notes(notes, user):
-    print(notes)
+
+def set_personal_notes(notes):
+    # print(notes)
     # Get user
-    #user = User.objects.filter(id=current_user_id).get()
-    print(user)
-    #if there are no notes, do nothing, else update notes and save
+    user = User.objects.filter(id=current_user_id).get()
+    # print(user)
+    # if there are no notes, do nothing, else update notes and save
     user.personalnotes = notes
     user.save()
+
+
 def getCurrentFridgeFriendsUsername():
-    current_fridge_friend = User.objects.filter(friendedfridges = current_fridge_id)
+    current_fridge_friend = User.objects.filter(
+        friendedfridges=current_fridge_id)
     friend_list_name = []
     for each in current_fridge_friend:
         friend_list_name.append(each.username)
     return friend_list_name
 
+
 def remove_friend(username):
-    friend = User.objects.filter(username = username).get()
+    friend = User.objects.filter(username=username).get()
     friend.friendedfridges.remove(current_fridge_id)
     if(friend.primary_fridge == current_fridge_id):
         friend.primary_fridge = -1
-    current_fridge = Fridge.objects.filter(id = current_fridge_id).get()
+    current_fridge = Fridge.objects.filter(id=current_fridge_id).get()
     current_fridge.friends.remove(friend.id)
     friend.save()
     current_fridge.save()

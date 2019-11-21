@@ -1,25 +1,22 @@
 {% extends 'refrigerator_project/base.html' %}
-{% block content %}
 {% load static %}
+{% block content %}
 
 <link rel="stylesheet" type="text/css" href="{% static '/css/fridge_card.css' %}">
 
 <div class="container">
-    <div class="row">
-      <div class="col card map border-light mb-3" style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
-        <h3 class="text-center">Profile Page</h3>
-      </div>
+  <div class="row">
+    <div class="col card map border-light mb-3"
+      style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+      <h3 class="text-center">Profile Page</h3>
     </div>
-    <div class="row text-center">
-      <h2 class="text-center">{{ user.username }}</h2>
-   
-        <h2>{{ user.email }} </h2>
-    </div>
-  
-
+  </div>
+  <div class="row text-center">
+    <h2 class="text-center">{{ user.username }}</h2>
+    <h2>{{ user.email }} </h2>
+  </div>
   <div class="row">
     <div class="col">
-
       <!-- Owned Fridges Accordian -->
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
@@ -30,10 +27,8 @@
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
-          <!-- looks for if the query is empty -->
-          {% if ownedfridge_objectlist %}
-            
-          {% else %}
+          <!-- Looks for if the query is empty -->
+          {% if not ownedfridge_objectlist %}
           <div id="owned" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
               <div class="column trash-center">
@@ -42,8 +37,7 @@
             </div>
           </div>
           {% endif %}
-
-          <!--  if the query is not empty, it will display the owned fridges -->
+          <!--  If the query is not empty, it will display the owned fridges -->
           {% for each in ownedfridge_objectlist %}
           <div id="owned" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
@@ -63,10 +57,9 @@
           </div>
           {% endfor %}
         </div>
-        </div>
-
-        <!-- Friended Fridges Accordian -->
-        <div id="accordion" role="tablist" aria-multiselectable="true">
+      </div>
+      <!-- Friended Fridges Accordian -->
+      <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
           <h5 class="card-header">
             <a data-toggle="collapse" href="#friended" data-parent="#accordion" aria-expanded="true"
@@ -75,10 +68,8 @@
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
-          <!-- looks for if the query is empty -->
-          {% if friendedfridge_objectlist %}
-            
-          {% else %}
+          <!-- Looks for if the query is empty -->
+          {% if not friendedfridge_objectlist %}
           <div id="friended" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
               <div class="column trash-center">
@@ -87,8 +78,7 @@
             </div>
           </div>
           {% endif %}
-
-          <!--  if the query is not empty, it will display the friended fridges -->
+          <!--  If the query is not empty, it will display the friended fridges -->
           {% for each in friendedfridge_objectlist %}
           <div id="friended" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
@@ -108,11 +98,9 @@
           </div>
           {% endfor %}
         </div>
-        </div>
-
-
-        <!-- Personal Notes Accordian -->
-        <div id="accordion" role="tablist" aria-multiselectable="true">
+      </div>
+      <!-- Personal Notes Accordian -->
+      <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
           <h5 class="card-header">
             <a data-toggle="collapse" href="#notePad" data-parent="#accordion" aria-expanded="true"
@@ -121,25 +109,20 @@
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
-
-          <!-- The personal notes are in a form -->>
+          <!-- The personal notes are in a form -->
           <form class="navbar-form navbar-left" role="search" method="POST">
             {% csrf_token %}
             <div id="notePad" class="collapse" aria-labelledby="heading-example">
-              <textarea placeholder="Personal Notes" id="myTextArea" rows="5" cols="30" 
-              name="personal_notes" class="textarea">{{personalnotes}}</textarea>
-
-              <button type="submit" name="add_personal_notes" value="ADD personalnotes" aria-pressed="true" 
-              class="btn btn-info btn-sm btn-rounded waves-effect" style="float:right;">submit</button>
+              <textarea placeholder="Personal Notes" id="myTextArea" rows="5" cols="30" name="personal_notes"
+                class="textarea">{{personalnotes}}</textarea>
+              <button type="submit" name="add_personal_notes" value="ADD personalnotes" aria-pressed="true"
+                class="btn btn-info btn-sm btn-rounded waves-effect" style="float:right;">submit</button>
             </div>
           </form>
-
         </div>
-        </div>
-    
+      </div>
     </div>
   </div>
-
 </div>
 
 {% endblock %}

@@ -162,22 +162,22 @@
                             {% csrf_token %}
                             <ul class="container-fluid" id="primary_fridge_ul">
                                 {% for key, value in all_fridges.items %}
-                                    <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
-                                        <label>
-                                            <div class="card-body">
-                                                {% if primary_fridge_id == value %}
-                                                <input type="radio" style="float:right;" name="primary_fridge_selected"
-                                                    value="{{ value }}" id="heading" checked>
-                                                {% else %}
-                                                <input type="radio" style="float:right;" name="primary_fridge_selected"
-                                                    value="{{ value }}" id="heading">
-                                                {% endif %}
-                                                <h5 class="card-title">
-                                                    {{ key }}
-                                                </h5>
-                                            </div>
-                                        </label>
-                                    </div>
+                                <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
+                                    <label>
+                                        <div class="card-body">
+                                            {% if primary_fridge_id == value %}
+                                            <input type="radio" style="float:right;" name="primary_fridge_selected"
+                                                value="{{ value }}" id="heading" checked>
+                                            {% else %}
+                                            <input type="radio" style="float:right;" name="primary_fridge_selected"
+                                                value="{{ value }}" id="heading">
+                                            {% endif %}
+                                            <h5 class="card-title">
+                                                {{ key }}
+                                            </h5>
+                                        </div>
+                                    </label>
+                                </div>
                                 {% endfor %}
                             </ul>
                         </form>
@@ -207,7 +207,7 @@
                             {% csrf_token %}
                             <ul class="container-fluid" id="primary_fridge_ul">
                                 {% for each in current_fridge_friends %}
-                                    <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
+                                <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
                                     <label>
                                         <div class="card-body">
                                             {% if each %}
@@ -226,7 +226,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                       <button class="btn btn-primary" name="friend_selected_submit" type="submit" value="selection"
+                        <button class="btn btn-primary" name="friend_selected_submit" type="submit" value="selection"
                             form="edit_friend_form">Remove Friend</button>
                     </div>
                 </div>

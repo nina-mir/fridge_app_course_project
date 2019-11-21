@@ -166,18 +166,21 @@ def profile(request):
             fridge.name, fridge.creation_date, fridge_manager.get_name_list_from_id_list(fridge.friends), fridge.id)
         friendedfridge_objectlist.append(f_obj)
 
-    actualownedfridges = fridge_manager.make_verified_fridge_list(ownedfridgelist)
-    actualfriendedfridges = fridge_manager.make_verified_fridge_list(friendedfridgelist)
+    actualownedfridges = fridge_manager.make_verified_fridge_list(
+        ownedfridgelist)
+    actualfriendedfridges = fridge_manager.make_verified_fridge_list(
+        friendedfridgelist)
 
     # Setting Personal Notes
     if request.method == 'POST' and request.POST.get('add_personal_notes'):
         try:
-            fridge_manager.set_personal_notes(request.POST.get('personal_notes'), User.objects.filter(username=request.user.username).get())
+            fridge_manager.set_personal_notes(request.POST.get(
+                'personal_notes'))
         except:
             print('Error setting personal notes')
 
-
-    personalnotes = User.objects.filter(username=request.user.username).get().personalnotes
+    personalnotes = User.objects.filter(
+        username=request.user.username).get().personalnotes
 
     if personalnotes is None:
         personalnotes = ''
@@ -229,7 +232,8 @@ def fridge(request):
         try:
             # resp = request.POST.get('SET')
             # print('nina : ', resp)
-            fridge_manager.changeCurrentFridge(request.POST.get('select_fridge_selected'))
+            fridge_manager.changeCurrentFridge(
+                request.POST.get('select_fridge_selected'))
             return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error Selecting Fridge.')
