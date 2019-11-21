@@ -246,7 +246,7 @@ def make_verified_fridge_list(fridge_list):
             new_fridge_list.append(fridge)
     return new_fridge_list
 
-def getCurrentFridgeFriendsUsername(current_fridge_id):
+def getCurrentFridgeFriendsUsername():
     current_fridge_friend = User.objects.filter(friendedfridges = current_fridge_id)
     friend_list_name = []
     for each in current_fridge_friend:

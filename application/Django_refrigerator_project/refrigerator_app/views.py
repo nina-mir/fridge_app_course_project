@@ -207,7 +207,7 @@ def fridge(request):
         all_fridges = fridge_manager.get_all_the_related_fridges()
         inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
         current_fridge = fridge_manager.getCurrentFridge()
-        current_fridge_friends = fridge_manager.getCurrentFridgeFriendsUsername(current_fridge.id)
+        current_fridge_friends = fridge_manager.getCurrentFridgeFriendsUsername()
     except:
         fridge_manager.initialCurrentFridge(request)
         print('FRIDGE VIEW: Error getting fridge data. Resetting current fridge.')
