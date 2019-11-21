@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required  #for using @login_required decorator on top of a function
-from refrigerator_app.models import Item,Fridge
+from refrigerator_app.models import Item,Fridge,FridgeContent
 from users.models import User
 from django.db.models import Q
 from refrigerator_app import views as fridge_views
@@ -52,8 +52,16 @@ def recipe_search(request):
     except:
         pass
 
-    inventory_items = Item.objects.all()
-    return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
+    inventory_items = None
+    fridge_con_items = fridge_manager.getCurrentFridgeContentByExpiration()
+    tmp_list = list(set([x.item.id for x in fridge_con_items]))
+
+    inventory_items = Item.objects.filter(id__in = tmp_list)
+    if inventory_items:
+        return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
+    else:
+        inventory_items = Item.objects.all()
+        return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
 
 @login_required
 def recipe_search_results(request):
