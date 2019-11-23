@@ -1,16 +1,14 @@
-{% extends 'refrigerator_project/base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
 <link rel="stylesheet" type="text/css" href="{% static '/css/fridge_card.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static '/css/modal_checkbox.css' %}">
-
 
 <!-- Show when user has a fridge -->
 {% if current_fridge %}
 <div class="container">
   <div class="row">
-    <div class="col card map border-light mb-3" style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+    <div class="col card map border-light mb-3"
+      style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
       <h3 class="text-center">{{ current_fridge.name }}</h3>
     </div>
   </div>
@@ -20,26 +18,30 @@
       <form class="navbar-form navbar-left" role="search" method="POST">
         {% csrf_token %}
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Item Name" style="width: 65%;float:left" name="item_name">
+          <input type="text" class="form-control" placeholder="Item Name" style="width: 65%;float:left"
+            name="item_name">
           <button type="submit" name="add_item" value="ADD ITEM" class="btn btn-info btn-sm btn-rounded waves-effect"
             style="width:30%;float:right" aria-pressed="true">Add Item</button>
-            <br>
+          <br>
         </div>
       </form>
       <!-- Add Friend Form -->
       <form class="navbar-form navbar-left" role="search" method="POST">
         {% csrf_token %}
         <div class="form-group" style="padding-bottom: 40px;">
-          <input type="text" class="form-control" placeholder="Friend's Email" style="width: 65%;float:left" name="friend_email">
-          <button type="submit" name="add_friend_by_email" value="ADD Friend" class="btn btn-info btn-sm btn-rounded waves-effect"
-            style="width:30%;float:right;" aria-pressed="true">Add Friend</button>
+          <input type="text" class="form-control" placeholder="Friend's Email" style="width: 65%;float:left"
+            name="friend_email">
+          <button type="submit" name="add_friend_by_email" value="ADD Friend"
+            class="btn btn-info btn-sm btn-rounded waves-effect" style="width:30%;float:right;" aria-pressed="true">Add
+            Friend</button>
         </div>
       </form>
     </div>
   </div>
   <div class="row">
-    <div class="col card map border-light mb-3" style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;"">
-      <h3 class="text-center">Items in Refrigerator </h3>
+    <div class="col card map border-light mb-3"
+      style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;"">
+      <h3 class=" text-center">Items in Refrigerator </h3>
     </div>
   </div>
   <div class="row">
@@ -178,8 +180,8 @@
         <div class="form-group">
           <input type="text" name="fridge_name" class="form-control" placeholder="Fridge Name"
             style="width: 65%;float:left">
-          <button type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-primary btn-block" style="width:30%;float:right"
-            aria-pressed="true">Create Fridge</button>
+          <button type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-primary btn-block"
+            style="width:30%;float:right" aria-pressed="true">Create Fridge</button>
         </div>
       </form>
     </div>

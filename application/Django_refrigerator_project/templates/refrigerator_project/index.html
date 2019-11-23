@@ -1,5 +1,4 @@
-{% extends 'refrigerator_project/base.html' %}
-{% block content %}
+{% extends 'refrigerator_project/base.html' %} {% block content %}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Fridge App</a>
@@ -29,20 +28,20 @@
     </div>
 </nav>
 
-    <div class="container">
-        <h2 class="text-center">Camera Test Page</h2>
-        <div class="row">
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="file" accept="image/*" name="image" id="file" >
-                <button type="submit">Upload</button>
-            </form>
-            <div>
-                {% if text %}
-                    {{text}}
-                {% endif %}
-            </div>
+<div class="container">
+    <h2 class="text-center">Camera Test Page</h2>
+    <div class="row">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" accept="image/*" name="image" id="file">
+            <button type="submit">Upload</button>
+        </form>
+        <div>
+            {% if text %}
+            {{text}}
+            {% endif %}
         </div>
     </div>
+</div>
 
 {% endblock %}

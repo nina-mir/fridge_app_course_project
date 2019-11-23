@@ -1,6 +1,4 @@
-{% extends 'refrigerator_project/base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
 <link rel="stylesheet" href="{% static '/css/fridge_card.css' %}">
 <link rel="stylesheet" href="{% static '/css/receipt_upload.css' %}">
@@ -23,14 +21,7 @@
                 onchange="this.form.submit()" />
         </form>
         {% endif %}
-        <!-- <div style="width: 70%;">
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="file" onchange="this.form.submit()" accept="image/*" name="image" id="file">
-            </form>
-        </div> -->
     </div>
-
     <!-- Form for list of found items -->
     <form method="POST">
         {% csrf_token %}

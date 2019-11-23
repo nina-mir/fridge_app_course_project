@@ -2,7 +2,7 @@ import io
 import sys
 import math
 import datetime
-import refrigerator_app.fridge as fridge_manager
+import refrigerator_app.fridge as fridge_import
 
 from io import BytesIO
 
@@ -44,6 +44,7 @@ def groceries(request):
         pass
 
     # Variables
+    fridge_manager = fridge_import.fridge_manager(request)
     all_items = fridge_manager.getAllItems()
     match = None
     missing_items = None
@@ -131,6 +132,8 @@ def profile(request):
     except:
         pass
 
+    fridge_manager = fridge_import.fridge_manager(request)
+
     # previous line printed all users
     # current_user = request.user
     user_info = User.objects.filter(username=request.user.username)
@@ -210,6 +213,7 @@ def fridge(request):
         print("No Selected items.")
 
     # Variables
+    fridge_manager = fridge_import.fridge_manager(request)
     inventory_items = None
     current_fridge = None
     primary_fridge_id = None
@@ -224,14 +228,11 @@ def fridge(request):
         current_fridge = fridge_manager.getCurrentFridge()
         current_fridge_friends = fridge_manager.getCurrentFridgeFriendsUsername()
     except:
-        fridge_manager.initialCurrentFridge(request)
-        print('FRIDGE VIEW: Error getting fridge data. Resetting current fridge.')
-        return redirect('/fridge/')
+        # fridge_manager.initialCurrentFridge(request)
+        print('FRIDGE VIEW: Error getting fridge data.')
     # Select a fridge to view
     if request.method == 'POST' and request.POST.get('select_fridge_submit'):
         try:
-            # resp = request.POST.get('SET')
-            # print('nina : ', resp)
             fridge_manager.changeCurrentFridge(
                 request.POST.get('select_fridge_selected'))
             return redirect('/fridge/')
@@ -262,6 +263,7 @@ def fridge(request):
     if request.method == 'POST' and request.POST.get('delete_fridge'):
         try:
             fridge_manager.delete_current_fridge()
+            return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error deleting fridge')
     # Adding Friends
@@ -302,6 +304,7 @@ def fridge(request):
 
 @login_required
 def receipt_upload(request):
+    fridge_manager = fridge_import.fridge_manager(request)
     context = {}
     # Display found receipt content upon image receipt
     print(request.POST)

@@ -1,20 +1,18 @@
-{% extends 'refrigerator_project/base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
 <div class="container">
     <div class="row">
-        <div class="col card map border-light mb-3" style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+        <div class="col card map border-light mb-3"
+            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
             <h3 class="text-center">Recipes</h3>
         </div>
     </div>
-
     <div class="row">
         <div class="col card map border-light mb-3" style="outline: none; border-radius: 10px;">
-            <span class="label label-info" style="margin:1%;text-align:center;color:white;background-color: #01B9F5;border-radius: 10px;padding:5px">{{current_fridge.name}}</span>
+            <span class="label label-info"
+                style="margin:1%;text-align:center;color:white;background-color: #01B9F5;border-radius: 10px;padding:5px">{{current_fridge.name}}</span>
         </div>
     </div>
-
     <div class="row row d-flex justify-content-center" style="padding-top: 10px;">
         <div style="width: 70%;">
             <a href="{% url 'recipe_search' %}" class="btn btn-info btn-lg btn-block" role="button"
@@ -30,8 +28,7 @@
     <div class="row">
         <div class="col">
             <!-- Display All Saved Recipes for Selected Fridge -->
-            {% if saved_recipes %}
-            {% for each in saved_recipes %}
+            {% if saved_recipes %} {% for each in saved_recipes %}
             <div class="card">
                 <h5 class="card-header">
                     <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
@@ -43,8 +40,7 @@
                     </a>
                 </h5>
             </div>
-            {% endfor %}
-            {% else %}
+            {% endfor %} {% else %}
             <p>none</p>
             {% endif %}
         </div>

@@ -1,14 +1,10 @@
-{% extends 'refrigerator_project/base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
 <link href="//s.w.org/wp-includes/css/dashicons.css?20150710" rel="stylesheet" type="text/css">
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400&display=swap" rel="stylesheet">
 <!--script src="{% static '/js/fave_button.js' %}"></script-->
 
-
-
-<div class="container" style="font-family: 'Inconsolata', serif;" >
+<div class="container" style="font-family: 'Inconsolata', serif;">
     <h3> Found {{ count }} Recipes!</h3>
     <div class="row">
         <div class="col">
@@ -16,13 +12,12 @@
             {% for each in recipes %}
             <div class="card">
                 <h5 class="card-header">
-                    <p data-toggle="collapse"  data-parent="#accordion" 
-                    aria-expanded="true" aria-controls="collapse-example" id="heading"
-                    class="collapsed d-block">
+                    <p data-toggle="collapse" data-parent="#accordion" aria-expanded="true"
+                        aria-controls="collapse-example" id="heading" class="collapsed d-block">
                         <img src="{{ each.image_url }}" alt="recipe_img" style="width:30%;height:auto">
                         <a style="float: right; width:60%;" href="{{ each.source_url }}">
                             {{ each.title }}
-                        </a>       
+                        </a>
                     </p>
                 </h5>
             </div>

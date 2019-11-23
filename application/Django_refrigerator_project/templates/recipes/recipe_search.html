@@ -1,6 +1,4 @@
-{% extends 'refrigerator_project/base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200&display=swap" rel="stylesheet">
 
@@ -31,8 +29,7 @@
                 <!-- Display Search Results if Applicable -->
                 {% if sr %}
                 <h6>Found Items:</h6>
-                {% endif %}
-                {% for each in sr %}
+                {% endif %} {% for each in sr %}
                 <div class="card">
                     <h5 class="card-header">
                         <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
@@ -48,7 +45,6 @@
                 {% endfor %}
                 </form>
             </div>
-
             <!-- View List of Items -->
             <form id="ingredients_survey" action="{% url 'recipe_search_results' %}" method="GET" novalidate>
                 <div class="container">

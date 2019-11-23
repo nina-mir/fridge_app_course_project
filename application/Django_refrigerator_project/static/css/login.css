@@ -72,7 +72,6 @@ legend {
 
 @media only screen and (max-width: 600px) {
     .main {
-      width: 100%;
+        width: 100%;
     }
-  }
-  
+}

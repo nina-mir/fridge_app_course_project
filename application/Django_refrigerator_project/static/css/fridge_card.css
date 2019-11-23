@@ -10,9 +10,10 @@ a:hover{
 }
 /* a:active, when link clicked, color change flashes */
 
-a:active{
+a:active {
   color: #3a4750;
 }
+
 /*.card-header and .fa for drop down ability*/
 
 .card-header .fa {

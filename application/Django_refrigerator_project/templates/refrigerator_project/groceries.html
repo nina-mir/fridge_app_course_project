@@ -1,6 +1,4 @@
-{% extends 'refrigerator_project/base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
 <style>
     .modal-dialog,
@@ -35,7 +33,8 @@
 
 <div class="container">
     <div class="row d-flex justify-content-center">
-        <div class="col card map border-light mb-3" style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+        <div class="col card map border-light mb-3"
+            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
             <h3 class="text-center">Grocery List</h3>
         </div>
     </div>
@@ -48,84 +47,79 @@
         </div>
         <div class="col align-self-center">
             <div class="float-right">
-                <a data-toggle="modal" data-target="#tracked_items_modal" class="btn btn-info btn-sm btn-rounded waves-effect" role="button"
-                    aria-pressed="true">Tracked Items</a>
+                <a data-toggle="modal" data-target="#tracked_items_modal"
+                    class="btn btn-info btn-sm btn-rounded waves-effect" role="button" aria-pressed="true">Tracked
+                    Items</a>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col" style="padding-top: 15px;">
             <!-- Missing Items For Loop -->
-            {% if missing_items %}
-            {% for each in missing_items %}
+            {% if missing_items %} {% for each in missing_items %}
             <div class=" card" style="height: 4.3em; background-color: #f2f2f2;">
-            <div class="card-body">
-                <h5 class="card-text">
-                    {% with image_static='/item_icons/'|add:each|add:'.png' %}
-                    <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                    {% endwith %}
-                    {{ each }}
-                </h5>
+                <div class="card-body">
+                    <h5 class="card-text">
+                        {% with image_static='/item_icons/'|add:each|add:'.png' %}
+                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;"> {% endwith %}
+                        {{ each }}
+                    </h5>
+                </div>
+            </div>
+            <div style="padding-top: 4px;"></div>
+            {% endfor %} {% else %}
+            <p>none</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <p style="text-align: center">Tracked items not found in the current fridge are displayed here as missing.
+            </p>
+        </div>
+        <hr size="6" width="100%" color="black">
+    </div>
+    <div class="row">
+        <div class="col align-self-center">
+            <h4>Manual Items:</h4>
+        </div>
+        <div class="col align-self-center">
+            <div class="float-right">
+                <a data-toggle="modal" data-target="#addItem" class="btn btn-info btn-sm btn-rounded waves-effect"
+                    role="button" aria-pressed="true">Add Items</a>
             </div>
         </div>
-        <div style="padding-top: 4px;"></div>
-        {% endfor %}
-        {% else %}
-        <p>none</p>
-        {% endif %}
     </div>
-</div>
-
-<div class="row">
-    <div class="col">
-        <p style="text-align: center">Tracked items not found in the current fridge are displayed here as
-            missing.</p>
-    </div>
-    <hr size="6" width="100%" color="black">
-</div>
-<div class="row">
-    <div class="col align-self-center">
-        <h4>Manual Items:</h4>
-    </div>
-    <div class="col align-self-center">
-        <div class="float-right">
-            <a data-toggle="modal" data-target="#addItem" class="btn btn-info btn-sm btn-rounded waves-effect" role="button"
-                aria-pressed="true">Add Items</a>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col" style="padding-top: 15px;">
-        <!-- Manual Items For Loop -->
-        {% if manual_items %}
-        {% for each in manual_items %}
-        <div class="card" style="background-color: #f2f2f2;">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <h5 class="card-text">
-                            {% with image_static='/item_icons/'|add:each|add:'.png' %}
-                            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                            {% endwith %}
-                            {{ each }}</h5>
-                    </div>
-                    <div class="col-3">
-                        <form method="POST" class="float-right">
-                            {% csrf_token %}
-                            <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
-                                value={{each}}></button>
-                        </form>
+    <div class="row">
+        <div class="col" style="padding-top: 15px;">
+            <!-- Manual Items For Loop -->
+            {% if manual_items %} {% for each in manual_items %}
+            <div class="card" style="background-color: #f2f2f2;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-text">
+                                {% with image_static='/item_icons/'|add:each|add:'.png' %}
+                                <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                                {% endwith %} {{ each }}</h5>
+                        </div>
+                        <div class="col-3">
+                            <form method="POST" class="float-right">
+                                {% csrf_token %}
+                                <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
+                                    value={{each}}></button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div style="padding-top: 4px;"></div>
+            {% endfor %} {% else %}
+            <p>none</p>
+            {% endif %}
         </div>
-        <div style="padding-top: 4px;"></div>
-        {% endfor %}
-        {% else %}
-        <p>none</p>
-        {% endif %}
     </div>
-</div>
 </div>
 
 <!-- Modal: Tracked Items -->

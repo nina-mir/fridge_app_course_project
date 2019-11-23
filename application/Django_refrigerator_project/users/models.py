@@ -81,7 +81,8 @@ class DjangoAdminLog(models.Model):
     object_id = models.TextField(blank=True, null=True)
     object_repr = models.CharField(max_length=200)
     change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+    content_type = models.ForeignKey(
+        'DjangoContentType', models.DO_NOTHING, blank=True, null=True)
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
     action_flag = models.PositiveSmallIntegerField()
 
@@ -121,11 +122,14 @@ class DjangoSession(models.Model):
 
 
 class User(models.Model):
-    auth_user = models.ForeignKey('AuthUser', models.DO_NOTHING, related_name='users')
+    auth_user = models.ForeignKey(
+        'AuthUser', models.DO_NOTHING, related_name='users')
     username = models.CharField(unique=True, max_length=255)
     primary_fridge = models.IntegerField(blank=True, default=-1)
-    ownedfridges = ListTextField(base_field=IntegerField()) #Saving fridge IDs for which user is an Owner
-    friendedfridges = ListTextField(base_field=IntegerField()) #Saving fridge IDs for which user is a friend
+    # Saving fridge IDs for which user is an Owner
+    ownedfridges = ListTextField(base_field=IntegerField())
+    # Saving fridge IDs for which user is a friend
+    friendedfridges = ListTextField(base_field=IntegerField())
     personalnotes = models.TextField(blank=True, null=True)
     eff_bgn_ts = models.DateTimeField()
     eff_end_ts = models.DateTimeField()

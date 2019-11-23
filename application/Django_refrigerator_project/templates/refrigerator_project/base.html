@@ -1,8 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<!--[if gt IE 8]><!-->
 <html class="no-js">
-<!--<![endif]-->
 
 <head>
     <meta charset="utf-8">
@@ -25,11 +23,8 @@
     <script src="https://kit.fontawesome.com/5316448d7f.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="{% static '/css/base.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static '/css/modal_checkbox.css' %}">
-
-    {% comment %}
-    <link rel="stylesheet" href="{% static '/css/styles.css' %}">
-    {% endcomment %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/modal_checkbox.css' %}"> {% comment %}
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static '/css/receipt_upload.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/css/modal_checkbox.css' %}">
 
@@ -44,7 +39,10 @@
             document.getElementById("mySidenav").style.width = "0";
         }
 
-        (function (e, t, n) { var r = e.querySelectorAll("html")[0]; r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2") })(document, window, 0);
+        (function (e, t, n) {
+            var r = e.querySelectorAll("html")[0];
+            r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2")
+        })(document, window, 0);
     </script>
 </head>
 
@@ -55,10 +53,7 @@
             {% if "fridge" in request.path %}
             <button onclick="openNav()" class="navbar-toggler" type="button" style="outline: none;">
                 <span class="navbar-toggler-icon"></span>
-            </button>
-            {% endif %}
-
-            {% if user.is_authenticated %}
+            </button> {% endif %} {% if user.is_authenticated %}
             <a class="navbar-brand" href="{% url 'fridge' %}">
                 <img src="{% static '/logo_icons/logo_gray.png' %}" height="30" alt="">
             </a>
@@ -70,8 +65,7 @@
 
             <div style="position: absolute; right:5%;background-color: #3c4245;">
                 {% if user.is_authenticated %}
-                <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}" role="button">Logout</a>
-                {% endif %}
+                <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}" role="button">Logout</a> {% endif %}
             </div>
         </div>
     </nav>
@@ -119,14 +113,12 @@
                                                 <input type="radio" name="select_fridge_selected" value="{{ value }}"
                                                     checked> {{ key }}
                                                 <span class="checkmarkRadio"></span>
-                                            </label>
-                                            {% else %}
+                                            </label> {% else %}
                                             <label class="containerRadio">
                                                 <input type="radio" name="select_fridge_selected" value="{{ value }}">
                                                 {{ key }}
                                                 <span class="checkmarkRadio"></span>
-                                            </label>
-                                            {% endif %}
+                                            </label> {% endif %}
                                         </div>
                                     </label>
                                 </div>
@@ -215,8 +207,7 @@
                                                 <input type="radio" name="select_friend_delete" value="{{ each }}"
                                                     checked> {{each}}
                                                 <span class="checkmarkRadio"></span>
-                                            </label>
-                                            {% endif %}
+                                            </label> {% endif %}
                                         </div>
                                     </label>
                                 </div>
@@ -320,21 +311,18 @@
     {% else %}
     <!-- Authentication Details -->
     <div class="container">
-        {% if messages %}
-        {% for message in messages %}
+        {% if messages %} {% for message in messages %}
         <div class="alert alert-{{ message.tags }}">
             <!-- for displaying messages like success -->
             {{ message }}
         </div>
-        {% endfor %}
-        {% endif %}
+        {% endfor %} {% endif %}
     </div>
     {% endif %}
 
     <!-- Body Content -->
     <div style="padding-bottom: 60px;">
-        {% block content %}
-        {% endblock %}
+        {% block content %} {% endblock %}
     </div>
 </body>
 

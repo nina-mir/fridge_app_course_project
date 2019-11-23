@@ -1,5 +1,7 @@
 /*CSS for radio buttons on Select Fridge modality*/
+
 /* The container */
+
 .containerRadio {
   display: block;
   position: relative;
@@ -14,6 +16,7 @@
 }
 
 /* Hide the browser's default radio button */
+
 .containerRadio input {
   position: absolute;
   opacity: 0;
@@ -21,6 +24,7 @@
 }
 
 /* Create a custom radio button */
+
 .checkmarkRadio {
   position: absolute;
   top: 0;
@@ -32,16 +36,19 @@
 }
 
 /* On mouse-over, add a grey background color */
-.containerRadio:hover input ~ .checkmarkRadio {
+
+.containerRadio:hover input~.checkmarkRadio {
   background-color: #ccc;
 }
 
 /* When the radio button is checked, add a blue background */
-.containerRadio input:checked ~ .checkmarkRadio {
+
+.containerRadio input:checked~.checkmarkRadio {
   background-color: #2196F3;
 }
 
 /* Create the indicator (the dot/circle - hidden when not checked) */
+
 .checkmarkRadio:after {
   content: "";
   position: absolute;
@@ -49,16 +56,18 @@
 }
 
 /* Show the indicator (dot/circle) when checked */
-.containerRadio input:checked ~ .checkmarkRadio:after {
+
+.containerRadio input:checked~.checkmarkRadio:after {
   display: block;
 }
 
 /* Style the indicator (dot/circle) */
+
 .containerRadio .checkmarkRadio:after {
- 	top: 9px;
-	left: 9px;
-	width: 8px;
-	height: 8px;
-	border-radius: 50%;
-	background: black;
+  top: 9px;
+  left: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: black;
 }

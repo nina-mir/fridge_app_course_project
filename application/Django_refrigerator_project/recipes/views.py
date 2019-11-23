@@ -1,16 +1,18 @@
 import json
 import requests
-import refrigerator_app.fridge as fridge_manager
+import refrigerator_app.fridge as fridge_import
 
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
-from django.contrib.auth.decorators import login_required  #for using @login_required decorator on top of a function
-from refrigerator_app.models import Item,Fridge,FridgeContent
+# for using @login_required decorator on top of a function
+from django.contrib.auth.decorators import login_required
+from refrigerator_app.models import Item, Fridge, FridgeContent
 from users.models import User
 from django.db.models import Q
 from refrigerator_app import views as fridge_views
 from django.shortcuts import redirect
+
 
 @login_required
 def recipe_landing(request):
@@ -28,14 +30,16 @@ def recipe_landing(request):
     except:
         pass
 
-    current_user = request.user
+    fridge_manager = fridge_import.fridge_manager(request)
+
     try:
         current_fridge = fridge_manager.getCurrentFridge()
-        context={'current_fridge':current_fridge}
+        context = {'current_fridge': current_fridge}
 
-        return render(request, 'recipes/recipe_landing.html',context=context)
+        return render(request, 'recipes/recipe_landing.html', context=context)
     except:
         return render(request, 'recipes/recipe_landing.html')
+
 
 @login_required
 def recipe_search(request):
@@ -52,16 +56,19 @@ def recipe_search(request):
     except:
         pass
 
+    # Variables
+    fridge_manager = fridge_import.fridge_manager(request)
     inventory_items = None
     fridge_con_items = fridge_manager.getCurrentFridgeContentByExpiration()
     tmp_list = list(set([x.item.id for x in fridge_con_items]))
+    inventory_items = Item.objects.filter(id__in=tmp_list)
 
-    inventory_items = Item.objects.filter(id__in = tmp_list)
     if inventory_items:
-        return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
+        return render(request, 'recipes/recipe_search.html', context={'inventory_items': inventory_items})
     else:
         inventory_items = Item.objects.all()
-        return render(request, 'recipes/recipe_search.html', context={'inventory_items':inventory_items})
+        return render(request, 'recipes/recipe_search.html', context={'inventory_items': inventory_items})
+
 
 @login_required
 def recipe_search_results(request):
@@ -80,7 +87,7 @@ def recipe_search_results(request):
 
     if request.method == 'GET':
         response = request.GET
-        list =response.getlist('ingredient', default=None)
+        list = response.getlist('ingredient', default=None)
         print(response)
         print(list)
         # Using for loop
@@ -92,10 +99,12 @@ def recipe_search_results(request):
         context = process_recipes(get_recipes)
         print(context['count'])
         print(type(context))
-    return render(request, 'recipes/recipe_search_results.html', {'count':context['count'],
-    'recipes':context['recipes']} )
+    return render(request, 'recipes/recipe_search_results.html', {'count': context['count'],
+                                                                  'recipes': context['recipes']})
 
 # method to mkae API call to food2fork recipe API
+
+
 def food2fork_call(list):
     # you have to sign up for an API key, which has some allowances.
     # Check the API documentation for further details:
@@ -106,19 +115,21 @@ def food2fork_call(list):
     paramsPost = {
         'key': key,
         'q': list,
-        'sort': 'r', #(optional) How the results should be sorted. See Below for details.
-        'page': '0' #(optional) Used to get additional results}
+        # (optional) How the results should be sorted. See Below for details.
+        'sort': 'r',
+        'page': '0'  # (optional) Used to get additional results}
     }
 
     responsePost = requests.post(url, paramsPost)
-    if responsePost.status_code == 202: # everything went well!
+    if responsePost.status_code == 202:  # everything went well!
         print('food2dork: all good!')
-    #print(responsePost.content)
+    # print(responsePost.content)
     try:
         result = responsePost.json()
     except ValueError:
         result = {'error': 'No JSON content returned'}
     return responsePost.text
+
 
 def process_recipes(str):
     toSee = json.loads(str)
