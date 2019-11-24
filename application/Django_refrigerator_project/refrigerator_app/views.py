@@ -295,9 +295,12 @@ def fridge(request):
             print('FRIDGE VIEW: Error Renaming Fridge')
     # Deleting Selected Friend from fridge
     if request.method == 'POST' and request.POST.get('friend_selected_submit'):
-        username = request.POST.get('select_friend_delete')
-        fridge_manager.remove_friend(username)
-        return redirect('/fridge/')
+        try:
+            username = request.POST.get('select_friend_delete')
+            fridge_manager.remove_friend(username)
+            return redirect('/fridge/')
+        except:
+            print('Error deleting friend from the list')
     return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'primary_fridge_id': primary_fridge_id,
                                                                 'current_date': current_time, 'week_time': week_time, 'all_fridges': all_fridges, 'current_fridge_friends': current_fridge_friends})
 
