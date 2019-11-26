@@ -40,6 +40,11 @@ def initialCurrentFridge(request):
 class fridge_manager():
     def __init__(self, request):
         self.session = request.session
+        try:
+            self.session['current_fridge_id']
+            self.session['current_user_id']
+        except:
+            initialCurrentFridge(request)
 
     def refindCurrentFridge(self):
         self.session['current_fridge_id'] = None
