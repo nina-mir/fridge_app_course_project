@@ -2,6 +2,30 @@
 
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200&display=swap" rel="stylesheet">
 
+<style>
+    ul {
+        list-style-type: none;
+    }
+</style>
+
+<script>
+    function search(input, ul) {
+        var input, filter, ul, li, a, i, txtValue;
+        input = document.getElementById(input);
+        filter = input.value.toUpperCase();
+        ul = document.getElementById(ul);
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            txtValue = li[i].id
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
 <div class="container">
     <div class="row">
         <div class="col">
@@ -12,82 +36,48 @@
         <div class="col">
             <!-- Search For Items -->
             <div class="container">
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col">
-                            Search by Name, ID, or Calories: <input type="text" name="itemname" size="35"><br>
+                <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+                    <div class="input-group">
+                        <input type="text" id="ingredient_input" onkeyup="search('ingredient_input', 'ingredient_ul')"
+                            placeholder="Item Name" aria-describedby="button-addon1"
+                            class="form-control border-0 bg-light">
+                        <div class="input-group-append">
+                            <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i
+                                    class="fa fa-search"></i></button>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <input type="submit" value="Search" name="search">
-                        </div>
-                    </div>
-                </form>
-                <hr size="3" width="100%" color="gray">
-                <!-- Display Search Results if Applicable -->
-                {% if sr %}
-                <h6>Found Items:</h6>
-                {% endif %} {% for each in sr %}
-                <div class="card">
-                    <h5 class="card-header">
-                        <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion"
-                            aria-expanded="true" aria-controls="collapse-example" id="heading"
-                            class="collapsed d-block">
-                            {{ each.name }}
-                            {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
-                            <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                            {% endwith %}
-                        </a>
-                    </h5>
                 </div>
-                {% endfor %}
-                </form>
+                <hr size="3" width="100%" color="gray">
             </div>
-            <!-- View List of Items -->
-            <form id="ingredients_survey" action="{% url 'recipe_search_results' %}" method="GET" novalidate>
-                <div class="container">
+            <!-- List of Items -->
+            <form id="ingredient_form" action="{% url 'recipe_search_results' %}" method="GET">
+                <ul class="container-fluid" id="ingredient_ul">
                     {% for each in inventory_items %}
-                    <div class="card" style="height: 4.3em; color: black; background-color: #f2f2f2;">
-                        <label>
-                            <div class="card-body">
-                                <input type="checkbox" style="float:right;" name="ingredient" value="{{ each.name }}">
-                                <h5 class="card-text">
-                                    {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
-                                    <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                                    {% endwith %}
-                                    {{ each.name }}
-                                </h5>
-                            </div>
-                        </label>
-                    </div>
-                    <div style="padding-top: 4px;"></div>
-                    <!-- <div class="card form-group">
-                        <label>
-                            <h5 class="card-header">
-                                <input type="checkbox" style="float:right;" name="ingredient" value="{{ each.name }}"
-                                    data-toggle="collapse" data-parent="#accordion" aria-expanded="true"
-                                    aria-controls="collapse-example" id="heading" class="collapsed d-block">
-                                {{ each.name }}
-                                {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
-                                <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                                {% endwith %}
-                            </h5>
-                        </label>
-                    </div> -->
-                    {% endfor %}
-                    <!-- submit button-->
-                    <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
-                        <div style="width: 70%;">
-                            <button class="btn btn-primary btn-lg btn-block" name="next" type="submit">Next</button>
+                    <li id="{{each.name}}" style="padding-top: 4px;">
+                        <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
+                            <label>
+                                <div class="card-body">
+                                    <input type="checkbox" style="float:right;" name="ingredient"
+                                        value="{{ each.name }}" id="heading">
+                                    <h5 class="card-title">
+                                        {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
+                                        <img src="{% static image_static %}" alt="tracked_item" style="height: 30px;">
+                                        {% endwith %}
+                                        {{ each.name }}
+                                    </h5>
+                                </div>
+                            </label>
                         </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <!-- Submit Button-->
+                <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
+                    <div style="width: 70%;">
+                        <button class="btn btn-primary btn-lg btn-block" name="next" type="submit">Next</button>
                     </div>
                 </div>
             </form>
-            <span id="user-responses">
-                <p><b>You included the following grocery items:</b></p>
-            </span>
         </div>
     </div>
 </div>

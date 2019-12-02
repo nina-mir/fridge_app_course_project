@@ -16,7 +16,6 @@ from django.shortcuts import redirect
 
 @login_required
 def recipe_landing(request):
-
     # Send user to receipt upload page upon "+" button click
     try:
         if request.method == 'POST' and request.FILES['receipt_image']:
@@ -31,11 +30,9 @@ def recipe_landing(request):
         pass
 
     fridge_manager = fridge_import.fridge_manager(request)
-
     try:
         current_fridge = fridge_manager.getCurrentFridge()
         context = {'current_fridge': current_fridge}
-
         return render(request, 'recipes/recipe_landing.html', context=context)
     except:
         return render(request, 'recipes/recipe_landing.html')
