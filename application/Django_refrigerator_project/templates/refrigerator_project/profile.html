@@ -9,9 +9,15 @@
       <h3 class="text-center">Profile Page</h3>
     </div>
   </div>
-  <div class="row text-center">
-    <h2 class="text-center">{{ user.username }}</h2>
-    <h2>{{ user.email }} </h2>
+  <div class="row">
+    <div class="col">
+      <h2>{{ user.username }}</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2>{{ user.email }} </h2>
+    </div>
   </div>
   <div class="row">
     <div class="col">
@@ -29,8 +35,8 @@
           {% if not ownedfridge_objectlist %}
           <div id="owned" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
-              <div class="column trash-center">
-                <h2>No fridges</h2>
+              <div class="col">
+                <p style="text-align: center;">No owned fridges</p>
               </div>
             </div>
           </div>
@@ -39,16 +45,11 @@
           {% for each in ownedfridge_objectlist %}
           <div id="owned" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
-              <div class="column trash-center">
+              <div class="col">
                 <ul style="list-style-type:none; padding-top: 10px;">
                   <li>Name: {{ each.name }} </li>
                   <li>Created on: {{ each.creation_date }} </li>
                   <li>Friends: {{ each.friends_name_list }} </li>
-                </ul>
-              </div>
-              <div class="column trash-center ">
-                <ul>
-                  <a class="nav-link" href="#"><i class="far fa-trash-alt fa-lg"></i></a>
                 </ul>
               </div>
             </div>
@@ -70,8 +71,8 @@
           {% if not friendedfridge_objectlist %}
           <div id="friended" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
-              <div class="column trash-center">
-                <h2>No friended fridges</h2>
+              <div class="col">
+                <p style="text-align: center;">No friended fridges</p>
               </div>
             </div>
           </div>
@@ -80,16 +81,11 @@
           {% for each in friendedfridge_objectlist %}
           <div id="friended" class="collapse" style="color: black;" aria-labelledby="heading-example">
             <div class="row">
-              <div class="column trash-center">
+              <div class="col">
                 <ul style="list-style-type:none; padding-top: 10px;">
                   <li>Name: {{ each.name }} </li>
                   <li>Created on: {{ each.creation_date }} </li>
                   <li>Friends: {{ each.friends_name_list }} </li>
-                </ul>
-              </div>
-              <div class="column trash-center ">
-                <ul>
-                  <a class="nav-link" href="#"><i class="far fa-trash-alt fa-lg"></i></a>
                 </ul>
               </div>
             </div>

@@ -57,7 +57,7 @@ class Recipe(models.Model):
         Fridge, models.DO_NOTHING, related_name='recipes')
     user = models.ForeignKey(User, models.DO_NOTHING, related_name='recipes')
     title = models.TextField()
-    sourceurl = models.TextField()
-    # imageurl = models.TextField() - Saving image URL for recipes
+    sourceurl = models.TextField(null=True)
+    imageurl = models.TextField(null=True)
     eff_bgn_ts = models.DateTimeField()
     eff_end_ts = models.DateTimeField()
