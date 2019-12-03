@@ -267,7 +267,6 @@ a:focus {
 #sidebar ul li.active>a,
 a[aria-expanded="true"] {
     color: #fff;
-    background: #6d7fcc;
 }
 
 
@@ -281,6 +280,5 @@ a[aria-expanded="true"] {
     width: 100%;
     min-height: 100vh;
     transition: all 0.3s;
-    position: absolute;
-    right: 0;
+    
 }
