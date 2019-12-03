@@ -188,7 +188,7 @@ a:focus {
 #sidebar {
     width: 250px;
     position: fixed;
-    left: -250px;
+    left: -500px;
     height: 100vh;
     z-index: 999;
     background: #33b5e5;
@@ -266,7 +266,7 @@ a:focus {
 
 #sidebar ul li.active>a,
 a[aria-expanded="true"] {
-    color: #fff;
+    color: black;
 }
 
 
