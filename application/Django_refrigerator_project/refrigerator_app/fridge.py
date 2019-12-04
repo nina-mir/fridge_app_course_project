@@ -205,7 +205,7 @@ class fridge_manager():
         eff_end_ts=datetime(9999, 12, 31))
         fridge.save()
         user.ownedfridges.append(fridge.id)
-        
+
         user.save()
         self.session['current_fridge_id'] = fridge.id
         self.session['current_fridge_id'] = fridge.id
@@ -277,7 +277,7 @@ class fridge_manager():
             friend_list_name.append(each.username)
         return friend_list_name
 
-    def remove_friend(self, username):
+    def removeFriend(self, username):
         friend = User.objects.filter(username=username).get()
         friend.friendedfridges.remove(self.session['current_fridge_id'])
         if(friend.primary_fridge == self.session['current_fridge_id']):
