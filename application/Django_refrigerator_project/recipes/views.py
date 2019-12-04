@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.conf import settings
 # for using @login_required decorator on top of a function
 from django.contrib.auth.decorators import login_required
-from refrigerator_app.models import Item, Fridge, FridgeContent
+from refrigerator_app.models import Item, Fridge, FridgeContent, Recipe
 from users.models import User
 from django.db.models import Q
 from refrigerator_app import views as fridge_views
@@ -29,10 +29,18 @@ def recipe_landing(request):
     except:
         pass
 
+    if request.method == 'POST' and request.POST.get('delete_recipe'):
+        try:
+            Recipe.objects.filter(id=request.POST.get('delete_recipe')).delete()
+            return redirect('/recipes/')
+        except:
+            pass
+
     fridge_manager = fridge_import.fridge_manager(request)
     try:
         current_fridge = fridge_manager.getCurrentFridge()
-        context = {'current_fridge': current_fridge}
+        saved_recipes = Recipe.objects.filter(fridge_id=current_fridge.id)
+        context = {'current_fridge': current_fridge, 'saved_recipes' : saved_recipes}
         return render(request, 'recipes/recipe_landing.html', context=context)
     except:
         return render(request, 'recipes/recipe_landing.html')

@@ -1,5 +1,24 @@
 {% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
+<style>
+    .all-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        text-align: center
+    }
+
+    .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+</style>
+
 <div class="container">
     <div class="row">
         <div class="col card map border-light mb-3"
@@ -30,16 +49,27 @@
             <!-- Display All Saved Recipes for Selected Fridge -->
             {% if saved_recipes %} {% for each in saved_recipes %}
             <div class="card">
-                <h5 class="card-header">
-                    <a data-toggle="collapse" href="#collapse-example1" data-parent="#accordion" aria-expanded="true"
-                        aria-controls="collapse-example" id="heading" class="collapsed d-block">
-                        {{ each.name }}
-                        {% with image_static=each.name|add:'.png' %}
-                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-                        {% endwith %}
-                    </a>
-                </h5>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-text">
+                                <img src="{{ each.imageurl }}" alt="recipe_img" style="height: 50px;">
+                                <a class="vertical-center" style="padding-left: 20px;" href="{{ each.sourceurl }}">
+                                    {{ each.title }}
+                                </a>
+                            </h5>
+                        </div>
+                        <div class="col-2">
+                            <form method="POST" class="all-center">
+                                {% csrf_token %}
+                                <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_recipe"
+                                    value={{each.id}}></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div style="padding-top: 4px;"></div>
             {% endfor %} {% else %}
             <p>none</p>
             {% endif %}
