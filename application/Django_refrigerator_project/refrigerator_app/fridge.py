@@ -277,7 +277,7 @@ class fridge_manager():
             friend_list_name.append(each.username)
         return friend_list_name
 
-    def removeFriend(self, username):
+    def removeFriend2(self, username):
         friend = User.objects.filter(username=username).get()
         friend.friendedfridges.remove(self.session['current_fridge_id'])
         if(friend.primary_fridge == self.session['current_fridge_id']):
