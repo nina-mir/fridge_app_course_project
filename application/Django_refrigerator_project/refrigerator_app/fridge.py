@@ -144,14 +144,31 @@ class fridge_manager():
         item = Item.objects.filter(name=item_name).get()
         item_dict = {item.id: item.age}
         for item_id in item_dict:
-            fridge_content = FridgeContent(expirationdate=(datetime.now()+timedelta(hours=item_dict[item_id])), size=1, creation_date=datetime.now(
-            ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31), addedby_id=self.session['current_user_id'], fridge_id=self.session['current_fridge_id'], item_id=item_id)
+
+            fridge_content = FridgeContent(
+            expirationdate=(datetime.now()+timedelta(hours=item_dict[item_id])),
+            size=1,
+            creation_date=datetime.now(),
+            modified_date=datetime.now(),
+            eff_bgn_ts=datetime.now(),
+            eff_end_ts=datetime(9999, 12, 31),
+            addedby_id=self.session['current_user_id'],
+            fridge_id=self.session['current_fridge_id'],
+            item_id=item_id)
             fridge_content.save()
 
     def save_to_db(self, item_dict):
         for item_id in item_dict:
-            fridge_content = FridgeContent(expirationdate=(datetime.now()+timedelta(hours=item_dict[item_id])), size=1, creation_date=datetime.now(
-            ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31), addedby_id=self.session['current_user_id'], fridge_id=self.session['current_fridge_id'], item_id=item_id)
+
+            fridge_content = FridgeContent(
+            expirationdate=(datetime.now()+timedelta(hours=item_dict[item_id])),
+            size=1, creation_date=datetime.now(),
+            modified_date=datetime.now(),
+            eff_bgn_ts=datetime.now(),
+            eff_end_ts=datetime(9999, 12, 31),
+            addedby_id=self.session['current_user_id'],
+            fridge_id=self.session['current_fridge_id'],
+            item_id=item_id)
             fridge_content.save()
 
 
@@ -178,11 +195,17 @@ class fridge_manager():
             current_fridge.save()
 
     def createFridge(self, fridge_name):
+
         user = User.objects.filter(id=self.session['current_user_id']).get()
-        fridge = Fridge(name=fridge_name, owner=user, creation_date=datetime.now(
-        ), modified_date=datetime.now(), eff_bgn_ts=datetime.now(), eff_end_ts=datetime(9999, 12, 31))
+
+        fridge = Fridge(name=fridge_name, owner=user,
+        creation_date=datetime.now(),
+        modified_date=datetime.now(),
+        eff_bgn_ts=datetime.now(),
+        eff_end_ts=datetime(9999, 12, 31))
         fridge.save()
         user.ownedfridges.append(fridge.id)
+        
         user.save()
         self.session['current_fridge_id'] = fridge.id
         self.session['current_fridge_id'] = fridge.id
