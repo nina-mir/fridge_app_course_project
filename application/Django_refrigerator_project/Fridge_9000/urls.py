@@ -26,6 +26,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('fridge/check/', fridge_manager.initialCurrentFridge, name='fridge_init'),
     path('fridge/', views.fridge, name='fridge'),
+    path('fridge/add/', views.add_button, name='add_button'),
     path('groceries/', views.groceries, name='groceries'),
     path('recipes/', recipe_views.recipe_landing, name='recipes'),
     path('recipes/search/', recipe_views.recipe_search, name='recipe_search'),

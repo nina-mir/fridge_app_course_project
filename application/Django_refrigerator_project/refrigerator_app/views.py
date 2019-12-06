@@ -199,7 +199,8 @@ def profile(request):
 
 
 @login_required
-def fridge(request):
+def add_button(request):
+    print("reached add button area")
     try:
         if request.method == 'POST' and request.FILES['receipt_image']:
             return receipt_upload(request)
@@ -212,6 +213,26 @@ def fridge(request):
     except:
         print("No Selected items.")
 
+    
+
+    if request.method == 'GET':
+        inventory_items = Item.objects.all()
+        return render(request, 'refrigerator_project/item_addition.html', {'all_items': inventory_items})
+
+    # Selected items added to manual list
+    if request.method == 'POST' and request.POST.get('grocery_selector_submit') == 'selection':
+        try:
+            fridge_manager = fridge_import.fridge_manager(request)
+            list = request.POST.getlist('grocery_items', default=None)
+            for each in list:
+                fridge_manager.addItem(each)
+            return redirect('/fridge/')
+        except:
+            print('ADD ITEM VIEW: Error saving selected items to grocery list.')
+
+
+@login_required
+def fridge(request):
     # Variables
     fridge_manager = fridge_import.fridge_manager(request)
     inventory_items = None
