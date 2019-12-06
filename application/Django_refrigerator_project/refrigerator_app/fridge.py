@@ -287,8 +287,25 @@ class fridge_manager():
         current_fridge.friends.remove(friend.id)
         friend.save()
         current_fridge.save()
+    
+    
+    def is_owner(self):
+        ownership = False
 
+        # Get user id
+        user_id = User.objects.filter(id=self.session['current_user_id']).get().id
 
+        # Get Current Fridge
+        curr_fridge = self.getCurrentFridge()
+        
+        # Get Owner of the Current Fridge
+        owner_fridge = curr_fridge.owner.id
+
+        if owner_fridge != user_id:
+            ownership = False
+        else:
+            ownership= True    
+        return ownership            
 """----------------------- OLD FRIDGE MANAGER --------------------------"""
 
 # current_fridge_id = None

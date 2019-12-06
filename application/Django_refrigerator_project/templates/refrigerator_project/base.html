@@ -89,12 +89,19 @@
             </div>
 
             <ul class="list-unstyled components">
+                {% with all_fridges|length as count%}
+                {% if count %}
+
+
                 <li>
                     <a href="#" data-toggle="modal" data-target="#select_fridge_modal">Select Fridge</a>
                 </li>
                 <li>
                     <a href="#" data-toggle="modal" data-target="#primary_fridge_modal">Set Primary Fridge</a>
                 </li>
+                {% endif %}
+
+                {% if ownership %}
                 <li>
                     <a href="#" data-toggle="modal" data-target="#editFriends">Edit Friends</a>
                 </li>
@@ -104,9 +111,13 @@
                 <li>
                     <a href="#" data-toggle="modal" data-target="#delete">Delete Fridge</a>
                 </li>
+                {% endif %}
                 <li>
                     <a href="#" data-toggle="modal" data-target="#add">Add Fridge</a>
                 </li>
+
+                {% endwith %}
+
             </ul>
         </div>
         <div>

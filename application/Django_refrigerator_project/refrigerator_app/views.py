@@ -221,12 +221,14 @@ def fridge(request):
     week_time = current_time + timedelta(days=7)
     all_fridges = None
     current_fridge_friends = None
+    ownership = None
     # Get current fridge data
     try:
         all_fridges = fridge_manager.get_all_the_related_fridges()
         inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
         current_fridge = fridge_manager.getCurrentFridge()
         current_fridge_friends = fridge_manager.getCurrentFridgeFriendsUsername()
+        ownership = fridge_manager.is_owner()
     except:
         # fridge_manager.initialCurrentFridge(request)
         print('FRIDGE VIEW: Error getting fridge data.')
@@ -301,8 +303,11 @@ def fridge(request):
             return redirect('/fridge/')
         except:
             print('Error deleting friend from the list')
-    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'primary_fridge_id': primary_fridge_id,
-                                                                'current_date': current_time, 'week_time': week_time, 'all_fridges': all_fridges, 'current_fridge_friends': current_fridge_friends})
+    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 
+            'current_fridge': current_fridge, 'primary_fridge_id': primary_fridge_id,
+            'current_date': current_time, 'week_time': week_time, 
+            'all_fridges': all_fridges, 'current_fridge_friends': current_fridge_friends, 
+            'ownership' : ownership})
 
 
 @login_required
