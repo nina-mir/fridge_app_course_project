@@ -54,7 +54,8 @@
                                 {% csrf_token %}
                                 <!-- <input class="like-button all-center" name="recipe_save"
                                     accept="image/*" onchange="this.form.submit()" /> -->
-                                <button class="like-button all-center" onchange="this.form.submit()"></button>
+
+                                <button name="saved_recipe" value="{{ each.title }}, {{ each.source_url }}, {{ each.image_url }}"" class="like-button all-center" onchange="this.form.submit()"></button>
                             </form>
                         </div>
                     </div>
