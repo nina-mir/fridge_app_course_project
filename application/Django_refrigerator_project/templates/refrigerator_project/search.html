@@ -1,0 +1,19 @@
+{% extends 'refrigerator_project/base.html' %} {% block content %}
+
+<p>Welcome To Search Section</p>
+<div>
+    <form method="post">
+        {% csrf_token %}
+        Search by name, id, calories: <input type="text" name="itemname"><br>
+        <input type="submit" value="Search" name="search">
+    </form>
+    {% for each in sr %}
+    <tr>
+        <td>Item Name:{{ each.name }} | Id: {{ each.id }} | Calories:{{ each.calories }}</td>
+        <br></br>
+    </tr>
+    {% endfor %}
+    </form>
+</div>
+
+{% endblock %}

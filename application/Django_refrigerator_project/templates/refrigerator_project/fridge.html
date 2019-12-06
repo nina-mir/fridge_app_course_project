@@ -1,0 +1,215 @@
+{% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static '/css/fridge_card.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/css/modal_checkbox.css' %}">
+
+<!-- Show when user has a fridge -->
+{% if current_fridge %}
+<div class="container" id="content">
+  <div class="row">
+    <div class="col card map border-light mb-3"
+      style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+      <h3 class="text-center">{{ current_fridge.name }}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <form method="GET" action="{% url 'add_button' %}">
+        <button type="submit" class="btn btn-info btn-block btn-lg btn-rounded waves-effect">Add Item
+          Manually</button>
+      </form>
+    </div>
+    <div class="col">
+        <form method="post" enctype="multipart/form-data" action="{% url 'add_button' %}">
+          {% csrf_token %}
+          <label for="file" class="btn btn-info btn-block btn-lg btn-rounded waves-effect" aria-pressed="true">
+            Upload Receipt
+          </label>
+          <input type="file" name="receipt_image" id="file" class="inputfile inputfile-5" accept="image/*"
+            onchange="this.form.submit()" />
+        </form>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <!-- Add Item Form -->
+      <!-- <form class="navbar-form navbar-left" role="search" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Item Name" style="width: 65%;float:left"
+            name="item_name">
+          <button type="submit" name="add_item" value="ADD ITEM" class="btn btn-info btn-sm btn-rounded waves-effect"
+            style="width:30%;float:right" aria-pressed="true">Add Item</button>
+          <br>
+        </div>
+      </form> -->
+      <!-- Add Friend Form -->
+      <!-- <form class="navbar-form navbar-left" role="search" method="POST">
+        {% csrf_token %}
+        <div class="form-group" style="padding-bottom: 40px;">
+          <input type="text" class="form-control" placeholder="Friend's Email" style="width: 65%;float:left"
+            name="friend_email">
+          <button type="submit" name="add_friend_by_email" value="ADD Friend"
+            class="btn btn-info btn-sm btn-rounded waves-effect" style="width:30%;float:right;" aria-pressed="true">Add
+            Friend</button>
+        </div>
+      </form> -->
+    </div>
+  </div>
+  <div class="row">
+    <div class="col card map border-light mb-3"
+      style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;"">
+      <h3 class=" text-center">Items in Refrigerator </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <!-- Accordion for Collapsible Elements -->
+      {% for each in inventory_items %}
+      {% with item_unique_id=each.id %}
+      {% with image_static='/item_icons/'|add:each.item.name|add:'.png' %}
+      {% if each.eff_end_ts.date > current_date.date %}
+      {% if each.expirationdate.date < current_date.date %}
+      <!-- Expired Items (RED) -->
+      <div id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="card" style="background-color: #ff8080; color: black;">
+          <h5 class="card-header">
+            <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
+              aria-controls="collapse-example" id="heading" class="collapsed d-block">
+              <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+              {{ each.item.name }} <span style="color:white;">*Expired*</span>
+              <i class="fa fa-chevron-left pull-right float-right"></i>
+            </a>
+          </h5>
+          <div id="collapse-{{item_unique_id}}" class="collapse" aria-labelledby="heading-example">
+            <div class="row">
+              <div class="column trash-center">
+                <ul style="list-style-type:none; padding-top: 10px;">
+                  <li>Calories: {{ each.item.calories }} </li>
+                  <li>Added on: {{ each.creation_date.date }} </li>
+                  <li>Expiration: {{ each.expirationdate.date }} </li>
+                  <li>Added By: {{ each.addedby.username }} </li>
+                </ul>
+              </div>
+              <div class="column trash-center ">
+                <ul>
+                  <form method="POST">
+                    {% csrf_token %}
+                    <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
+                      value={{item_unique_id}}></button>
+                  </form>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% elif each.expirationdate.date > week_time.date %}
+      <!-- Good Items (GREEN) -->
+      <div id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="card" style="background-color: #c6f1d6; color: black;">
+          <h5 class="card-header">
+            <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
+              aria-controls="collapse-example" id="heading" class="collapsed d-block">
+              <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+              {{ each.item.name }}
+              <i class="fa fa-chevron-left pull-right float-right"></i>
+            </a>
+          </h5>
+          <div id="collapse-{{item_unique_id}}" class="collapse" aria-labelledby="heading-example">
+            <div class="row">
+              <div class="column trash-center">
+                <ul style="list-style-type:none; padding-top: 10px;">
+                  <li>Calories: {{ each.item.calories }} </li>
+                  <li>Added on: {{ each.creation_date.date }} </li>
+                  <li>Expiration: {{ each.expirationdate.date }} </li>
+                  <li>Added By: {{ each.addedby.username }} </li>
+                </ul>
+              </div>
+              <div class="column trash-center ">
+                <ul>
+                  <form method="post">
+                    {% csrf_token %}
+                    <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
+                      value={{item_unique_id}}></button>
+                  </form>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <!-- Near Expiration Items (YELLOW) -->
+      <div id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="card" style="background-color: #ffba92; color: black;">
+          <h5 class="card-header">
+            <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
+              aria-controls="collapse-example" id="heading" class="collapsed d-block">
+              <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+              {{ each.item.name }}
+              <i class="fa fa-chevron-left pull-right float-right"></i>
+            </a>
+          </h5>
+          <div id="collapse-{{item_unique_id}}" class="collapse" aria-labelledby="heading-example">
+            <div class="row">
+              <div class="column trash-center">
+                <ul style="list-style-type:none; padding-top: 10px;">
+                  <li>Calories: {{ each.item.calories }} </li>
+                  <li>Added on: {{ each.creation_date.date }} </li>
+                  <li>Expiration: {{ each.expirationdate.date }} </li>
+                  <li>Added By: {{ each.addedby.username }} </li>
+                </ul>
+              </div>
+              <div class="column trash-center ">
+                <ul>
+                  <form method="post">
+                    {% csrf_token %}
+                    <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
+                      value={{item_unique_id}}></button>
+                  </form>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endif %}
+      {% endwith %}
+      {% endwith %}
+      {% endfor %}
+      <!-- End Accordion -->
+    </div>
+  </div>
+</div>
+{% else %}
+<!-- Show when user has no fridges -->
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1 style="text-align: center;"> You have no fridges.</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="text" name="fridge_name" class="form-control" placeholder="Fridge Name"
+            style="width: 65%;float:left">
+          <button type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-primary btn-block"
+            style="width:30%;float:right" aria-pressed="true">Create Fridge</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row" style="padding-top: 30%;">
+    <div class="col">
+      <h5 style="text-align: center;">If you should have fridges displayed, please logout and log in again.</h5>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

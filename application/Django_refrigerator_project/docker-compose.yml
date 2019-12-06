@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql-db
+  mysql-db:
+    container_name: mysql-db
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'ref_db'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - db_data:/var/lib/mysql
+volumes:
+  db_data:
