@@ -46,13 +46,6 @@
             r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2")
         })(document, window, 0);
     </script>
-    {% if open_modal %}
-    <script type="text/javascript">
-        $(window).on('load', function () {
-            $('#manual_item_modal').modal('show');
-        });
-    </script>
-    {% endif %}
 </head>
 
 <body>
@@ -82,7 +75,6 @@
             </div>
         </div>
     </nav>
-
     <!-- Sidebar (Active on Fridge Page Only) -->
     <div class="wrapper">
         <!-- Sidebar  -->
@@ -162,7 +154,6 @@
         {% endfor %} {% endif %}
     </div>
     {% endif %}
-
     <!-- Modals -->
     <div>
         <!-- Select Current Fridge -->
@@ -170,16 +161,13 @@
             aria-labelledby="tracked_items_modal" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <!-- Header -->
                     <div class="modal-header">
                         <h4 class="modal-title">Select Current Fridge</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <!--Body-->
                     <div class="modal-body">
-                        <!-- List of Items -->
                         <form id="select_fridge_form" method="POST">
                             {% csrf_token %}
                             <ul class="container-fluid" id="select_fridge_ul">
@@ -205,7 +193,6 @@
                             </ul>
                         </form>
                     </div>
-                    <!-- Modal Footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <button class="btn btn-primary" name="select_fridge_submit" type="submit" value="selection"
@@ -219,16 +206,13 @@
             aria-labelledby="tracked_items_modal" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <!-- Header -->
                     <div class="modal-header">
                         <h4 class="modal-title">Select Primary Fridge</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <!--Body-->
                     <div class="modal-body">
-                        <!-- List of Items -->
                         <form id="primary_fridge_form" method="POST">
                             {% csrf_token %}
                             <ul class="container-fluid" id="primary_fridge_ul">
@@ -253,7 +237,6 @@
                             </ul>
                         </form>
                     </div>
-                    <!-- Modal Footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <button class="btn btn-primary" name="primary_fridge_submit" type="submit" value="selection"

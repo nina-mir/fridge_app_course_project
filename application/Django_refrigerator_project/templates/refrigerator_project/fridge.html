@@ -14,8 +14,26 @@
   </div>
   <div class="row">
     <div class="col">
+      <form method="GET" action="{% url 'add_button' %}">
+        <button type="submit" class="btn btn-info btn-block btn-lg btn-rounded waves-effect">Add Item
+          Manually</button>
+      </form>
+    </div>
+    <div class="col">
+        <form method="post" enctype="multipart/form-data" action="{% url 'add_button' %}">
+          {% csrf_token %}
+          <label for="file" class="btn btn-info btn-block btn-lg btn-rounded waves-effect" aria-pressed="true">
+            Upload Receipt
+          </label>
+          <input type="file" name="receipt_image" id="file" class="inputfile inputfile-5" accept="image/*"
+            onchange="this.form.submit()" />
+        </form>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col">
       <!-- Add Item Form -->
-      <form class="navbar-form navbar-left" role="search" method="POST">
+      <!-- <form class="navbar-form navbar-left" role="search" method="POST">
         {% csrf_token %}
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Item Name" style="width: 65%;float:left"
@@ -24,9 +42,9 @@
             style="width:30%;float:right" aria-pressed="true">Add Item</button>
           <br>
         </div>
-      </form>
+      </form> -->
       <!-- Add Friend Form -->
-      <form class="navbar-form navbar-left" role="search" method="POST">
+      <!-- <form class="navbar-form navbar-left" role="search" method="POST">
         {% csrf_token %}
         <div class="form-group" style="padding-bottom: 40px;">
           <input type="text" class="form-control" placeholder="Friend's Email" style="width: 65%;float:left"
@@ -35,7 +53,7 @@
             class="btn btn-info btn-sm btn-rounded waves-effect" style="width:30%;float:right;" aria-pressed="true">Add
             Friend</button>
         </div>
-      </form>
+      </form> -->
     </div>
   </div>
   <div class="row">
