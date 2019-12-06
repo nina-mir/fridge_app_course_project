@@ -1,29 +1,75 @@
 {% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
-<link href="//s.w.org/wp-includes/css/dashicons.css?20150710" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400&display=swap" rel="stylesheet">
-<!--script src="{% static '/js/fave_button.js' %}"></script-->
+<link rel="stylesheet" href="{% static '/css/favorite_icon.css' %}">
 
-<div class="container" style="font-family: 'Inconsolata', serif;">
-    <h3> Found {{ count }} Recipes!</h3>
+<style>
+    .all-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        text-align: center
+    }
+
+    .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col card map border-light mb-3"
+            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+            <h3 class="text-center">Recipes</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col card map border-light mb-3" style="outline: none; border-radius: 10px;">
+            <span class="label label-info"
+                style="margin:1%;text-align:center;color:white;background-color: #01B9F5;border-radius: 10px;padding:5px">{{current_fridge.name}}</span>
+        </div>
+    </div>
+    <h3> Discovered Recipes:</h3>
     <div class="row">
         <div class="col">
             <!-- Display Found Recipes for Selected Grocery Items -->
-            {% for each in recipes %}
+            {% if recipes %} {% for each in recipes %}
             <div class="card">
-                <h5 class="card-header">
-                    <p data-toggle="collapse" data-parent="#accordion" aria-expanded="true"
-                        aria-controls="collapse-example" id="heading" class="collapsed d-block">
-                        <img src="{{ each.image_url }}" alt="recipe_img" style="width:30%; height:auto">
-                        <a style="float: right; width:60%;" href="{{ each.source_url }}">
-                            {{ each.title }}
-                        </a>
-                    </p>
-                </h5>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-text">
+                                <img src="{{ each.image_url }}" alt="recipe_img" style="height: 50px;">
+                                <a class="vertical-center" style="padding-left: 20px;" href="{{ each.source_url }}">
+                                    {{ each.title }}
+                                </a>
+                            </h5>
+                        </div>
+                        <div class="col-2">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <!-- <input class="like-button all-center" name="recipe_save"
+                                    accept="image/*" onchange="this.form.submit()" /> -->
+                                <button class="like-button all-center" onchange="this.form.submit()"></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            {% endfor %}
+            <div style="padding-top: 4px;"></div>
+            {% endfor %} {% else %}
+            <p style="text-align: center;">No Recipes Found</p>
+            {% endif %}
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelector('.like-button').addEventListener('click', e => { e.currentTarget.classList.toggle('liked'); });
+</script>
 
 {% endblock %}

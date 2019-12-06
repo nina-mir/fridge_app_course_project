@@ -5,7 +5,6 @@ import refrigerator_app.fridge as fridge_import
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
-# for using @login_required decorator on top of a function
 from django.contrib.auth.decorators import login_required
 from refrigerator_app.models import Item, Fridge, FridgeContent, Recipe
 from users.models import User
@@ -29,21 +28,28 @@ def recipe_landing(request):
     except:
         pass
 
+    # Variables
+    fridge_manager = fridge_import.fridge_manager(request)
+    context = None
+
+    # Delete Saved Recipes
     if request.method == 'POST' and request.POST.get('delete_recipe'):
         try:
-            Recipe.objects.filter(id=request.POST.get('delete_recipe')).delete()
+            Recipe.objects.filter(
+                id=request.POST.get('delete_recipe')).delete()
             return redirect('/recipes/')
         except:
             pass
 
-    fridge_manager = fridge_import.fridge_manager(request)
+    # Get Fridge data and saved recipe data
     try:
         current_fridge = fridge_manager.getCurrentFridge()
         saved_recipes = Recipe.objects.filter(fridge_id=current_fridge.id)
-        context = {'current_fridge': current_fridge, 'saved_recipes' : saved_recipes}
-        return render(request, 'recipes/recipe_landing.html', context=context)
+        context = {'current_fridge': current_fridge,
+                   'saved_recipes': saved_recipes}
     except:
-        return render(request, 'recipes/recipe_landing.html')
+        pass
+    return render(request, 'recipes/recipe_landing.html', context)
 
 
 @login_required
@@ -63,16 +69,18 @@ def recipe_search(request):
 
     # Variables
     fridge_manager = fridge_import.fridge_manager(request)
+    current_fridge = fridge_manager.getCurrentFridge()
     inventory_items = None
     fridge_con_items = fridge_manager.getCurrentFridgeContentByExpiration()
     tmp_list = list(set([x.item.id for x in fridge_con_items]))
     inventory_items = Item.objects.filter(id__in=tmp_list)
 
-    if inventory_items:
-        return render(request, 'recipes/recipe_search.html', context={'inventory_items': inventory_items})
-    else:
+    if not inventory_items:
         inventory_items = Item.objects.all()
-        return render(request, 'recipes/recipe_search.html', context={'inventory_items': inventory_items})
+
+    context = {'current_fridge': current_fridge,
+               'inventory_items': inventory_items}
+    return render(request, 'recipes/recipe_search.html', context)
 
 
 @login_required
@@ -90,62 +98,67 @@ def recipe_search_results(request):
     except:
         pass
 
-    if request.method == 'GET':
-        response = request.GET
-        list = response.getlist('ingredient', default=None)
-        print(response)
-        print(list)
-        # Using for loop
-        kompi = ""
-        for i in list:
-            kompi = i + "," + kompi
-        print(kompi)
-        get_recipes = food2fork_call(kompi)
-        context = process_recipes(get_recipes)
-        print(context['count'])
-        print(type(context))
-    return render(request, 'recipes/recipe_search_results.html', {'count': context['count'],
-                                                                  'recipes': context['recipes']})
+    # Variables
+    fridge_manager = fridge_import.fridge_manager(request)
+    current_fridge = None
+    recipe_data = None
+    context = None
 
-# method to mkae API call to food2fork recipe API
+    # Get refrigerator data
+    try:
+        current_fridge = fridge_manager.getCurrentFridge()
+        context = {'current_fridge': current_fridge}
+    except:
+        print('RECIPE_RESULTS VIEW: No Fridge found.')
+
+    # Get recipe results
+    if request.method == 'GET':
+        try:
+            list = request.GET.getlist('ingredient', default=None)
+            ingredients = ""
+            for i in list:
+                ingredients = i + "," + ingredients
+            recipe_data = food2fork_call(ingredients)
+            context = {'current_fridge': current_fridge,
+                       'recipes': recipe_data['recipes']}
+        except:
+            print('RECIPE_RESULTS VIEW: Error getting food2fork data.')
+
+    # Save recipes
+    if request.method == 'POST' and request.POST.get('saved_recipe'):
+        try:
+            pass
+        except:
+            print('RECIPE_RESULTS VIEW: Error saving recipe.')
+    return render(request, 'recipes/recipe_search_results.html', context)
 
 
 def food2fork_call(list):
-    # you have to sign up for an API key, which has some allowances.
-    # Check the API documentation for further details:
-    url = 'https://www.food2fork.com/api/search'
+    # # Key 1 Attempt
+    # key = '6e81eadfd535b092815e395bcc38be11'
+    # paramsPost = {
+    #     'key': key,
+    #     'q': list,
+    #     'sort': 'r',
+    #     'page': '0'
+    # }
+    # responsePost = requests.post('https://www.food2fork.com/api/search', paramsPost)
 
-    key = '6e81eadfd535b092815e395bcc38be11'
-    #key = '57604ca61ce33d68532bb9af7f0472f9'
-    paramsPost = {
-        'key': key,
-        'q': list,
-        # (optional) How the results should be sorted. See Below for details.
-        'sort': 'r',
-        'page': '0'  # (optional) Used to get additional results}
-    }
+    # # Key 2 Attempt
+    # if responsePost.text == '{"error": "limit"}':
+    #     key = '57604ca61ce33d68532bb9af7f0472f9'
+    #     paramsPost = {
+    #         'key': key,
+    #         'q': list,
+    #         'sort': 'r',
+    #         'page': '0'
+    #     }
+    #     responsePost = requests.post('https://www.food2fork.com/api/search', paramsPost)
 
-    responsePost = requests.post(url, paramsPost)
-    if responsePost.status_code == 202:  # everything went well!
-        print('food2dork: all good!')
-    # print(responsePost.content)
-    try:
-        result = responsePost.json()
-    except ValueError:
-        result = {'error': 'No JSON content returned'}
-    return responsePost.text
+    # if responsePost.status_code == 202:
+    #     print('FOOD2FORK: Data received.')
 
+    fakePost = '{"count": 30, "recipes": [{"publisher": "Simply Recipes", "f2f_url": "http://food2fork.com/view/36482", "title": "How to Make Fruit Leather", "source_url": "http://www.simplyrecipes.com/recipes/how_to_make_fruit_leather/", "recipe_id": "36482", "image_url": "http://static.food2fork.com/fruitleather300x2001f9f84c4.jpg", "social_rank": 99.99999999999989, "publisher_url": "http://simplyrecipes.com"}, {"publisher": "Simply Recipes", "f2f_url": "http://food2fork.com/view/37128", "title": "Waldorf Salad", "source_url": "http://www.simplyrecipes.com/recipes/waldorf_salad/", "recipe_id": "37128", "image_url": "http://static.food2fork.com/waldorfsalad300x20000f287fd.jpg", "social_rank": 99.9999667957302, "publisher_url": "http://simplyrecipes.com"}, {"publisher": "All Recipes", "f2f_url": "http://food2fork.com/view/15768", "title": "Groovy Green Smoothie", "source_url": "http://allrecipes.com/Recipe/Groovy-Green-Smoothie/Detail.aspx", "recipe_id": "15768", "image_url": "http://static.food2fork.com/4511209622.jpg", "social_rank": 99.97384730336904, "publisher_url": "http://allrecipes.com"}]}'
+    # return json.loads(responsePost.text)
+    return json.loads(fakePost)
 
-def process_recipes(str):
-    toSee = json.loads(str)
-    print(type(toSee))
-    print("string value: %s" % toSee["count"])
-    recipes = toSee["recipes"]
-    print(type(recipes))
-    return toSee
-    # print(len(recipes))
-    # for x in range(len(recipes)):
-    #     print(x)
-    #     #print(recipes[x])
-    #     print(recipes[x]["title"])
-    #     print(recipes[x]["publisher"])
