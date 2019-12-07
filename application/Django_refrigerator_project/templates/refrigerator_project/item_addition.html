@@ -19,13 +19,13 @@
 </script>
 
 <div class="container">
-    <div class="row">
+    <div class="row fixed-top" style="padding-top: 50px; z-index: 1;">
         <div class="col card map border-light mb-3"
             style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
             <h3 class="text-center">Select Manual Items</h3>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="padding-top: 60px;">
         <div class="col">
             <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
                 <div class="input-group">
@@ -67,11 +67,19 @@
             </form>
         </div>
     </div>
+
+</div>
+
+<div class="container fixed-bottom" style="padding-bottom: 60px; z-index: 0;" >
     <div class="row">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button class="btn btn-primary" name="grocery_selector_submit" type="submit" value="selection"
-            form="grocery_selector">Save Selection</button>
+        <div class="col" style="text-align: right;">
+            <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button> -->
+            <button class="btn btn-info" name="grocery_selector_submit" type="submit" value="selection"
+                form="grocery_selector">Save Selection</button>
+        </div>
     </div>
 </div>
+
+
 
 {% endblock %}
