@@ -6,10 +6,17 @@
             <h2 style="text-align: center; margin-top: 20px;">You have been logged out.</h2>
         </div>
     </div>
-    <div class="border-top pt-3">
-        <small class="text-muted">
-            <a href="{% url 'login' %}">Log In Again</a>
-        </small>
+    <div class="row border-top pt-3">
+        <div class="col">
+            <small class="text-muted">
+                <a href="{% url 'login' %}">Log In</a>
+            </small>
+        </div>
+        <div class="col" style="text-align: right;">
+            <small class="text-muted">
+                <a style="text-align: right;" href="{% url 'home' %}">Home</a>
+            </small>
+        </div>
     </div>
 </div>
 
