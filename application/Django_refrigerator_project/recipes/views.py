@@ -50,6 +50,7 @@ def recipe_search(request):
     inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
     current_time = datetime.now()
 
+    # Return all items if user has no fridge
     if not inventory_items:
         inventory_items = Item.objects.all()
 

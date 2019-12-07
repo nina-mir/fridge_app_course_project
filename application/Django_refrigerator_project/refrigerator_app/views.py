@@ -203,7 +203,6 @@ def profile(request):
 
 @login_required
 def add_button(request):
-    print("reached add button area")
     try:
         if request.method == 'POST' and request.FILES['receipt_image']:
             return receipt_upload(request)
