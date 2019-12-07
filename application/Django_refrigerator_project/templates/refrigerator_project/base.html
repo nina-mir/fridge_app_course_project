@@ -101,12 +101,21 @@
                 {% endif %}
 
                 {% if ownership %}
+
+                {% if current_fridge_friends %}
                 <li>
-                    <a href="#" data-toggle="modal" data-target="#editFriends">Edit Friends</a>
+                    <a href="#" data-toggle="modal" data-target="#removeFriend">Remove Friend</a>
                 </li>
+                {% endif %}
+                
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#addFriend">Add Friend</a>
+                </li>
+
                 <li>
                     <a href="#" data-toggle="modal" data-target="#rename">Rename Fridge</a>
                 </li>
+
                 <li>
                     <a href="#" data-toggle="modal" data-target="#delete">Delete Fridge</a>
                 </li>
@@ -245,13 +254,13 @@
                 </div>
             </div>
         </div>
-        <!-- Edit Friends -->
-        <div class="modal fade" id="editFriends" tabindex="-1" role="dialog" aria-labelledby="editFriends"
+        <!-- Remove Friends -->
+        <div class="modal fade" id="removeFriend" tabindex="-1" role="dialog" aria-labelledby="removeFriend"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Edit Friends</h4>
+                        <h4 class="modal-title">Remove Friend</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -285,16 +294,53 @@
                 </div>
             </div>
         </div>
-        <!-- Rename Refrigerator -->
-        <div class="modal fade" id="rename" tabindex="-1" role="dialog" aria-labelledby="rename" aria-hidden="true">
+        <!-- Add Friends -->
+        <div class="modal fade" id="addFriend" tabindex="-1" role="dialog" aria-labelledby="addFriend" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <form method="POST" action="">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" name="friend_email" class="form-control" placeholder="Friend's email"
+                                    style="width: 65%;float:left">
+                                <button type="submit" name="add_friend_by_email" value="ADD FRIEND"
+                                    class="btn btn-primary btn-block" style="width:30%;float:right"
+                                    aria-pressed="true">Add Friend</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Rename Refrigerator -->
+        {% comment %} <div class="modal fade" id="rename" tabindex="-1" role="dialog" aria-labelledby="rename" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form method="POST">
                             {% csrf_token %}
                             <label for="fridge_name">Enter name: </label>
                             <input id="fridge_name" type="text" name="rename_fridge">
                             <input type="submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> {% endcomment %}
+        <div class="modal fade" id="rename" tabindex="-1" role="dialog" aria-labelledby="rename" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" name="fridge_name" class="form-control" placeholder="Fridge name"
+                                    style="width: 65%;float:left">
+                                <button type="submit" name="rename_fridge" value="RENAME FRIDGE"
+                                    class="btn btn-primary btn-block" style="width:30%;float:right"
+                                    aria-pressed="true">Rename</button>
+                            </div>
                         </form>
                     </div>
                 </div>

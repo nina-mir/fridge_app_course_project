@@ -293,6 +293,7 @@ def fridge(request):
     if request.method == 'POST' and request.POST.get('add_friend_by_email'):
         try:
             fridge_manager.addFriend(request.POST.get('friend_email'))
+            return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error adding friend')
     # Deleting items via trash icon
@@ -311,8 +312,9 @@ def fridge(request):
     # Rename current primary fridge name :: to be added checks on ownership.
     if request.method == 'POST' and request.POST.get('rename_fridge'):
         try:
+            request.POST.get('fridge_name')
             fridge_manager.renameCurrentFridge(
-                request.POST.get('rename_fridge'))
+                request.POST.get('fridge_name'))
             return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error Renaming Fridge')
