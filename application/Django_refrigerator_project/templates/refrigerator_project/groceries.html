@@ -1,22 +1,5 @@
 {% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
-<style>
-    .modal-dialog,
-    .modal-content {
-        /* overflow-y: initial !important; */
-        height: 95%;
-    }
-
-    .modal-body {
-        max-height: calc(100% - 120px);
-        overflow-y: auto;
-    }
-
-    ul {
-        list-style-type: none;
-    }
-</style>
-
 <script>
     function search(input, ul) {
         var input, filter, ul, li, a, i, txtValue;
@@ -36,18 +19,16 @@
 </script>
 
 <div class="container">
-    <div class="row d-flex justify-content-center">
+    <div class="row d-flex justify-content-center" style="height: 93px;">
         <div class="col card map border-light mb-3"
-            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
             <h3 class="text-center">Grocery List</h3>
+            <p class="text-center">{{current_fridge.name}}</p>
         </div>
     </div>
     <div class="row">
-        <hr size="6" width="100%" color="black">
-    </div>
-    <div class="row">
         <div class="col align-self-center">
-            <h4>Missing Items:</h4>
+            <h5>Missing Items:</h5>
         </div>
         <div class="col align-self-center">
             <div class="float-right">
@@ -76,17 +57,17 @@
             {% endif %}
         </div>
     </div>
-
-    <div class="row">
+    <div class="row" style="padding-top:5px; height: 40px;">
         <div class="col">
-            <p style="text-align: center">Tracked items not found in the current fridge are displayed here as missing.
+            <p style="text-align: center; color: darkgray; font-size: small;">Tracked items not found in the current
+                fridge are displayed here as missing.
             </p>
         </div>
-        <hr size="6" width="100%" color="black">
     </div>
     <div class="row">
+        <hr size="6" width="100%" color="black">
         <div class="col align-self-center">
-            <h4>Manual Items:</h4>
+            <h5>Manual Items:</h5>
         </div>
         <div class="col align-self-center">
             <div class="float-right">
@@ -129,8 +110,8 @@
 <!-- Modal: Tracked Items -->
 <div class="modal fade" id="tracked_items_modal" tabindex="-1" role="dialog" aria-labelledby="tracked_items_modal"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
             <!-- Header -->
             <div class="modal-header">
                 <h4 class="modal-title">Select Tracked Items</h4>
@@ -139,7 +120,7 @@
                 </button>
             </div>
             <!--Body-->
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
                 <!-- Search For Items -->
                 <div class="container">
                     <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
@@ -198,8 +179,8 @@
 
 <!-- Modal: Manual items -->
 <div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="addItem" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
             <!-- Header -->
             <div class="modal-header">
                 <h4 class="modal-title">Select Manual Items</h4>
@@ -208,7 +189,7 @@
                 </button>
             </div>
             <!--Body-->
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
                 <!-- Search For Items -->
                 <div class="container">
                     <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
@@ -259,7 +240,5 @@
         </div>
     </div>
 </div>
-
-
 
 {% endblock %}

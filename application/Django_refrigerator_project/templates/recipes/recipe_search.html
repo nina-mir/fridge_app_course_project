@@ -1,13 +1,5 @@
 {% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
-<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200&display=swap" rel="stylesheet">
-
-<style>
-    ul {
-        list-style-type: none;
-    }
-</style>
-
 <script>
     function search(input, ul) {
         var input, filter, ul, li, a, i, txtValue;
@@ -27,24 +19,19 @@
 </script>
 
 <div class="container">
-    <div class="row">
+    <div class="row fixed-top" style="padding-top: 50px; z-index: 1;">
         <div class="col card map border-light mb-3"
-            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
-            <h3 class="text-center">Recipes</h3>
+            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
+            <h3 class="text-center">Recipe Search</h3>
+            <p class="text-center">{{current_fridge.name}}</p>
         </div>
     </div>
-    <div class="row">
-        <div class="col card map border-light mb-3" style="outline: none; border-radius: 10px;">
-            <span class="label label-info"
-                style="margin:1%;text-align:center;color:white;background-color: #01B9F5;border-radius: 10px;padding:5px">{{current_fridge.name}}</span>
-        </div>
-    </div>
-    <div class="row">
+    <div class="row" style="padding-top: 84px;">
         <div class="col">
-            <h2 class="text-center">Select the items you'd like to use</h2>
+            <h4 class="text-center">Select items you'd like to use:</h4>
         </div>
     </div>
-    <div class="row" style="padding-top: 25px;">
+    <div class="row" style="padding-top: 10px;">
         <div class="col">
             <!-- Search For Items -->
             <div class="container">
@@ -93,7 +80,8 @@
 <div class="container fixed-bottom" style="padding-bottom: 60px; z-index: 0;">
     <div class="row">
         <div class="col" style="text-align: right;">
-            <button form="ingredient_form" class="btn btn-info" name="next" type="submit" style="width: 40%;">Next</button>
+            <button form="ingredient_form" class="btn btn-info" name="next" type="submit"
+                style="width: 40%;">Next</button>
         </div>
     </div>
 </div>

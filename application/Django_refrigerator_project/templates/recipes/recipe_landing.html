@@ -1,35 +1,13 @@
 {% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
-<style>
-    .all-center {
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);
-        text-align: center
-    }
-
-    .vertical-center {
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);
-    }
-</style>
+<link rel="stylesheet" href="{% static '/css/recipe_landing.css' %}">
 
 <div class="container">
-    <div class="row">
+    <div class="row d-flex justify-content-center" style="height: 93px;">
         <div class="col card map border-light mb-3"
-            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
             <h3 class="text-center">Recipes</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col card map border-light mb-3" style="outline: none; border-radius: 10px;">
-            <span class="label label-info"
-                style="margin:1%;text-align:center;color:white;background-color: #01B9F5;border-radius: 10px;padding:5px">{{current_fridge.name}}</span>
+            <p class="text-center">{{current_fridge.name}}</p>
         </div>
     </div>
     <div class="row row d-flex justify-content-center" style="padding-top: 10px;">
@@ -38,10 +16,11 @@
                 aria-pressed="true">Find Recipes</a>
         </div>
     </div>
-    <div class="row" style="padding-top: 25px;">
-        <div class="col">
-            <h4>Saved Recipes:</h4>
+
+    <div class="row" style="padding-top: 10px;">
             <hr size="6" width="100%" color="black">
+        <div class="col">
+            <h5>Saved Recipes:</h5>
         </div>
     </div>
     <div class="row">

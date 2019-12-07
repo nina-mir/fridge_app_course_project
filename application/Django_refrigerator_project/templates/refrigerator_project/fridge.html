@@ -6,16 +6,21 @@
 <!-- Show when user has a fridge -->
 {% if current_fridge %}
 <div class="container" id="content">
-  <div class="row">
+  <div class="row d-flex justify-content-center" style="height: 93px;">
     <div class="col card map border-light mb-3"
-      style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
-      <h3 class="text-center">{{ current_fridge.name }}</h3>
+      style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
+      <h3 class="text-center">{{current_fridge.name}}</h3>
+      {% if ownership %}
+      <p class="text-center">My Refrigerator</p>
+      {% else %}
+      <p class="text-center">{{owner_name}}'s Refrigerator</p>
+      {% endif %}
     </div>
   </div>
   <div class="row">
     <div class="col">
       <form method="GET" action="{% url 'add_button' %}">
-        <button type="submit" class="btn btn-info btn-block btn-lg btn-rounded waves-effect">Add Item
+        <button type="submit" class="btn btn-info btn-block btn-lg btn-rounded waves-effect">Add Items
           Manually</button>
       </form>
     </div>
@@ -31,35 +36,9 @@
     </div>
   </div>
   <div class="row">
-    <div class="col">
-      <!-- Add Item Form -->
-      <!-- <form class="navbar-form navbar-left" role="search" method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Item Name" style="width: 65%;float:left"
-            name="item_name">
-          <button type="submit" name="add_item" value="ADD ITEM" class="btn btn-info btn-sm btn-rounded waves-effect"
-            style="width:30%;float:right" aria-pressed="true">Add Item</button>
-          <br>
-        </div>
-      </form> -->
-      <!-- Add Friend Form -->
-      <!-- <form class="navbar-form navbar-left" role="search" method="POST">
-        {% csrf_token %}
-        <div class="form-group" style="padding-bottom: 40px;">
-          <input type="text" class="form-control" placeholder="Friend's Email" style="width: 65%;float:left"
-            name="friend_email">
-          <button type="submit" name="add_friend_by_email" value="ADD Friend"
-            class="btn btn-info btn-sm btn-rounded waves-effect" style="width:30%;float:right;" aria-pressed="true">Add
-            Friend</button>
-        </div>
-      </form> -->
-    </div>
-  </div>
-  <div class="row">
-    <div class="col card map border-light mb-3"
-      style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;"">
-      <h3 class=" text-center">Items in Refrigerator </h3>
+    <hr size="6" width="100%" color="black">
+    <div class="col align-self-center">
+      <h5>Fridge Contents:</h5>
     </div>
   </div>
   <div class="row">

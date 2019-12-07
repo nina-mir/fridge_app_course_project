@@ -1,14 +1,21 @@
 {% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
-<link rel="stylesheet" href="{% static '/css/fridge_card.css' %}">
-<link rel="stylesheet" href="{% static '/css/receipt_upload.css' %}">
 <script>
     (function (e, t, n) { var r = e.querySelectorAll("html")[0]; r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2") })(document, window, 0);
 </script>
 
 <div class="container-fluid">
-    <div class="row d-flex justify-content-center">
-        <h1 class="text-center">Upload Your Receipt</h1>
+    <div class="row d-flex justify-content-center" style="height: 93px;">
+        <div class="col card map border-light mb-3"
+            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
+            <h3 class="text-center">Receipt Upload</h3>
+            <p class="text-center">{{current_fridge.name}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col align-self-center">
+            <h5>Discovered Items From Receipt:</h5>
+        </div>
     </div>
     <div class="row d-flex justify-content-center">
         {% if not text %}
@@ -23,7 +30,7 @@
         {% endif %}
     </div>
     <!-- Form for list of found items -->
-    <form method="POST">
+    <form method="POST" id="receipt_selection">
         {% csrf_token %}
         <div class="container" style="color:initial;">
             {% for each in  text %}
@@ -43,16 +50,19 @@
             <div style="padding-top: 4px;"></div>
             {% endfor %}
         </div>
-        <!-- Submit button-->
-        {% if text %}
-        <div class="row row d-flex align-items-end justify-content-center" style="padding-top: 10px;">
-            <div style="width: 70%;">
-                <button class="btn btn-primary btn-lg btn-block" name="validate_items" type="submit"
-                    value="selection">Next</button>
-            </div>
-        </div>
-        {% endif %}
     </form>
 </div>
+
+{% if text %}
+<!-- Submit Button-->
+<div class="container fixed-bottom" style="padding-bottom: 60px; z-index: 0;">
+    <div class="row">
+        <div class="col" style="text-align: center;">
+            <button form="receipt_selection" class="btn btn-lg btn-info" name="validate_items" type="submit"
+                style="width: 75%;" value="selection">Confirm Items</button>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% endblock %}

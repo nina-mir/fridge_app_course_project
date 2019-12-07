@@ -1,39 +1,17 @@
 {% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
 <link rel="stylesheet" href="{% static '/css/favorite_icon.css' %}">
+<link rel="stylesheet" href="{% static '/css/recipe_landing.css' %}">
 
-<style>
-    .all-center {
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);
-        text-align: center
-    }
-
-    .vertical-center {
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);
-    }
-</style>
 <div class="container">
-    <div class="row">
+    <div class="row d-flex justify-content-center" style="height: 93px;">
         <div class="col card map border-light mb-3"
-            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
-            <h3 class="text-center">Recipes</h3>
+            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
+            <h3 class="text-center">Recipe Search</h3>
+            <p class="text-center">{{current_fridge.name}}</p>
         </div>
     </div>
-    <div class="row">
-        <div class="col card map border-light mb-3" style="outline: none; border-radius: 10px;">
-            <span class="label label-info"
-                style="margin:1%;text-align:center;color:white;background-color: #01B9F5;border-radius: 10px;padding:5px">{{current_fridge.name}}</span>
-        </div>
-    </div>
-    <h3> Discovered Recipes:</h3>
+    <h5>Discovered Recipes:</h5>
     <div class="row">
         <div class="col">
             <!-- Display Found Recipes for Selected Grocery Items -->
@@ -52,10 +30,9 @@
                         <div class="col-2">
                             <form method="POST">
                                 {% csrf_token %}
-                                <!-- <input class="like-button all-center" name="recipe_save"
-                                    accept="image/*" onchange="this.form.submit()" /> -->
-
-                                <button name="saved_recipe" value="{{ each.title }}, {{ each.source_url }}, {{ each.image_url }}"" class="like-button all-center" onchange="this.form.submit()"></button>
+                                <button name="saved_recipe"
+                                    value="{{ each.title }}, {{ each.source_url }}, {{ each.image_url }}"
+                                    class="like-button all-center" onchange="this.form.submit()"></button>
                             </form>
                         </div>
                     </div>
