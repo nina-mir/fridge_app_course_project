@@ -41,33 +41,36 @@
                             placeholder="Item Name" aria-describedby="button-addon1"
                             class="form-control border-0 bg-light">
                         <div class="input-group-append">
-                            <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i
+                            <button id="button-addon1" type="submit" class="btn btn-link text-info"><i
                                     class="fa fa-search"></i></button>
                         </div>
                     </div>
                 </div>
                 <hr size="3" width="100%" color="gray">
+                <h5>Current Fridge Contents:</h5>
             </div>
             <!-- List of Items -->
             <form id="ingredient_form" action="{% url 'recipe_search_results' %}" method="GET">
                 <ul class="container-fluid" id="ingredient_ul">
                     {% for each in inventory_items %}
-                    <li id="{{each.name}}" style="padding-top: 4px;">
+                    {% if each.eff_end_ts.date > current_date.date %}
+                    <li id="{{each.item.name}}" style="padding-top: 4px;">
                         <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
                             <label>
                                 <div class="card-body">
                                     <input type="checkbox" style="float:right;" name="ingredient"
-                                        value="{{ each.name }}" id="heading">
+                                        value="{{ each.item.name }}" id="heading">
                                     <h5 class="card-title">
-                                        {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
+                                        {% with image_static='/item_icons/'|add:each.item.name|add:'.png' %}
                                         <img src="{% static image_static %}" alt="tracked_item" style="height: 30px;">
                                         {% endwith %}
-                                        {{ each.name }}
+                                        {{ each.item.name }}
                                     </h5>
                                 </div>
                             </label>
                         </div>
                     </li>
+                    {% endif %}
                     {% endfor %}
                 </ul>
 

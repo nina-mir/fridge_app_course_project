@@ -47,16 +47,15 @@ def recipe_search(request):
     # Variables
     fridge_manager = fridge_import.fridge_manager(request)
     current_fridge = fridge_manager.getCurrentFridge()
-    inventory_items = None
-    fridge_con_items = fridge_manager.getCurrentFridgeContentByExpiration()
-    tmp_list = list(set([x.item.id for x in fridge_con_items]))
-    inventory_items = Item.objects.filter(id__in=tmp_list)
+    inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
+    current_time = datetime.now()
 
     if not inventory_items:
         inventory_items = Item.objects.all()
 
     context = {'current_fridge': current_fridge,
-               'inventory_items': inventory_items}
+               'inventory_items': inventory_items,
+               'current_date': current_time}
     return render(request, 'recipes/recipe_search.html', context)
 
 
