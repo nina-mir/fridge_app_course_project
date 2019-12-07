@@ -8,7 +8,7 @@
     <title>Fridge App 9000</title>
     <meta name="description" content="An application for all your fridge needs.">
     <meta name="viewport" content="width=device-width initial-scale=1">
-    <link rel="shortcut icon" type="image/png" href="{% static '/logo_icons/favicon.ico' %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% static '/logo_icons/favicon.ico' %}" />
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -89,26 +89,21 @@
             <ul class="list-unstyled components">
                 {% with all_fridges|length as count%}
                 {% if count %}
-
-
                 <li>
-                    <a href="#" data-toggle="modal" data-target="#select_fridge_modal">Select Fridge</a>
+                    <a href="#" data-toggle="modal" data-target="#select_fridge_modal">Select Current Fridge</a>
                 </li>
                 <li>
                     <a href="#" data-toggle="modal" data-target="#primary_fridge_modal">Set Primary Fridge</a>
                 </li>
                 {% endif %}
-
                 {% if ownership %}
-
                 {% if current_fridge_friends %}
                 <li>
-                    <a href="#" data-toggle="modal" data-target="#removeFriend">Remove Friend</a>
+                    <a href="#" data-toggle="modal" data-target="#removeFriend">Remove Friends</a>
                 </li>
                 {% endif %}
-                
                 <li>
-                    <a href="#" data-toggle="modal" data-target="#addFriend">Add Friend</a>
+                    <a href="#" data-toggle="modal" data-target="#addFriend">Add Friends</a>
                 </li>
 
                 <li>
@@ -120,11 +115,9 @@
                 </li>
                 {% endif %}
                 <li>
-                    <a href="#" data-toggle="modal" data-target="#add">Add Fridge</a>
+                    <a href="#" data-toggle="modal" data-target="#add">Create Fridge</a>
                 </li>
-
                 {% endwith %}
-
             </ul>
         </div>
     </div>
@@ -176,6 +169,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <p style="text-align: center;">The currently displayed fridge.</p>
                         <form id="select_fridge_form" method="POST">
                             {% csrf_token %}
                             <ul class="container-fluid" id="select_fridge_ul">
@@ -203,8 +197,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button class="btn btn-primary" name="select_fridge_submit" type="submit" value="selection"
-                            form="select_fridge_form">Save Selection</button>
+                        <button class="btn btn-info" name="select_fridge_submit" type="submit" value="selection"
+                            form="select_fridge_form">Select Fridge</button>
                     </div>
                 </div>
             </div>
@@ -221,6 +215,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <p style="text-align: center;">The primary fridge is loaded on log in.</p>
                         <form id="primary_fridge_form" method="POST">
                             {% csrf_token %}
                             <ul class="container-fluid" id="primary_fridge_ul">
@@ -247,8 +242,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button class="btn btn-primary" name="primary_fridge_submit" type="submit" value="selection"
-                            form="primary_fridge_form">Save Selection</button>
+                        <button class="btn btn-info" name="primary_fridge_submit" type="submit" value="selection"
+                            form="primary_fridge_form">Select Primary</button>
                     </div>
                 </div>
             </div>
@@ -287,60 +282,61 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button class="btn btn-primary" name="friend_selected_submit" type="submit" value="selection"
+                        <button class="btn btn-info" name="friend_selected_submit" type="submit" value="selection"
                             form="edit_friend_form">Remove Friend</button>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Add Friends -->
-        <div class="modal fade" id="addFriend" tabindex="-1" role="dialog" aria-labelledby="addFriend" aria-hidden="true">
+        <div class="modal fade" id="addFriend" tabindex="-1" role="dialog" aria-labelledby="addFriend"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Friends</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <div class="modal-body">
-                        <form method="POST">
+                        <h5 style="text-align: center;">You can add a friend to this fridge via email:</h5>
+                        <form id="addFriend_fridge_form" method="POST">
                             {% csrf_token %}
-                            <div class="form-group">
-                                <input type="text" name="friend_email" class="form-control" placeholder="Friend's email"
-                                    style="width: 65%;float:left">
-                                <button type="submit" name="add_friend_by_email" value="ADD FRIEND"
-                                    class="btn btn-primary btn-block" style="width:30%;float:right"
-                                    aria-pressed="true">Add Friend</button>
-                            </div>
+                            <input type="text" name="fridge_name" class="form-control" placeholder="Friend's Email"
+                                style="width: 100%;">
                         </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-info" name="add_friend_by_email" type="submit" value="ADD FRIEND"
+                            form="addFriend_fridge_form">Confirm</button>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Rename Refrigerator -->
-        {% comment %} <div class="modal fade" id="rename" tabindex="-1" role="dialog" aria-labelledby="rename" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <form method="POST">
-                            {% csrf_token %}
-                            <label for="fridge_name">Enter name: </label>
-                            <input id="fridge_name" type="text" name="rename_fridge">
-                            <input type="submit">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div> {% endcomment %}
         <div class="modal fade" id="rename" tabindex="-1" role="dialog" aria-labelledby="rename" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Rename Fridge</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <div class="modal-body">
-                        <form method="POST">
+                        <h5 style="text-align: center;">Change name of '{{current_fridge.name}}' to:</h5>
+                        <form id="rename_fridge_form" method="POST">
                             {% csrf_token %}
-                            <div class="form-group">
-                                <input type="text" name="fridge_name" class="form-control" placeholder="Fridge name"
-                                    style="width: 65%;float:left">
-                                <button type="submit" name="rename_fridge" value="RENAME FRIDGE"
-                                    class="btn btn-primary btn-block" style="width:30%;float:right"
-                                    aria-pressed="true">Rename</button>
-                            </div>
+                            <input type="text" name="fridge_name" class="form-control" placeholder="New Fridge Name"
+                                style="width: 100%;">
                         </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-info" name="rename_fridge" type="submit" value="RENAME FRIDGE"
+                            form="rename_fridge_form">Confirm</button>
                     </div>
                 </div>
             </div>
@@ -349,37 +345,51 @@
         <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete Fridge</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <div class="modal-body">
-                        <form method="POST" action="">
+                        <form id="delete_fridge_form" method="POST">
                             {% csrf_token %}
                             <div class="form-group">
-                                <p class="form-control" placeholder="Fridge Name" style="width: 65%;float:left">Are
-                                    you
-                                    sure about that?</p>
-                                <button type="submit" name="delete_fridge" value="DELETE FRIDGE"
-                                    class="btn btn-primary btn-block" style="width:30%;float:right"
-                                    aria-pressed="true">Sure</button>
+                                <h5 style="text-align: center;">Are you sure you want to delete:</h5>
+                                <h4 style="text-align: center;">{{current_fridge.name}}</h4>
                             </div>
                         </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-danger" name="delete_fridge" type="submit" value="DELETE FRIDGE"
+                            form="delete_fridge_form">Confirm Deletion</button>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Add Fridge -->
+        <!-- Create Fridge -->
         <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Create Fridge</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <div class="modal-body">
-                        <form method="POST">
+                        <h5 style="text-align: center;">Enter the name of your new fridge:</h5>
+                        <form id="create_fridge_form" method="POST">
                             {% csrf_token %}
-                            <div class="form-group">
-                                <input type="text" name="fridge_name" class="form-control" placeholder="Fridge Name"
-                                    style="width: 65%;float:left">
-                                <button type="submit" name="add_fridge" value="ADD FRIDGE"
-                                    class="btn btn-primary btn-block" style="width:30%;float:right"
-                                    aria-pressed="true">Create Fridge</button>
-                            </div>
+                            <input type="text" name="fridge_name" class="form-control" placeholder="New Fridge Name"
+                                style="width: 100%;">
                         </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-info" name="add_fridge" type="submit" value="ADD FRIDGE"
+                            form="create_fridge_form">Create</button>
                     </div>
                 </div>
             </div>
