@@ -35,8 +35,9 @@
       </form>
     </div>
   </div>
+  <hr size="6" width="100%" color="black">
+  {% if inventory_items %}
   <div class="row">
-    <hr size="6" width="100%" color="black">
     <div class="col align-self-center">
       <h5 style="text-align: center;">Fridge Contents</h5>
     </div>
@@ -182,6 +183,13 @@
       {% endwith %} {% endwith %}
       {% endfor %}
       <!-- End Accordion -->
+      {% else %}
+      <div class="row">
+        <div class="col align-self-center">
+          <h5 style="text-align: center;">Fridge Empty</h5>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
 </div>

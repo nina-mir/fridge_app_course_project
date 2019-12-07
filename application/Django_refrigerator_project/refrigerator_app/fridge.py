@@ -28,9 +28,9 @@ def initialCurrentFridge(request):
     # Set current fridge as first fridge found with user's id
     else:
         try:
-            if user.ownedfridges[0]:
+            try:
                 request.session['current_fridge_id'] = user.ownedfridges[0]
-            elif user.friendedfridges[0]:
+            except:
                 request.session['current_fridge_id'] = user.friendedfridges[0]
         except:
             print("FRIDGE INITIALIZER: No Fridges found.")
@@ -60,12 +60,12 @@ class fridge_manager():
         # Set current fridge as first fridge found with user's id
         else:
             try:
-                if user.ownedfridges[0]:
+                try:
                     self.session['current_fridge_id'] = user.ownedfridges[0]
-                elif user.friendedfridges[0]:
+                except:
                     self.session['current_fridge_id'] = user.friendedfridges[0]
             except:
-                print("FRIDGE REFINDER: No Fridges found.")
+                print("FRIDGE INITIALIZER: No Fridges found.")
 
     def getCurrentFridge(self):
         if(self.session['current_fridge_id']):
