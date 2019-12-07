@@ -246,6 +246,7 @@ def fridge(request):
     current_fridge_friends = None
     ownership = None
     owner_name = None
+    current_user = User.objects.filter(id=request.session['current_user_id']).get()
     # Get current fridge data
     try:
         all_fridges = fridge_manager.get_all_the_related_fridges()
@@ -337,7 +338,7 @@ def fridge(request):
     context = {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'primary_fridge_id': primary_fridge_id,
                'current_date': current_time, 'week_time': week_time,
                'all_fridges': all_fridges, 'current_fridge_friends': current_fridge_friends,
-               'ownership': ownership, 'owner_name': owner_name}
+               'ownership': ownership, 'owner_name': owner_name, 'current_user': current_user}
     return render(request, 'refrigerator_project/fridge.html', context)
 
 

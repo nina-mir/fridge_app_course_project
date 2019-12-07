@@ -215,29 +215,24 @@ class fridge_manager():
 
     def get_all_the_related_fridges(self):
         # Get all the fridges a user has access to
-        owned = {}
-        friends = {}
+        user_fridges = []
         temp = User.objects.filter(id=self.session['current_user_id']).get()
-        Owndfridge_id = temp.ownedfridges
-        Friendfridge_id = temp.friendedfridges
-
+        Owndfridge_id_list = temp.ownedfridges
+        Friendfridge_id_list = temp.friendedfridges
         try:
-            for i in Owndfridge_id:
+            for i in Owndfridge_id_list:
                 fridge_obj = Fridge.objects.filter(id=i).get()
                 if(fridge_obj.eff_end_ts > datetime.now()):
-                    owned[fridge_obj.name] = fridge_obj.id
+                    user_fridges.append(fridge_obj)
         except:
             print('FRIDGE MANAGER: Error Getting Owned Fridges.')
         try:
-            for i in Friendfridge_id:
+            for i in Friendfridge_id_list:
                 fridge_obj = Fridge.objects.filter(id=i).get()
                 if(fridge_obj.eff_end_ts > datetime.now()):
-                    friends[fridge_obj.name] = fridge_obj.id
+                    user_fridges.append(fridge_obj)
         except:
             print('FRIDGE MANAGER: Error Getting friended fridges.')
-
-        user_fridges = owned.copy()
-        user_fridges.update(friends)
         return user_fridges
 
     class fridge_Object:

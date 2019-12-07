@@ -87,8 +87,7 @@
             </div>
 
             <ul class="list-unstyled components">
-                {% with all_fridges|length as count%}
-                {% if count %}
+                {% if all_fridges %}
                 <li>
                     <a href="#" data-toggle="modal" data-target="#select_fridge_modal">Select Current Fridge</a>
                 </li>
@@ -117,7 +116,6 @@
                 <li>
                     <a href="#" data-toggle="modal" data-target="#add">Create Fridge</a>
                 </li>
-                {% endwith %}
             </ul>
         </div>
     </div>
@@ -169,31 +167,60 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p style="text-align: center;">The currently displayed fridge.</p>
                         <form id="select_fridge_form" method="POST">
                             {% csrf_token %}
                             <ul class="container-fluid" id="select_fridge_ul">
-                                {% for key, value in all_fridges.items %}
+                                <p style="margin: 0;">Owned Refrigerators:</p>
+                                {% for each in all_fridges %}
+                                {% if each.owner_id == current_user.id %}
                                 <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
                                     <label>
                                         <div class="card-body">
-                                            {% if current_fridge.id == value %}
+                                            {% if current_fridge.id == each.id %}
                                             <label class="containerRadio">
-                                                <input type="radio" name="select_fridge_selected" value="{{ value }}"
-                                                    checked> {{ key }}
+                                                <input type="radio" name="select_fridge_selected" value="{{ each.id }}"
+                                                    checked> {{ each.name }}
                                                 <span class="checkmarkRadio"></span>
-                                            </label> {% else %}
+                                            </label>
+                                            {% else %}
                                             <label class="containerRadio">
-                                                <input type="radio" name="select_fridge_selected" value="{{ value }}">
-                                                {{ key }}
+                                                <input type="radio" name="select_fridge_selected" value="{{ each.id }}">
+                                                {{ each.name }}
                                                 <span class="checkmarkRadio"></span>
-                                            </label> {% endif %}
+                                            </label>
+                                            {% endif %}
                                         </div>
                                     </label>
                                 </div>
+                                {% endif %}
+                                {% endfor %}
+                                <p style="padding-top: 10px; margin: 0;">Friends' Refrigerators:</p>
+                                {% for each in all_fridges %}
+                                {% if each.owner_id != current_user.id %}
+                                <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
+                                    <label>
+                                        <div class="card-body">
+                                            {% if current_fridge.id == each.id %}
+                                            <label class="containerRadio">
+                                                <input type="radio" name="select_fridge_selected" value="{{ each.id }}"
+                                                    checked> {{ each.name }}
+                                                <span class="checkmarkRadio"></span>
+                                            </label>
+                                            {% else %}
+                                            <label class="containerRadio">
+                                                <input type="radio" name="select_fridge_selected" value="{{ each.id }}">
+                                                {{ each.name }}
+                                                <span class="checkmarkRadio"></span>
+                                            </label>
+                                            {% endif %}
+                                        </div>
+                                    </label>
+                                </div>
+                                {% endif %}
                                 {% endfor %}
                             </ul>
                         </form>
+                        <p style="text-align: center; margin: 0; color: gray;" class="small">The currently displayed fridge.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -215,30 +242,62 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p style="text-align: center;">The primary fridge is loaded on log in.</p>
                         <form id="primary_fridge_form" method="POST">
                             {% csrf_token %}
                             <ul class="container-fluid" id="primary_fridge_ul">
-                                {% for key, value in all_fridges.items %}
+                                <p style="margin: 0;">Owned Refrigerators:</p>
+                                {% for each in all_fridges %}
+                                {% if each.owner_id == current_user.id %}
                                 <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
                                     <label>
                                         <div class="card-body">
-                                            {% if primary_fridge_id == value %}
-                                            <input type="radio" style="float:right;" name="primary_fridge_selected"
-                                                value="{{ value }}" id="heading" checked>
+                                            {% if primary_fridge_id == each.id %}
+                                            <label class="containerRadio">
+                                                <input type="radio" name="primary_fridge_selected" value="{{ each.id }}"
+                                                    checked> {{ each.name }}
+                                                <span class="checkmarkRadio"></span>
+                                            </label>
                                             {% else %}
-                                            <input type="radio" style="float:right;" name="primary_fridge_selected"
-                                                value="{{ value }}" id="heading">
+                                            <label class="containerRadio">
+                                                <input type="radio" name="primary_fridge_selected"
+                                                    value="{{ each.id }}">
+                                                {{ each.name }}
+                                                <span class="checkmarkRadio"></span>
+                                            </label>
                                             {% endif %}
-                                            <h5 class="card-title">
-                                                {{ key }}
-                                            </h5>
                                         </div>
                                     </label>
                                 </div>
+                                {% endif %}
+                                {% endfor %}
+                                <p style="margin: 0; padding-top: 10px;">Friends' Refrigerators:</p>
+                                {% for each in all_fridges %}
+                                {% if each.owner_id != current_user.id %}
+                                <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
+                                    <label>
+                                        <div class="card-body">
+                                            {% if primary_fridge_id == each.id %}
+                                            <label class="containerRadio">
+                                                <input type="radio" name="primary_fridge_selected" value="{{ each.id }}"
+                                                    checked> {{ each.name }}
+                                                <span class="checkmarkRadio"></span>
+                                            </label>
+                                            {% else %}
+                                            <label class="containerRadio">
+                                                <input type="radio" name="primary_fridge_selected"
+                                                    value="{{ each.id }}">
+                                                {{ each.name }}
+                                                <span class="checkmarkRadio"></span>
+                                            </label>
+                                            {% endif %}
+                                        </div>
+                                    </label>
+                                </div>
+                                {% endif %}
                                 {% endfor %}
                             </ul>
                         </form>
+                        <p style="text-align: center; margin: 0; color: gray;" class="small">The primary fridge is loaded on log in.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
