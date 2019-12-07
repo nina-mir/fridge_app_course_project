@@ -299,11 +299,11 @@ def fridge(request):
             print('FRIDGE VIEW: Error deleting fridge')
     # Adding Friends
     if request.method == 'POST' and request.POST.get('add_friend_by_email'):
-        try:
-            fridge_manager.addFriend(request.POST.get('friend_email'))
-            return redirect('/fridge/')
-        except:
-            print('FRIDGE VIEW: Error adding friend')
+        # try:
+        fridge_manager.addFriend(request.POST.get('friend_email'))
+        return redirect('/fridge/')
+        # except:
+        #     print('FRIDGE VIEW: Error adding friend')
     # Deleting items via trash icon
     if request.method == 'POST' and request.POST.get('delete_item'):
         try:
