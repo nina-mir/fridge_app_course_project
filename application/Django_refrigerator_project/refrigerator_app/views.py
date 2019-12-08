@@ -21,7 +21,6 @@ from users.models import User
 
 from datetime import datetime
 from datetime import timedelta
-# for using @login_required decorator on top of a function
 
 
 def home(request):
@@ -251,7 +250,6 @@ def fridge(request):
     owner_name = None
     current_user = User.objects.filter(
         id=request.session['current_user_id']).get()
-
     # Get current fridge data
     current_fridge = fridge_manager.getCurrentFridge()
     try:
@@ -261,11 +259,9 @@ def fridge(request):
         expired = inventory_items_sorted['expired']
         expiring = inventory_items_sorted['expiring']
         fresh = inventory_items_sorted['fresh']
-        # current_fridge = fridge_manager.getCurrentFridge()
         current_fridge_friends = fridge_manager.getCurrentFridgeFriendsUsername()
         ownership = fridge_manager.is_owner()
     except:
-        # fridge_manager.initialCurrentFridge(request)
         print('FRIDGE VIEW: Error getting fridge data.')
     # Get Fridge owner
     try:
@@ -347,7 +343,7 @@ def fridge(request):
                 fridge_manager.remove_friend(each)
             return redirect('/fridge/')
         except:
-            print('Error deleting friend from the list')
+            print('FRIDGE VIEW: Error deleting friend from fridge.')
     context = {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'primary_fridge_id': primary_fridge_id,
                'current_date': current_time, 'week_time': week_time,
                'all_fridges': all_fridges, 'current_fridge_friends': current_fridge_friends,
