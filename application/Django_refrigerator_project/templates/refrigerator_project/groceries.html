@@ -143,23 +143,20 @@
                         {% for each in all_items %}
                         <li id="{{each.name}}" style="padding-top: 4px;">
                             <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
-                                <label>
-                                    <div class="card-body">
-                                        {% if each.name in tracked_items %}
-                                        <input type="checkbox" style="float:right;" name="tracked_items"
-                                            value="{{ each.name }}" id="heading" checked>
-                                        {% else %}
-                                        <input type="checkbox" style="float:right;" name="tracked_items"
-                                            value="{{ each.name }}" id="heading">
-                                        {% endif %}
-                                        <h5 class="card-title">
-                                            {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
-                                            <img src="{% static image_static %}" alt="tracked_item"
-                                                style="height: 30px;">
-                                            {% endwith %}
-                                            {{ each.name }}
-                                        </h5>
-                                    </div>
+                                <label class="card-body">
+                                    {% if each.name in tracked_items %}
+                                    <input type="checkbox" style="float:right;" name="tracked_items"
+                                        value="{{ each.name }}" id="heading" checked>
+                                    {% else %}
+                                    <input type="checkbox" style="float:right;" name="tracked_items"
+                                        value="{{ each.name }}" id="heading">
+                                    {% endif %}
+                                    <h5 class="card-title">
+                                        {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
+                                        <img src="{% static image_static %}" alt="tracked_item" style="height: 30px;">
+                                        {% endwith %}
+                                        {{ each.name }}
+                                    </h5>
                                 </label>
                             </div>
                         </li>
@@ -212,18 +209,15 @@
                         {% for each in all_items %}
                         <li id="{{each.name}}" style="padding-top: 4px;">
                             <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
-                                <label>
-                                    <div class="card-body">
-                                        <input type="checkbox" style="float:right;" name="grocery_items"
-                                            value="{{ each.name }}" id="heading">
-                                        <h5 class="card-title">
-                                            {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
-                                            <img src="{% static image_static %}" alt="grocery_item"
-                                                style="height: 30px;">
-                                            {% endwith %}
-                                            {{ each.name }}
-                                        </h5>
-                                    </div>
+                                <label class="card-body">
+                                    <input type="checkbox" style="float:right;" name="grocery_items"
+                                        value="{{ each.name }}" id="heading">
+                                    <h5 class="card-title">
+                                        {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
+                                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                                        {% endwith %}
+                                        {{ each.name }}
+                                    </h5>
                                 </label>
                             </div>
                         </li>

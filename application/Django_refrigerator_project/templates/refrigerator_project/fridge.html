@@ -45,15 +45,14 @@
   <div class="row">
     <div class="col">
       <!-- Expired Items (RED) -->
-      <div style="padding-left: 15px;">
+      <div style="padding-left: 15px; padding-right: 15px" >
         <p style="text-align: left; margin: 0; color: black;">Expired:</p>
-        <hr style="text-align:left; margin: 0;" size="1" width="30%" color="gray">
+        <hr style="text-align:left; margin: 0;" size="1" width="100%" color="gray">
+        {% if not expired %}<p class="small" style="color: gray;">none</p>{% endif %}
       </div>
-      {% for each in inventory_items %}
+      {% for each in expired %}
       {% with item_unique_id=each.id %}
       {% with image_static='/item_icons/'|add:each.item.name|add:'.png' %}
-      {% if each.eff_end_ts.date > current_date.date %}
-      {% if each.expirationdate.date < current_date.date %}
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card" style="background-color: #ff8080; color: black;">
           <h5 class="card-header">
@@ -87,19 +86,17 @@
           </div>
         </div>
       </div>
-      {% endif %} {% endif %}
       {% endwith %} {% endwith %}
       {% endfor %}
       <!-- Expiring Soon Items (Yellow) -->
-      <div style="padding-left: 15px; padding-top: 10px;">
+      <div style="padding-left: 15px; padding-top: 10px; padding-right: 15px;">
         <p style="text-align: left; margin: 0; color: black;">Expiring Soon:</p>
-        <hr style="text-align:left; margin: 0;" size="1" width="30%" color="gray">
+        <hr style="text-align:left; margin: 0;" size="1" width="100%" color="gray">
+        {% if not expiring %}<p class="small" style="color: gray;">none</p>{% endif %}
       </div>
-      {% for each in inventory_items %}
+      {% for each in expiring %}
       {% with item_unique_id=each.id %}
       {% with image_static='/item_icons/'|add:each.item.name|add:'.png' %}
-      {% if each.eff_end_ts.date > current_date.date %}
-      {% if each.expirationdate.date <= week_time.date and each.expirationdate.date >= current_date.date %}
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card" style="background-color: #ffba92; color: black;">
           <h5 class="card-header">
@@ -133,19 +130,17 @@
           </div>
         </div>
       </div>
-      {% endif %} {% endif %}
       {% endwith %} {% endwith %}
       {% endfor %}
       <!-- Fresh Items (GREEN) -->
-      <div style="padding-left: 15px; padding-top: 10px;">
+      <div style="padding-left: 15px; padding-top: 10px; padding-right: 15px">
         <p style="text-align: left; margin: 0; color: black;">Fresh:</p>
-        <hr style="text-align:left; margin: 0;" size="1" width="30%" color="gray">
+        <hr style="text-align:left; margin: 0;" size="1" width="100%" color="gray">
+        {% if not fresh %}<p class="small" style="color: gray;">none</p>{% endif %}
       </div>
-      {% for each in inventory_items %}
+      {% for each in fresh %}
       {% with item_unique_id=each.id %}
       {% with image_static='/item_icons/'|add:each.item.name|add:'.png' %}
-      {% if each.eff_end_ts.date > current_date.date %}
-      {% if each.expirationdate.date > week_time.date %}
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card" style="background-color: #c6f1d6; color: black;">
           <h5 class="card-header">
@@ -179,7 +174,6 @@
           </div>
         </div>
       </div>
-      {% endif %} {% endif %}
       {% endwith %} {% endwith %}
       {% endfor %}
       <!-- End Accordion -->

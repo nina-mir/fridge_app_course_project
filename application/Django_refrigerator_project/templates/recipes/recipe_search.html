@@ -53,7 +53,6 @@
             <form id="ingredient_form" action="{% url 'recipe_search_results' %}" method="GET">
                 <ul class="container-fluid" id="ingredient_ul">
                     {% for each in inventory_items %}
-                    {% if each.eff_end_ts.date > current_date.date %}
                     <li id="{{each.item.name}}" style="padding-top: 4px;">
                         <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
                             <label>
@@ -70,7 +69,6 @@
                             </label>
                         </div>
                     </li>
-                    {% endif %}
                     {% endfor %}
                 </ul>
             </form>

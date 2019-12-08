@@ -51,7 +51,7 @@ def recipe_search(request):
 
     # Return all items if user has no fridge
     try:
-        inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
+        inventory_items = fridge_manager.getCurrentFridgeContent()
     except:
         inventory_items = Item.objects.all()
 
