@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{% static '/css/fridge_card.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static '/css/modal_checkbox.css' %}">
 
+
 <!-- Show when user has a fridge -->
 {% if current_fridge %}
 <div class="container" id="content">
@@ -67,20 +68,20 @@
             <div class="card-body">
               <div class="row">
                 <div class="col">
-                  <p class="small" style="text-align: center;">calories</p>
-                  <h5 style="text-align: center;">{{each.item.calories}}</h5>
+                  <p class="small" style="text-align: center; margin-bottom: 10px;">CALORIES</p>
+                  <h3 style="text-align: center;">{{each.item.calories}}</h5>
                 </div>
                 <div class="col">
-                  <p class="small" style="text-align: center;">added</p>
-                  <h5 style="text-align: center;">{{each.creation_date.date}}</h5>
+                  <p class="small" style="text-align: center; margin-bottom: 10px;">ADDED</p>
+                  <h3 style="text-align: center;">{{each.creation_date.date}}</h5>
                 </div>
                 <div class="col">
-                  <p class="small" style="text-align: center;">expires</p>
-                  <h5 style="text-align: center;">{{each.expirationdate.date}}</h5>
+                  <p class="small" style="text-align: center; margin-bottom: 10px;">EXPIRES</p>
+                  <h3 style="text-align: center;">{{each.expirationdate.date}}</h5>
                 </div>
                 <div class="col">
-                  <p class="small" style="text-align: center;">owner</p>
-                  <h5 style="text-align: center;">{{each.addedby.username}}</h5>
+                  <p class="small" style="text-align: center; margin-bottom: 10px;">OWNER</p>
+                  <h3 style="text-align: center;">{{each.addedby.username}}</h5>
                 </div>
               </div>
               <div class="row">
@@ -120,19 +121,19 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col">
-                    <p class="small" style="text-align: center;">calories</p>
+                    <p class="small" style="text-align: center;">CALORIES</p>
                     <h5 style="text-align: center;">{{each.item.calories}}</h5>
                   </div>
                   <div class="col">
-                    <p class="small" style="text-align: center;">added</p>
+                    <p class="small" style="text-align: center;">ADDED</p>
                     <h5 style="text-align: center;">{{each.creation_date.date}}</h5>
                   </div>
                   <div class="col">
-                    <p class="small" style="text-align: center;">expires</p>
+                    <p class="small" style="text-align: center;">EXPIRES</p>
                     <h5 style="text-align: center;">{{each.expirationdate.date}}</h5>
                   </div>
                   <div class="col">
-                    <p class="small" style="text-align: center;">owner</p>
+                    <p class="small" style="text-align: center;">OWNER</p>
                     <h5 style="text-align: center;">{{each.addedby.username}}</h5>
                   </div>
                 </div>
@@ -174,19 +175,19 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col">
-                    <p class="small" style="text-align: center;">calories</p>
+                    <p class="small" style="text-align: center;">CALORIES</p>
                     <h5 style="text-align: center;">{{each.item.calories}}</h5>
                   </div>
                   <div class="col">
-                    <p class="small" style="text-align: center;">added</p>
+                    <p class="small" style="text-align: center;">ADDED</p>
                     <h5 style="text-align: center;">{{each.creation_date.date}}</h5>
                   </div>
-                  <div class="col">
-                    <p class="small" style="text-align: center;">expires</p>
+                  <div class="col" >
+                    <p class="small" style="text-align: center;">EXPIRES</p>
                     <h5 style="text-align: center;">{{each.expirationdate.date}}</h5>
                   </div>
                   <div class="col">
-                    <p class="small" style="text-align: center;">owner</p>
+                    <p class="small" style="text-align: center;">OWNER</p>
                     <h5 style="text-align: center;">{{each.addedby.username}}</h5>
                   </div>
                 </div>
