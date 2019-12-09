@@ -147,7 +147,7 @@ STATICFILES_DIRS = (
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-
+MEDIA_URL = '/media/'
 
 LOGIN_REDIRECT_URL = 'fridge_init'   #need this to redirect to home from login
 LOGIN_URL = 'login'         #need this for login

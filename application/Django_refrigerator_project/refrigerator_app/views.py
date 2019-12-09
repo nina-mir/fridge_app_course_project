@@ -361,7 +361,6 @@ def receipt_upload(request):
     except:
         pass
     # Display found receipt content upon image receipt
-    print(request.POST)
     if request.method == 'POST':
         try:
             if request.FILES['receipt_image']:
