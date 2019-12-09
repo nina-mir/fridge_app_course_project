@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{% static '/css/fridge_card.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static '/css/modal_checkbox.css' %}">
 
+
 <!-- Show when user has a fridge -->
 {% if current_fridge %}
 <div class="container" id="content">
@@ -20,14 +21,14 @@
   <div class="row">
     <div class="col">
       <form method="GET" action="{% url 'add_button' %}">
-        <button type="submit" class="btn btn-info btn-block btn-lg btn-rounded waves-effect">Add Items
+        <button type="submit" class="btn btn-info btn-block btn-rounded waves-effect">Add Items
           Manually</button>
       </form>
     </div>
     <div class="col">
       <form method="post" enctype="multipart/form-data" action="{% url 'add_button' %}">
         {% csrf_token %}
-        <label for="file" class="btn btn-info btn-block btn-lg btn-rounded waves-effect" aria-pressed="true">
+        <label for="file" class="btn btn-info btn-block btn-rounded waves-effect" aria-pressed="true">
           Upload Receipt
         </label>
         <input type="file" name="receipt_image" id="file" class="inputfile inputfile-5" accept="image/*"
@@ -35,160 +36,214 @@
       </form>
     </div>
   </div>
+  <hr size="6" width="100%" color="black">
+  {% if inventory_items %}
   <div class="row">
-    <hr size="6" width="100%" color="black">
     <div class="col align-self-center">
-      <h5>Fridge Contents:</h5>
+      <h5 style="text-align: center;">Fridge Contents</h5>
     </div>
   </div>
   <div class="row">
     <div class="col">
-      <!-- Accordion for Collapsible Elements -->
-      {% for each in inventory_items %}
+      <!-- Expired Items (RED) -->
+      <div style="padding-left: 15px; padding-right: 15px">
+        <p style="text-align: left; margin: 0; color: black;">Expired:</p>
+        <hr style="text-align:left; margin: 0;" size="1" width="100%" color="gray">
+        {% if not expired %}<p class="small" style="color: gray;">none</p>{% endif %}
+      </div>
+      {% for each in expired %}
       {% with item_unique_id=each.id %}
       {% with image_static='/item_icons/'|add:each.item.name|add:'.png' %}
-      {% if each.eff_end_ts.date > current_date.date %}
-      {% if each.expirationdate.date < current_date.date %}
-      <!-- Expired Items (RED) -->
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card" style="background-color: #ff8080; color: black;">
           <h5 class="card-header">
             <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
               aria-controls="collapse-example" id="heading" class="collapsed d-block">
               <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-              {{ each.item.name }} <span style="color:white;">*Expired*</span>
+              {{ each.item.name }}
               <i class="fa fa-chevron-left pull-right float-right"></i>
             </a>
           </h5>
           <div id="collapse-{{item_unique_id}}" class="collapse" aria-labelledby="heading-example">
-            <div class="row">
-              <div class="column trash-center">
-                <ul style="list-style-type:none; padding-top: 10px;">
-                  <li>Calories: {{ each.item.calories }} </li>
-                  <li>Added on: {{ each.creation_date.date }} </li>
-                  <li>Expiration: {{ each.expirationdate.date }} </li>
-                  <li>Added By: {{ each.addedby.username }} </li>
-                </ul>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <p class="small" style="text-align: center; margin-bottom: 5px;">CALORIES</p>
+                  <h4 style="text-align: center;">{{each.item.calories}}</h4>
+                </div>
+                <div class="col">
+                  <p class="small" style="text-align: center; margin-bottom: 5px;">ADDED</p>
+                  <h4 style="text-align: center;">{{each.creation_date.date}}</h4>
+                </div>
+                <div class="col">
+                  <p class="small" style="text-align: center; margin-bottom: 5px;">EXPIRES</p>
+                  <h4 style="text-align: center;">{{each.expirationdate.date}}</h4>
+                </div>
+                <div class="col">
+                  <p class="small" style="text-align: center; margin-bottom: 5px;">OWNER</p>
+                  <h4 style="text-align: center;">{{each.addedby.username}}</h4>
+                </div>
               </div>
-              <div class="column trash-center ">
-                <ul>
+              <div class="row">
+                <div class="col" style="text-align: center;">
                   <form method="POST">
                     {% csrf_token %}
                     <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
                       value={{item_unique_id}}></button>
                   </form>
-                </ul>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      {% elif each.expirationdate.date > week_time.date %}
-      <!-- Good Items (GREEN) -->
-      <div id="accordion" role="tablist" aria-multiselectable="true">
-        <div class="card" style="background-color: #c6f1d6; color: black;">
-          <h5 class="card-header">
-            <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
-              aria-controls="collapse-example" id="heading" class="collapsed d-block">
-              <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-              {{ each.item.name }}
-              <i class="fa fa-chevron-left pull-right float-right"></i>
-            </a>
-          </h5>
-          <div id="collapse-{{item_unique_id}}" class="collapse" aria-labelledby="heading-example">
-            <div class="row">
-              <div class="column trash-center">
-                <ul style="list-style-type:none; padding-top: 10px;">
-                  <li>Calories: {{ each.item.calories }} </li>
-                  <li>Added on: {{ each.creation_date.date }} </li>
-                  <li>Expiration: {{ each.expirationdate.date }} </li>
-                  <li>Added By: {{ each.addedby.username }} </li>
-                </ul>
-              </div>
-              <div class="column trash-center ">
-                <ul>
-                  <form method="post">
-                    {% csrf_token %}
-                    <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
-                      value={{item_unique_id}}></button>
-                  </form>
-                </ul>
+        {% endwith %} {% endwith %}
+        {% endfor %}
+        <!-- Expiring Soon Items (Yellow) -->
+        <div style="padding-left: 15px; padding-top: 10px; padding-right: 15px;">
+          <p style="text-align: left; margin: 0; color: black;">Expiring Soon:</p>
+          <hr style="text-align:left; margin: 0;" size="1" width="100%" color="gray">
+          {% if not expiring %}<p class="small" style="color: gray;">none</p>{% endif %}
+        </div>
+        {% for each in expiring %}
+        {% with item_unique_id=each.id %}
+        {% with image_static='/item_icons/'|add:each.item.name|add:'.png' %}
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="card" style="background-color: #ffba92; color: black;">
+            <h5 class="card-header">
+              <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion"
+                aria-expanded="true" aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                {{ each.item.name }}
+                <i class="fa fa-chevron-left pull-right float-right"></i>
+              </a>
+            </h5>
+            <div id="collapse-{{item_unique_id}}" class="collapse" aria-labelledby="heading-example">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+                    <p class="small" style="text-align: center; margin-bottom: 5px;">CALORIES</p>
+                    <h4 style="text-align: center;">{{each.item.calories}}</h4>
+                  </div>
+                  <div class="col">
+                    <p class="small" style="text-align: center; margin-bottom: 5px;">ADDED</p>
+                    <h4 style="text-align: center;">{{each.creation_date.date}}</h4>
+                  </div>
+                  <div class="col">
+                    <p class="small" style="text-align: center; margin-bottom: 5px;">EXPIRES</p>
+                    <h4 style="text-align: center;">{{each.expirationdate.date}}</h4>
+                  </div>
+                  <div class="col">
+                    <p class="small" style="text-align: center; margin-bottom: 5px;">OWNER</p>
+                    <h4 style="text-align: center;">{{each.addedby.username}}</h4>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col" style="text-align: center;">
+                    <form method="POST">
+                      {% csrf_token %}
+                      <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
+                        value={{item_unique_id}}></button>
+                    </form>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      {% else %}
-      <!-- Near Expiration Items (YELLOW) -->
-      <div id="accordion" role="tablist" aria-multiselectable="true">
-        <div class="card" style="background-color: #ffba92; color: black;">
-          <h5 class="card-header">
-            <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion" aria-expanded="true"
-              aria-controls="collapse-example" id="heading" class="collapsed d-block">
-              <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
-              {{ each.item.name }}
-              <i class="fa fa-chevron-left pull-right float-right"></i>
-            </a>
-          </h5>
-          <div id="collapse-{{item_unique_id}}" class="collapse" aria-labelledby="heading-example">
-            <div class="row">
-              <div class="column trash-center">
-                <ul style="list-style-type:none; padding-top: 10px;">
-                  <li>Calories: {{ each.item.calories }} </li>
-                  <li>Added on: {{ each.creation_date.date }} </li>
-                  <li>Expiration: {{ each.expirationdate.date }} </li>
-                  <li>Added By: {{ each.addedby.username }} </li>
-                </ul>
-              </div>
-              <div class="column trash-center ">
-                <ul>
-                  <form method="post">
-                    {% csrf_token %}
-                    <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
-                      value={{item_unique_id}}></button>
-                  </form>
-                </ul>
+        {% endwith %} {% endwith %}
+        {% endfor %}
+        <!-- Fresh Items (GREEN) -->
+        <div style="padding-left: 15px; padding-top: 10px; padding-right: 15px">
+          <p style="text-align: left; margin: 0; color: black;">Fresh:</p>
+          <hr style="text-align:left; margin: 0;" size="1" width="100%" color="gray">
+          {% if not fresh %}<p class="small" style="color: gray;">none</p>{% endif %}
+        </div>
+        {% for each in fresh %}
+        {% with item_unique_id=each.id %}
+        {% with image_static='/item_icons/'|add:each.item.name|add:'.png' %}
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="card" style="background-color: #c6f1d6; color: black;">
+            <h5 class="card-header">
+              <a data-toggle="collapse" href="#collapse-{{item_unique_id}}" data-parent="#accordion"
+                aria-expanded="true" aria-controls="collapse-example" id="heading" class="collapsed d-block">
+                <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                {{ each.item.name }}
+                <i class="fa fa-chevron-left pull-right float-right"></i>
+              </a>
+            </h5>
+            <div id="collapse-{{item_unique_id}}" class="collapse" aria-labelledby="heading-example">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+                    <p class="small" style="text-align: center; margin-bottom: 5px;">CALORIES</p>
+                    <h4 style="text-align: center;">{{each.item.calories}}</h4>
+                  </div>
+                  <div class="col">
+                    <p class="small" style="text-align: center; margin-bottom: 5px;">ADDED</p>
+                    <h4 style="text-align: center;">{{each.creation_date.date}}</h4>
+                  </div>
+                  <div class="col" >
+                    <p class="small" style="text-align: center; margin-bottom: 5px;">EXPIRES</p>
+                    <h4 style="text-align: center;">{{each.expirationdate.date}}</h4>
+                  </div>
+                  <div class="col">
+                    <p class="small" style="text-align: center; margin-bottom: 5px;">OWNER</p>
+                    <h4 style="text-align: center;">{{each.addedby.username}}</h4>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col" style="text-align: center;">
+                    <form method="POST">
+                      {% csrf_token %}
+                      <button class="far fa-trash-alt fa-lg btn" type="submit" name="delete_item"
+                        value={{item_unique_id}}></button>
+                    </form>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      {% endif %}
-      {% endif %}
-      {% endwith %}
-      {% endwith %}
-      {% endfor %}
-      <!-- End Accordion -->
-    </div>
-  </div>
-</div>
-{% else %}
-<!-- Show when user has no fridges -->
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <h1 style="text-align: center;"> You have no fridges.</h1>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <form method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-          <input type="text" name="fridge_name" class="form-control" placeholder="Fridge Name"
-            style="width: 65%;float:left">
-          <button type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-primary btn-block"
-            style="width:30%;float:right" aria-pressed="true">Create Fridge</button>
+        {% endwith %} {% endwith %}
+        {% endfor %}
+        <!-- End Accordion -->
+        {% else %}
+        <div class="row">
+          <div class="col align-self-center">
+            <h5 style="text-align: center;">Fridge Empty</h5>
+          </div>
         </div>
-      </form>
+        {% endif %}
+      </div>
     </div>
   </div>
-  <div class="row" style="padding-top: 30%;">
-    <div class="col">
-      <h5 style="text-align: center;">If you should have fridges displayed, please logout and log in again.</h5>
+  {% else %}
+  <!-- Show when user has no fridges -->
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1 style="text-align: center;"> You have no fridges.</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <input type="text" name="fridge_name" class="form-control" placeholder="Fridge Name"
+              style="width: 65%;float:left">
+            <button type="submit" name="add_fridge" value="ADD FRIDGE" class="btn btn-info btn-block"
+              style="width:30%;float:right" aria-pressed="true">Create Fridge</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 30%;">
+      <div class="col">
+        <h5 style="text-align: center;">If you should have fridges displayed, please logout and log in again.</h5>
+      </div>
     </div>
   </div>
-</div>
-{% endif %}
+  {% endif %}
 
-{% endblock %}
+  {% endblock %}

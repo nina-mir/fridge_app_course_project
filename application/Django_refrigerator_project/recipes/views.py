@@ -47,16 +47,17 @@ def recipe_search(request):
     # Variables
     fridge_manager = fridge_import.fridge_manager(request)
     current_fridge = fridge_manager.getCurrentFridge()
-    inventory_items = None
-    fridge_con_items = fridge_manager.getCurrentFridgeContentByExpiration()
-    tmp_list = list(set([x.item.id for x in fridge_con_items]))
-    inventory_items = Item.objects.filter(id__in=tmp_list)
+    current_time = datetime.now()
 
-    if not inventory_items:
+    # Return all items if user has no fridge
+    try:
+        inventory_items = fridge_manager.getCurrentFridgeContent()
+    except:
         inventory_items = Item.objects.all()
 
     context = {'current_fridge': current_fridge,
-               'inventory_items': inventory_items}
+               'inventory_items': inventory_items,
+               'current_date': current_time}
     return render(request, 'recipes/recipe_search.html', context)
 
 
@@ -112,32 +113,32 @@ def recipe_search_results(request):
 
 
 def food2fork_call(list):
-    # # Key 1 Attempt
-    # key = '6e81eadfd535b092815e395bcc38be11'
-    # paramsPost = {
-    #     'key': key,
-    #     'q': list,
-    #     'sort': 'r',
-    #     'page': '0'
-    # }
-    # responsePost = requests.post(
-    #     'https://www.food2fork.com/api/search', paramsPost)
+    # Key 1 Attempt
+    key = '6e81eadfd535b092815e395bcc38be11'
+    paramsPost = {
+        'key': key,
+        'q': list,
+        'sort': 'r',
+        'page': '0'
+    }
+    responsePost = requests.post(
+        'https://www.food2fork.com/api/search', paramsPost)
 
-    # # Key 2 Attempt
-    # if responsePost.text == '{"error": "limit"}':
-    #     key = '57604ca61ce33d68532bb9af7f0472f9'
-    #     paramsPost = {
-    #         'key': key,
-    #         'q': list,
-    #         'sort': 'r',
-    #         'page': '0'
-    #     }
-    #     responsePost = requests.post(
-    #         'https://www.food2fork.com/api/search', paramsPost)
+    # Key 2 Attempt
+    if responsePost.text == '{"error": "limit"}':
+        key = '57604ca61ce33d68532bb9af7f0472f9'
+        paramsPost = {
+            'key': key,
+            'q': list,
+            'sort': 'r',
+            'page': '0'
+        }
+        responsePost = requests.post(
+            'https://www.food2fork.com/api/search', paramsPost)
 
-    # if responsePost.status_code == 202:
-    #     print('FOOD2FORK: Data received.')
+    if responsePost.status_code == 202:
+        print('FOOD2FORK: Data received.')
 
-    fakePost = '{"count": 30, "recipes": [{"publisher": "Simply Recipes", "f2f_url": "http://food2fork.com/view/36482", "title": "How to Make Fruit Leather", "source_url": "http://www.simplyrecipes.com/recipes/how_to_make_fruit_leather/", "recipe_id": "36482", "image_url": "http://static.food2fork.com/fruitleather300x2001f9f84c4.jpg", "social_rank": 99.99999999999989, "publisher_url": "http://simplyrecipes.com"}, {"publisher": "Simply Recipes", "f2f_url": "http://food2fork.com/view/37128", "title": "Waldorf Salad", "source_url": "http://www.simplyrecipes.com/recipes/waldorf_salad/", "recipe_id": "37128", "image_url": "http://static.food2fork.com/waldorfsalad300x20000f287fd.jpg", "social_rank": 99.9999667957302, "publisher_url": "http://simplyrecipes.com"}, {"publisher": "All Recipes", "f2f_url": "http://food2fork.com/view/15768", "title": "Groovy Green Smoothie", "source_url": "http://allrecipes.com/Recipe/Groovy-Green-Smoothie/Detail.aspx", "recipe_id": "15768", "image_url": "http://static.food2fork.com/4511209622.jpg", "social_rank": 99.97384730336904, "publisher_url": "http://allrecipes.com"}]}'
-    # return json.loads(responsePost.text)
-    return json.loads(fakePost)
+    # fakePost = '{"count": 30, "recipes": [{"publisher": "Simply Recipes", "f2f_url": "http://food2fork.com/view/36482", "title": "How to Make Fruit Leather", "source_url": "http://www.simplyrecipes.com/recipes/how_to_make_fruit_leather/", "recipe_id": "36482", "image_url": "http://static.food2fork.com/fruitleather300x2001f9f84c4.jpg", "social_rank": 99.99999999999989, "publisher_url": "http://simplyrecipes.com"}, {"publisher": "Simply Recipes", "f2f_url": "http://food2fork.com/view/37128", "title": "Waldorf Salad", "source_url": "http://www.simplyrecipes.com/recipes/waldorf_salad/", "recipe_id": "37128", "image_url": "http://static.food2fork.com/waldorfsalad300x20000f287fd.jpg", "social_rank": 99.9999667957302, "publisher_url": "http://simplyrecipes.com"}, {"publisher": "All Recipes", "f2f_url": "http://food2fork.com/view/15768", "title": "Groovy Green Smoothie", "source_url": "http://allrecipes.com/Recipe/Groovy-Green-Smoothie/Detail.aspx", "recipe_id": "15768", "image_url": "http://static.food2fork.com/4511209622.jpg", "social_rank": 99.97384730336904, "publisher_url": "http://allrecipes.com"}]}'
+    return json.loads(responsePost.text)
+    # return json.loads(fakePost)

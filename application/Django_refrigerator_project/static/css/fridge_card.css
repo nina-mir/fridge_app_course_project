@@ -8,6 +8,9 @@ a{
 a:hover{
   color: black;
 }
+p{
+  font-family: 'Open Sans', sans-serif;
+}
 /* a:active, when link clicked, color change flashes 
 
 a:active {
@@ -42,6 +45,10 @@ a:active {
   float: left;
   width: 50%;
 }
+.row{
+  flex-direction: row;
+}
+
 
 .row:after {
   content: "";
@@ -63,4 +70,6 @@ a:active {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
+  margin-top: 3px;
 }

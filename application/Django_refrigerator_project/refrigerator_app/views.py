@@ -21,7 +21,6 @@ from users.models import User
 
 from datetime import datetime
 from datetime import timedelta
-# for using @login_required decorator on top of a function
 
 
 def home(request):
@@ -203,7 +202,6 @@ def profile(request):
 
 @login_required
 def add_button(request):
-    print("reached add button area")
     try:
         if request.method == 'POST' and request.FILES['receipt_image']:
             return receipt_upload(request)
@@ -239,6 +237,9 @@ def fridge(request):
     # Variables
     fridge_manager = fridge_import.fridge_manager(request)
     inventory_items = None
+    expired = None
+    expiring = None
+    fresh = None
     current_fridge = None
     primary_fridge_id = None
     current_time = datetime.now()
@@ -247,19 +248,25 @@ def fridge(request):
     current_fridge_friends = None
     ownership = None
     owner_name = None
+    current_user = User.objects.filter(
+        id=request.session['current_user_id']).get()
     # Get current fridge data
+    current_fridge = fridge_manager.getCurrentFridge()
     try:
         all_fridges = fridge_manager.get_all_the_related_fridges()
-        inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
-        current_fridge = fridge_manager.getCurrentFridge()
+        inventory_items = fridge_manager.getCurrentFridgeContent()
+        inventory_items_sorted = fridge_manager.getCurrentFridgeContentByExpiration()
+        expired = inventory_items_sorted['expired']
+        expiring = inventory_items_sorted['expiring']
+        fresh = inventory_items_sorted['fresh']
         current_fridge_friends = fridge_manager.getCurrentFridgeFriendsUsername()
         ownership = fridge_manager.is_owner()
     except:
-        # fridge_manager.initialCurrentFridge(request)
         print('FRIDGE VIEW: Error getting fridge data.')
     # Get Fridge owner
     try:
-        owner_name = User.objects.filter(id=current_fridge.owner_id).get().username
+        owner_name = User.objects.filter(
+            id=current_fridge.owner_id).get().username
     except:
         pass
     # Select a fridge to view
@@ -309,6 +316,7 @@ def fridge(request):
     if request.method == 'POST' and request.POST.get('delete_item'):
         try:
             fridge_manager.deleteItem(request.POST.get('delete_item'))
+            return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error deleting item from fridge.')
     # Adding items via text field
@@ -327,18 +335,19 @@ def fridge(request):
             return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error Renaming Fridge')
-    # Deleting Selected Friend from fridge
+    # Deleting Friends from fridge
     if request.method == 'POST' and request.POST.get('friend_selected_submit'):
         try:
-            username = request.POST.get('select_friend_delete')
-            fridge_manager.remove_friend(username)
+            list = request.POST.getlist('select_friend_delete', default=None)
+            for each in list:
+                fridge_manager.remove_friend(each)
             return redirect('/fridge/')
         except:
-            print('Error deleting friend from the list')
+            print('FRIDGE VIEW: Error deleting friend from fridge.')
     context = {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'primary_fridge_id': primary_fridge_id,
                'current_date': current_time, 'week_time': week_time,
                'all_fridges': all_fridges, 'current_fridge_friends': current_fridge_friends,
-               'ownership': ownership, 'owner_name': owner_name}
+               'ownership': ownership, 'owner_name': owner_name, 'current_user': current_user, 'expiring': expiring, 'expired': expired, 'fresh': fresh}
     return render(request, 'refrigerator_project/fridge.html', context)
 
 
