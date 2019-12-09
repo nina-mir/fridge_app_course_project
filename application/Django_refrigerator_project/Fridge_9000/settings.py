@@ -146,6 +146,8 @@ STATICFILES_DIRS = (
     '/Django_refrigerator_project/static',
 )
 
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
 
 LOGIN_REDIRECT_URL = 'fridge_init'   #need this to redirect to home from login
 LOGIN_URL = 'login'         #need this for login

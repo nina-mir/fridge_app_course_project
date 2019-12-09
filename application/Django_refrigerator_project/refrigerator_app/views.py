@@ -393,7 +393,8 @@ def detect_text(filename):
     from google.cloud import vision
     import io
     client = vision.ImageAnnotatorClient()
-    with io.open(filename, 'rb') as image_file:
+    filepath = 'media/' + filename
+    with io.open(filepath, 'rb') as image_file:
         content = image_file.read()
     image = vision.types.Image(content=content)
     response = client.text_detection(image=image)
