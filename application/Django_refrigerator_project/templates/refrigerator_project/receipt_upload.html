@@ -4,7 +4,7 @@
     (function (e, t, n) { var r = e.querySelectorAll("html")[0]; r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2") })(document, window, 0);
 </script>
 
-<div class="container-fluid">
+<div class="container">
     <div class="row d-flex justify-content-center" style="height: 93px;">
         <div class="col card map border-light mb-3"
             style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
@@ -12,28 +12,39 @@
             <p class="text-center">{{current_fridge.name}}</p>
         </div>
     </div>
+    {% if text %}
     <div class="row">
         <div class="col align-self-center">
             <h5>Discovered Items From Receipt:</h5>
         </div>
     </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <h4 style="text-align: center;">No items were discovered on your receipt.</h4>
+        </div>
+    </div>
     <div class="row d-flex justify-content-center">
-        {% if not text %}
-        <form method="POST" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" action="{% url 'add_button' %}">
             {% csrf_token %}
-            <label for="file">
-                <a class="nav-link icon" style="margin-top: -5px;"><i class="far fa-plus-square fa-2x"></i></a>
+            <label for="file" class="btn btn-info btn-block btn-rounded waves-effect" aria-pressed="true">
+                Upload Another Receipt
             </label>
             <input type="file" name="receipt_image" id="file" class="inputfile inputfile-5" accept="image/*"
                 onchange="this.form.submit()" />
         </form>
-        {% endif %}
     </div>
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <a href="{% url 'fridge' %}">Return to Fridge</a>
+        </div>
+    </div>
+    {% endif %}
     <!-- Form for list of found items -->
     <form method="POST" id="receipt_selection">
         {% csrf_token %}
         <div class="container" style="color:initial;">
-            {% for each in  text %}
+            {% for each in text %}
             <div class="card" style="height: 4rem; color: black; background-color: #f2f2f2;">
                 <label>
                     <div class="card-body">

@@ -33,7 +33,7 @@ urlpatterns = [
     path('recipes/search', recipe_views.recipe_search_results,
          name='recipe_search_results'),
     path('profile/', views.profile, name='profile'),
-    path('upload/', views.receipt_upload, name='upload'),
+    # path('upload/', views.receipt_upload, name='upload'),
     path('auth/register/', user_views.register, name='register'),
     path('auth/login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('auth/logout/', auth_views.LogoutView.as_view(
