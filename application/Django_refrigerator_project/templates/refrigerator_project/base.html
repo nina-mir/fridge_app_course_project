@@ -473,10 +473,13 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col">
+                                {% if not current_fridge %}
+                                <p class="text-center" style="color: #ff8080;">No Refrigerators. Please Add One.</p>
+                                {% endif %}
                                 <form method="GET" action="{% url 'add_button' %}">
-                                    <button type="submit"
-                                        class="btn btn-info btn-block btn-lg btn-rounded waves-effect">Add Items
-                                        Manually</button>
+                                    <button type="submit" class="btn btn-info btn-block btn-lg btn-rounded waves-effect"
+                                        {% if not current_fridge %} disabled {% endif %}>Add
+                                        Items</button>
                                 </form>
                             </div>
                         </div>
@@ -484,7 +487,9 @@
                             <div class="col">
                                 <form method="post" enctype="multipart/form-data" action="{% url 'add_button' %}">
                                     {% csrf_token %}
-                                    <label for="file" class="btn btn-info btn-block btn-lg btn-rounded waves-effect"
+                                    <label {% if not current_fridge %}
+                                        class="btn btn-info btn-block btn-lg btn-rounded disabled" {% else %} for="file"
+                                        class="btn btn-info btn-block btn-lg btn-rounded waves-effect" {% endif %}
                                         aria-pressed="true">
                                         Upload Receipt
                                     </label>

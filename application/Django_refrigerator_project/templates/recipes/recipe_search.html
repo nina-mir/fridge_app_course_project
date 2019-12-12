@@ -23,7 +23,11 @@
         <div class="col card map border-light mb-3"
             style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
             <h3 class="text-center">Recipe Search</h3>
+            {% if current_fridge %}
             <p class="text-center">{{current_fridge.name}}</p>
+            {% else %}
+            <p class="text-center" style="color: #ff8080;">No Refrigerators. Please Add One.</p>
+            {% endif %}
         </div>
     </div>
     <div class="row" style="padding-top: 84px;">

@@ -23,7 +23,11 @@
         <div class="col card map border-light mb-3"
             style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
             <h3 class="text-center">Grocery List</h3>
+            {% if current_fridge %}
             <p class="text-center">{{current_fridge.name}}</p>
+            {% else %}
+            <p class="text-center" style="color: #ff8080;">No Refrigerators. Please Add One.</p>
+            {% endif %}
         </div>
     </div>
     <div class="row">
@@ -32,9 +36,10 @@
         </div>
         <div class="col align-self-center">
             <div class="float-right">
-                <a data-toggle="modal" data-target="#tracked_items_modal"
-                    class="btn btn-info btn-sm btn-rounded waves-effect" role="button" aria-pressed="true">Tracked
-                    Items</a>
+                <button data-toggle="modal" data-target="#tracked_items_modal"
+                    class="btn btn-info btn-sm btn-rounded waves-effect" role="button" aria-pressed="true"
+                    {% if not current_fridge %} disabled {% endif %}>Tracked
+                    Items</button>
             </div>
         </div>
     </div>
@@ -71,8 +76,9 @@
         </div>
         <div class="col align-self-center">
             <div class="float-right">
-                <a data-toggle="modal" data-target="#addItem" class="btn btn-info btn-sm btn-rounded waves-effect"
-                    role="button" aria-pressed="true">Add Items</a>
+                <button data-toggle="modal" data-target="#addItem" class="btn btn-info btn-sm btn-rounded waves-effect"
+                    role="button" aria-pressed="true" {% if not current_fridge %} disabled {% endif %}>Add
+                    Items</button>
             </div>
         </div>
     </div>
