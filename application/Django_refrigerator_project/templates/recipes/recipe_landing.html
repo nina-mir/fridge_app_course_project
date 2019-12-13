@@ -16,8 +16,8 @@
     </div>
     <div class="row row d-flex justify-content-center" style="padding-top: 10px;">
         <div style="width: 70%;">
-            <button href="{% url 'recipe_search' %}" class="btn btn-info btn-lg btn-block" role="button"
-                aria-pressed="true" {% if not current_fridge %} disabled {% endif %}>Find Recipes</button>
+            <a {% if current_fridge %} href="{% url 'recipe_search' %}" class="btn btn-info btn-lg btn-block" {% else %} class="btn btn-info btn-lg btn-block disabled"  {% endif %}  class="btn btn-info btn-lg btn-block" role="button"
+                aria-pressed="true">Find Recipes</a>
         </div>
     </div>
 
