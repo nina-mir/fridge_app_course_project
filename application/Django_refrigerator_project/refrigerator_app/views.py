@@ -358,6 +358,7 @@ def receipt_upload(request):
     # Get Current Fridge Data
     try:
         current_fridge = fridge_manager.getCurrentFridge()
+        context['current_fridge'] = current_fridge
     except:
         pass
     # Display found receipt content upon image receipt
@@ -369,7 +370,7 @@ def receipt_upload(request):
                 filename = fs.save(myfile.name, myfile)
                 text = detect_text(filename)[1]
                 # text = {'coffee'} #used for testing
-                context = {'text': text, 'current_fridge': current_fridge}
+                context['text'] = text
         except:
             print('RECEIPT VIEW: No items detected.')
     # Get list of selected found items and save it to db
