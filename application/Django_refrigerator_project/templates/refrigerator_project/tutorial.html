@@ -1,15 +1,37 @@
 {% load static %}
+<div class="modal fade" id="tutorial0" tabindex="-1" role="dialog" aria-labelledby="tutorial0" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
+            <!-- Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Select Tracked Items</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-info" name="tracked_selector_submit" type="submit" value="selection"
+                    form="tracked_selector">Save Selection</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="tutorial" tabindex="-1" role="dialog" aria-labelledby="tutorial" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
             <div class="modal-header">
                 <h4 class="modal-title">Tutorial 1/5</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
                 <h5 style="text-align: center;">Welcome to the Fridge App 9000</h5>
                 <p class="small" style="text-align: center;">Here you can manage your refrigerator and pantry
                 </p>
@@ -17,28 +39,9 @@
                 <p class="small" style="text-align: center;">This is your toolbar</p>
                 <div class="row">
                     <div class="col">
-                        <nav class="navbar justify-content-center navbar-dark bg-dark">
-                            <ul class="navbar-nav" style="height: 35px;">
-                                <li class="nav-item">
-                                    <a><img src="{% static '/logo_icons/fridge_gray.png' %}"
-                                            style="height: 30px; vertical-align: middle;" title="Refrigerator"
-                                            alt="Refrigerator"></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link icon"><i class="fas fa-shopping-cart fa-lg"></i></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link icon" style="margin-top: -5px;"><i
-                                            class="far fa-plus-square fa-2x"></i></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link icon"><i class="fas fa-scroll fa-lg"></i></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link icon"><i class="fas fa-user fa-lg"></i></a>
-                                </li>
-                            </ul>
-                        </nav>
+                        <img src="{% static '/tutorial_images/toolbar.png' %}"
+                            style="width: 100%; vertical-align: middle; text-align: center;" title="sidebar"
+                            alt="sidebar">
                     </div>
                 </div>
                 <div class="row" style="padding-top: 5px;">
@@ -93,15 +96,15 @@
 </div>
 
 <div class="modal fade" id="tutorial2" tabindex="-1" role="dialog" aria-labelledby="tutorial2" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
             <div class="modal-header">
                 <h4 class="modal-title">Tutorial 2/5</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
                 <div class="row">
                     <div class="col">
                         <h5 style="text-align: center;">The Fridge Sidebar</h5>
@@ -135,15 +138,15 @@
 </div>
 
 <div class="modal fade" id="tutorial3" tabindex="-1" role="dialog" aria-labelledby="tutorial3" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
             <div class="modal-header">
                 <h4 class="modal-title">Tutorial 3/5</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
                 <div class="row">
                     <div class="col">
                         <h5 style="text-align: center;">Refrigerators</h5>
@@ -173,15 +176,15 @@
 </div>
 
 <div class="modal fade" id="tutorial4" tabindex="-1" role="dialog" aria-labelledby="tutorial4" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
             <div class="modal-header">
                 <h4 class="modal-title">Tutorial 4/5</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
                 <div class="row">
                     <div class="col">
                         <h5 style="text-align: center;">Groceries</h5>
@@ -209,15 +212,15 @@
 </div>
 
 <div class="modal fade" id="tutorial5" tabindex="-1" role="dialog" aria-labelledby="tutorial5" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
             <div class="modal-header">
                 <h4 class="modal-title">Tutorial 5/5</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
                 <div class="row">
                     <div class="col">
                         <h5 style="text-align: center;">Recipes</h5>
