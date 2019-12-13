@@ -82,11 +82,9 @@
             <div id="dismiss">
                 <i class="fas fa-arrow-left"></i>
             </div>
-
             <div class="sidebar-header">
                 <h3>{{ current_fridge.name }}</h3>
             </div>
-
             <ul class="list-unstyled components">
                 {% if all_fridges %}
                 <li>
@@ -118,6 +116,9 @@
                     <a href="#" data-toggle="modal" data-target="#add">Create Fridge</a>
                 </li>
             </ul>
+            <div class="d-flex justify-content-center" style="bottom: 5px;">
+                <a class="small" href="#" data-toggle="modal" data-target="#tutorial"> Need Help?</a>
+            </div>
         </div>
     </div>
     <!-- Footer (disabled on home and login pages) -->
@@ -501,6 +502,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- Tutorials -->
+        <div>
+            {% include "refrigerator_project/tutorial.html" %}
         </div>
     </div>
 
