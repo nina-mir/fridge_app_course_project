@@ -84,9 +84,11 @@ def recipe_search_results(request):
             for i in list:
                 ingredients = i + "," + ingredients
             recipe_data = food2fork_call(ingredients)
-            recipe_puppy(ingredients)
+            recipe_data = recipe_puppy(ingredients)
+            # context = {'current_fridge': current_fridge,
+            #            'recipes': recipe_data['recipes']}
             context = {'current_fridge': current_fridge,
-                       'recipes': recipe_data['recipes']}
+                       'recipes': recipe_data}
         except:
             print('RECIPE_RESULTS VIEW: Error getting food2fork data.')
 
@@ -124,15 +126,20 @@ def recipe_puppy(list):
 
     x = response.text
     x=json.loads(x)
-    print(type(x))
 
+    # x : data to be retunred
+    # to the calling function
+    
     x = x["results"]
+    
+    #debugging purposes -- tbd ASAP
     for item in x:
         z = item["title"]
         z = z.replace('  ', '')
         z = z.replace('\n', '') 
         print(z,'\n',item["href"])
-  
+
+    return(x)
 
 
 
