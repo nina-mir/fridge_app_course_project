@@ -464,22 +464,25 @@
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <!--div class="modal-header">
                         <h4 class="modal-title">Item Addition</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                    </div>
+                    </div-->
                     <div class="modal-body">
                         <div class="row">
                             <div class="col">
                                 {% if not current_fridge %}
-                                <p class="text-center" style="color: #ff8080;">No Refrigerators. Please Add One.</p>
+                                <p class="text-center" style="color: #ff8080;">
+                                    No Refrigerators. Please Add One.</p>
                                 {% endif %}
                                 <form method="GET" action="{% url 'add_button' %}">
-                                    <button type="submit" class="btn btn-info btn-block btn-lg btn-rounded waves-effect"
-                                        {% if not current_fridge %} disabled {% endif %}>Add
-                                        Items</button>
+                                    <button type="submit" class="btn btn-info btn-block 
+                                        btn-lg btn-rounded waves-effect"
+                                        {% if not current_fridge %} disabled {% endif %}>
+                                        Add Items
+                                    </button>
                                 </form>
                             </div>
                         </div>

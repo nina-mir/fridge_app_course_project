@@ -84,8 +84,11 @@ def recipe_search_results(request):
             for i in list:
                 ingredients = i + "," + ingredients
             recipe_data = food2fork_call(ingredients)
+            recipe_data = recipe_puppy(ingredients)
+            # context = {'current_fridge': current_fridge,
+            #            'recipes': recipe_data['recipes']}
             context = {'current_fridge': current_fridge,
-                       'recipes': recipe_data['recipes']}
+                       'recipes': recipe_data}
         except:
             print('RECIPE_RESULTS VIEW: Error getting food2fork data.')
 
@@ -110,6 +113,34 @@ def recipe_search_results(request):
         except:
             print('RECIPE_RESULTS VIEW: Error saving recipe.')
     return render(request, 'recipes/recipe_search_results.html', context)
+
+
+def recipe_puppy(list):   
+
+    url = "http://www.recipepuppy.com/api/"
+
+    querystring = {"i":list,"p":"30","format":"json"}
+
+
+    response = requests.request("GET", url,  params=querystring)
+
+    x = response.text
+    x=json.loads(x)
+
+    # x : data to be retunred
+    # to the calling function
+    
+    x = x["results"]
+    
+    #debugging purposes -- tbd ASAP
+    for item in x:
+        z = item["title"]
+        z = z.replace('  ', '')
+        z = z.replace('\n', '') 
+        print(z,'\n',item["href"])
+
+    return(x)
+
 
 
 def food2fork_call(list):
