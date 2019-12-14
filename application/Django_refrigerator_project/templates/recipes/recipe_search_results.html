@@ -34,7 +34,7 @@
                             <form method="POST">
                                 {% csrf_token %}
                                 <button name="saved_recipe"
-                                    value="{{ each.title }}, {{ each.source_url }}, {{ each.image_url }}"
+                                    value="{{ each.title }}, {{ each.href }}"
                                     class="like-button all-center" onchange="this.form.submit()"></button>
                             </form>
                         </div>

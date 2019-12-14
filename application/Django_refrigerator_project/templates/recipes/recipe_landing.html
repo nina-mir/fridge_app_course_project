@@ -1,7 +1,5 @@
 {% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
-<link rel="stylesheet" href="{% static '/css/recipe_landing.css' %}">
-
 <div class="container">
     <div class="row d-flex justify-content-center" style="height: 93px;">
         <div class="col card map border-light mb-3"
@@ -37,7 +35,7 @@
                         <div class="col">
                             <h5 class="card-text">
                                 <!--img src="{{ each.imageurl }}" alt="recipe_img" style="height: 50px;"-->
-                                <a class="vertical-center" style="padding-left: 20px;" href="{{ each.href }}">
+                                <a class="vertical-center" style="padding-left: 20px;" href="{{ each.sourceurl }}">
                                     {{ each.title }}
                                 </a>
                             </h5>

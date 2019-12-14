@@ -83,19 +83,19 @@ def recipe_search_results(request):
             ingredients = ""
             for i in list:
                 ingredients = i + "," + ingredients
-            recipe_data = food2fork_call(ingredients)
+            #recipe_data = food2fork_call(ingredients)
             recipe_data = recipe_puppy(ingredients)
             # context = {'current_fridge': current_fridge,
             #            'recipes': recipe_data['recipes']}
             context = {'current_fridge': current_fridge,
                        'recipes': recipe_data}
         except:
-            print('RECIPE_RESULTS VIEW: Error getting food2fork data.')
+            print('RECIPE_RESULTS VIEW: Error getting food API data.')
 
     # Save recipes
     if request.method == 'POST' and request.POST.get('saved_recipe'):
         try:
-            title, sourceurl, imageurl = request.POST.get(
+            title, href = request.POST.get(
                 "saved_recipe").split(",")
 
             recipe_save = Recipe(
@@ -104,8 +104,8 @@ def recipe_search_results(request):
                 user_id=request.session['current_user_id'],
                 fridge_id=request.session['current_fridge_id'],
                 title=title,
-                sourceurl=sourceurl,
-                imageurl=imageurl
+                sourceurl=href,
+                imageurl=""
             )
             recipe_save.save()
             return redirect('/recipes/')
