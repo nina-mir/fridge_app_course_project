@@ -53,7 +53,7 @@ def recipe_search(request):
     try:
         inventory_items = fridge_manager.getCurrentFridgeContent()
     except:
-        inventory_items = Item.objects.all()
+        inventory_items = fridge_manager.getAllItems()
 
     context = {'current_fridge': current_fridge,
                'inventory_items': inventory_items,

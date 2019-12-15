@@ -216,9 +216,9 @@ def add_button(request):
         print("No Selected items.")
 
     if request.method == 'GET':
-        inventory_items = Item.objects.all()
-        current_fridge = fridge_import.fridge_manager(
-            request).getCurrentFridge()
+        fridge_manager = fridge_import.fridge_manager(request)
+        inventory_items = fridge_manager.getAllItems()
+        current_fridge = fridge_manager.getCurrentFridge()
         return render(request, 'refrigerator_project/item_addition.html', {'all_items': inventory_items, 'current_fridge': current_fridge})
 
     # Selected items added to current fridge

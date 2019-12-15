@@ -228,7 +228,7 @@ class fridge_manager():
         self.session['current_fridge_id'] = fridge.id
 
     def getAllItems(self):
-        return Item.objects.all()
+        return Item.objects.all().order_by('name')
 
     def get_all_the_related_fridges(self):
         # Get all the fridges a user has access to
