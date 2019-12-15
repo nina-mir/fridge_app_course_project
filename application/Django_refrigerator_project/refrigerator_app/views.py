@@ -47,6 +47,7 @@ def groceries(request):
     # Get list of manual items
     try:
         manual_item_list = fridge_manager.getCurrentFridge().manually_added_list
+        manual_item_list.reverse()
     except:
         # fridge_manager.initialCurrentFridge(request)
         print('GROCERY VIEW: Error getting manual groceries.')

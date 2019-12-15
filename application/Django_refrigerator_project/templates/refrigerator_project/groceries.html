@@ -32,15 +32,22 @@
     </div>
     <div class="row">
         <div class="col align-self-center">
-            <h5>Missing Items:</h5>
+            <h5>Missing From Fridge:</h5>
         </div>
-        <div class="col align-self-center">
+        <div class="col-4 align-self-center">
             <div class="float-right">
                 <button data-toggle="modal" data-target="#tracked_items_modal"
                     class="btn btn-info btn-sm btn-rounded waves-effect" role="button" aria-pressed="true"
-                    {% if not current_fridge %} disabled {% endif %}>Tracked
+                    {% if not current_fridge %} disabled {% endif %}>Edit
                     Items</button>
             </div>
+        </div>
+    </div>
+    <div class="row" style="padding-top:5px;">
+        <div class="col">
+            <p style="text-align: center; color: darkgray; font-size: small;">Items here are automatically checked for
+                availability in your fridge. When they are not in the fridge they appear here.
+            </p>
         </div>
     </div>
     <div class="row">
@@ -62,17 +69,10 @@
             {% endif %}
         </div>
     </div>
-    <div class="row" style="padding-top:5px; height: 40px;">
-        <div class="col">
-            <p style="text-align: center; color: darkgray; font-size: small;">Tracked items not found in the current
-                fridge are displayed here as missing.
-            </p>
-        </div>
-    </div>
     <div class="row">
         <hr size="6" width="100%" color="black">
         <div class="col align-self-center">
-            <h5>Manual Items:</h5>
+            <h5>Grocery Items:</h5>
         </div>
         <div class="col align-self-center">
             <div class="float-right">
@@ -80,6 +80,12 @@
                     role="button" aria-pressed="true" {% if not current_fridge %} disabled {% endif %}>Add
                     Items</button>
             </div>
+        </div>
+    </div>
+    <div class="row" style="padding-top:5px;">
+        <div class="col">
+            <p style="text-align: center; color: darkgray; font-size: small;">Groceries you can keep track of yourself.
+            </p>
         </div>
     </div>
     <div class="row">
@@ -120,7 +126,7 @@
         <div class="modal-content" style="height: 95%;">
             <!-- Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Select Tracked Items</h4>
+                <h4 class="modal-title">Select Items to Track</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -186,7 +192,7 @@
         <div class="modal-content" style="height: 95%;">
             <!-- Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Select Manual Items</h4>
+                <h4 class="modal-title">Select Items to Add</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
