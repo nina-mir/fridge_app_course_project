@@ -21,7 +21,6 @@ from users.models import User
 
 from datetime import datetime
 from datetime import timedelta
-# for using @login_required decorator on top of a function
 
 
 def home(request):
@@ -30,30 +29,25 @@ def home(request):
 
 @login_required
 def groceries(request):
-    # Send user to receipt upload page upon "+" button click
-    try:
-        if request.method == 'POST' and request.FILES['receipt_image']:
-            return receipt_upload(request)
-    except:
-        pass
-    try:
-        if request.method == 'POST' and request.POST.get('validate_items') == 'selection':
-            receipt_upload(request)
-            return redirect('/fridge/')
-    except:
-        pass
-
     # Variables
     fridge_manager = fridge_import.fridge_manager(request)
+    current_fridge = None
     all_items = fridge_manager.getAllItems()
     match = None
     missing_items = None
     manual_item_list = None
     tracked_item_list = None
 
+    # Get Current Fridge Name
+    try:
+        current_fridge = fridge_manager.getCurrentFridge()
+    except:
+        pass
+
     # Get list of manual items
     try:
         manual_item_list = fridge_manager.getCurrentFridge().manually_added_list
+        manual_item_list.reverse()
     except:
         # fridge_manager.initialCurrentFridge(request)
         print('GROCERY VIEW: Error getting manual groceries.')
@@ -114,7 +108,16 @@ def groceries(request):
             return redirect('/groceries/')
         except:
             print('GROCERY VIEW: Error removing selected items to grocery list.')
-    return render(request, 'refrigerator_project/groceries.html', {'all_items': all_items, 'sr': match, 'missing_items': missing_items, 'tracked_items': tracked_item_list, 'manual_items': manual_item_list})
+
+    context = {
+        'all_items': all_items,
+        'sr': match,
+        'missing_items': missing_items,
+        'tracked_items': tracked_item_list,
+        'manual_items': manual_item_list,
+        'current_fridge': current_fridge}
+
+    return render(request, 'refrigerator_project/groceries.html', context)
 
 
 @login_required
@@ -200,7 +203,6 @@ def profile(request):
 
 @login_required
 def add_button(request):
-    print("reached add button area")
     try:
         if request.method == 'POST' and request.FILES['receipt_image']:
             return receipt_upload(request)
@@ -213,13 +215,13 @@ def add_button(request):
     except:
         print("No Selected items.")
 
-    
-
     if request.method == 'GET':
-        inventory_items = Item.objects.all()
-        return render(request, 'refrigerator_project/item_addition.html', {'all_items': inventory_items})
+        fridge_manager = fridge_import.fridge_manager(request)
+        inventory_items = fridge_manager.getAllItems()
+        current_fridge = fridge_manager.getCurrentFridge()
+        return render(request, 'refrigerator_project/item_addition.html', {'all_items': inventory_items, 'current_fridge': current_fridge})
 
-    # Selected items added to manual list
+    # Selected items added to current fridge
     if request.method == 'POST' and request.POST.get('grocery_selector_submit') == 'selection':
         try:
             fridge_manager = fridge_import.fridge_manager(request)
@@ -236,6 +238,9 @@ def fridge(request):
     # Variables
     fridge_manager = fridge_import.fridge_manager(request)
     inventory_items = None
+    expired = None
+    expiring = None
+    fresh = None
     current_fridge = None
     primary_fridge_id = None
     current_time = datetime.now()
@@ -243,16 +248,28 @@ def fridge(request):
     all_fridges = None
     current_fridge_friends = None
     ownership = None
+    owner_name = None
+    current_user = User.objects.filter(
+        id=request.session['current_user_id']).get()
     # Get current fridge data
+    current_fridge = fridge_manager.getCurrentFridge()
     try:
         all_fridges = fridge_manager.get_all_the_related_fridges()
-        inventory_items = fridge_manager.getCurrentFridgeContentByExpiration()
-        current_fridge = fridge_manager.getCurrentFridge()
+        inventory_items = fridge_manager.getCurrentFridgeContent()
+        inventory_items_sorted = fridge_manager.getCurrentFridgeContentByExpiration()
+        expired = inventory_items_sorted['expired']
+        expiring = inventory_items_sorted['expiring']
+        fresh = inventory_items_sorted['fresh']
         current_fridge_friends = fridge_manager.getCurrentFridgeFriendsUsername()
         ownership = fridge_manager.is_owner()
     except:
-        # fridge_manager.initialCurrentFridge(request)
         print('FRIDGE VIEW: Error getting fridge data.')
+    # Get Fridge owner
+    try:
+        owner_name = User.objects.filter(
+            id=current_fridge.owner_id).get().username
+    except:
+        pass
     # Select a fridge to view
     if request.method == 'POST' and request.POST.get('select_fridge_submit'):
         try:
@@ -293,12 +310,14 @@ def fridge(request):
     if request.method == 'POST' and request.POST.get('add_friend_by_email'):
         try:
             fridge_manager.addFriend(request.POST.get('friend_email'))
+            return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error adding friend')
     # Deleting items via trash icon
     if request.method == 'POST' and request.POST.get('delete_item'):
         try:
             fridge_manager.deleteItem(request.POST.get('delete_item'))
+            return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error deleting item from fridge.')
     # Adding items via text field
@@ -311,32 +330,39 @@ def fridge(request):
     # Rename current primary fridge name :: to be added checks on ownership.
     if request.method == 'POST' and request.POST.get('rename_fridge'):
         try:
+            request.POST.get('fridge_name')
             fridge_manager.renameCurrentFridge(
-                request.POST.get('rename_fridge'))
+                request.POST.get('fridge_name'))
             return redirect('/fridge/')
         except:
             print('FRIDGE VIEW: Error Renaming Fridge')
-    # Deleting Selected Friend from fridge
+    # Deleting Friends from fridge
     if request.method == 'POST' and request.POST.get('friend_selected_submit'):
         try:
-            username = request.POST.get('select_friend_delete')
-            fridge_manager.remove_friend(username)
+            list = request.POST.getlist('select_friend_delete', default=None)
+            for each in list:
+                fridge_manager.remove_friend(each)
             return redirect('/fridge/')
         except:
-            print('Error deleting friend from the list')
-    return render(request, 'refrigerator_project/fridge.html', {'inventory_items': inventory_items, 
-            'current_fridge': current_fridge, 'primary_fridge_id': primary_fridge_id,
-            'current_date': current_time, 'week_time': week_time, 
-            'all_fridges': all_fridges, 'current_fridge_friends': current_fridge_friends, 
-            'ownership' : ownership})
+            print('FRIDGE VIEW: Error deleting friend from fridge.')
+    context = {'inventory_items': inventory_items, 'current_fridge': current_fridge, 'primary_fridge_id': primary_fridge_id,
+               'current_date': current_time, 'week_time': week_time,
+               'all_fridges': all_fridges, 'current_fridge_friends': current_fridge_friends,
+               'ownership': ownership, 'owner_name': owner_name, 'current_user': current_user, 'expiring': expiring, 'expired': expired, 'fresh': fresh}
+    return render(request, 'refrigerator_project/fridge.html', context)
 
 
 @login_required
 def receipt_upload(request):
     fridge_manager = fridge_import.fridge_manager(request)
     context = {}
+    # Get Current Fridge Data
+    try:
+        current_fridge = fridge_manager.getCurrentFridge()
+        context['current_fridge'] = current_fridge
+    except:
+        pass
     # Display found receipt content upon image receipt
-    print(request.POST)
     if request.method == 'POST':
         try:
             if request.FILES['receipt_image']:
@@ -345,7 +371,7 @@ def receipt_upload(request):
                 filename = fs.save(myfile.name, myfile)
                 text = detect_text(filename)[1]
                 # text = {'coffee'} #used for testing
-                context = {'text': text}
+                context['text'] = text
         except:
             print('RECEIPT VIEW: No items detected.')
     # Get list of selected found items and save it to db
@@ -377,7 +403,8 @@ def detect_text(filename):
     from google.cloud import vision
     import io
     client = vision.ImageAnnotatorClient()
-    with io.open(filename, 'rb') as image_file:
+    filepath = 'media/' + filename
+    with io.open(filepath, 'rb') as image_file:
         content = image_file.read()
     image = vision.types.Image(content=content)
     response = client.text_detection(image=image)

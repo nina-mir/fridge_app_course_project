@@ -1,0 +1,251 @@
+{% load static %}
+<div class="modal fade" id="tutorial0" tabindex="-1" role="dialog" aria-labelledby="tutorial0" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
+            <!-- Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Select Tracked Items</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-info" name="tracked_selector_submit" type="submit" value="selection"
+                    form="tracked_selector">Save Selection</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tutorial" tabindex="-1" role="dialog" aria-labelledby="tutorial" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
+            <div class="modal-header">
+                <h4 class="modal-title">Tutorial 1/5</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
+                <h5 style="text-align: center;">Welcome to the Fridge App 9000</h5>
+                <p class="small" style="text-align: center;">Here you can manage your refrigerator and pantry
+                </p>
+                <hr size="6" width="100%" color="black">
+                <p class="small" style="text-align: center;">This is your toolbar</p>
+                <div class="row">
+                    <div class="col">
+                        <img src="{% static '/tutorial_images/toolbar.png' %}"
+                            style="width: 100%; vertical-align: middle; text-align: center;" title="sidebar"
+                            alt="sidebar">
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 5px;">
+                    <div class="col-2">
+                        <a><img src="{% static '/logo_icons/fridge_gray.png' %}"
+                                style="height: 30px; vertical-align: middle;" title="Refrigerator"
+                                alt="Refrigerator"></a>
+                    </div>
+                    <div class="col">
+                        <p class="small">Fridge contents and fridge functions.</p>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 5px;">
+                    <div class="col-2">
+                        <i class="fas fa-shopping-cart fa-lg"></i>
+                    </div>
+                    <div class="col">
+                        <p class="small">Access grocery lists for the fridge.</p>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 5px;">
+                    <div class="col-2">
+                        <i class="far fa-plus-square fa-2x"></i>
+                    </div>
+                    <div class="col">
+                        <p class="small">Add items manually or via receipt upload.</p>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 5px;">
+                    <div class="col-2">
+                        <i class="fas fa-scroll fa-lg"></i>
+                    </div>
+                    <div class="col">
+                        <p class="small">Find recipes based on your fridge contents.</p>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 5px;">
+                    <div class="col-2">
+                        <i class="fas fa-user fa-lg"></i>
+                    </div>
+                    <div class="col">
+                        <p class="small">Your profile page. Your information and a list of all your fridges.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" data-dismiss="modal" data-toggle="modal"
+                    data-target="#tutorial2">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tutorial2" tabindex="-1" role="dialog" aria-labelledby="tutorial2" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
+            <div class="modal-header">
+                <h4 class="modal-title">Tutorial 2/5</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
+                <div class="row">
+                    <div class="col">
+                        <h5 style="text-align: center;">The Fridge Sidebar</h5>
+                        <hr size="6" width="100%" color="black">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col d-flex justify-content-center">
+                        <img src="{% static '/tutorial_images/sidebar.png' %}"
+                            style="height: 300px; vertical-align: middle; text-align: center;" title="sidebar"
+                            alt="sidebar">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="small">Access the sidebar via the hamburger button on the top left of the fridge page.
+                        </p>
+                        <p class="small" style="margin-bottom: 0em;">Available sidebar functions are dependent on
+                            whether you own the fridge.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" data-dismiss="modal" data-toggle="modal"
+                    data-target="#tutorial">Back</button>
+                <button class="btn btn-info" data-dismiss="modal" data-toggle="modal"
+                    data-target="#tutorial3">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tutorial3" tabindex="-1" role="dialog" aria-labelledby="tutorial3" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
+            <div class="modal-header">
+                <h4 class="modal-title">Tutorial 3/5</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
+                <div class="row">
+                    <div class="col">
+                        <h5 style="text-align: center;">Refrigerators</h5>
+                        <p style="text-align: center;">Owned vs Friends'</p>
+                        <hr size="6" width="100%" color="black">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="small">When you create a refrigerator you become its sole owner. You have the ability
+                            to add friends, rename, and delete the refrigerator.</p>
+                        <p class="small">If you are a friend of a fridge you only have access to the fridge contents.
+                        </p>
+                        <p class="small">Whether owner or friend, you can add/delete items items to/from the fridge,
+                            modify the fridge's grocery list, and find recipes.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" data-dismiss="modal" data-toggle="modal"
+                    data-target="#tutorial2">Back</button>
+                <button class="btn btn-info" data-dismiss="modal" data-toggle="modal"
+                    data-target="#tutorial4">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tutorial4" tabindex="-1" role="dialog" aria-labelledby="tutorial4" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
+            <div class="modal-header">
+                <h4 class="modal-title">Tutorial 4/5</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
+                <div class="row">
+                    <div class="col">
+                        <h5 style="text-align: center;">Groceries</h5>
+                        <p style="text-align: center;">Tracked vs Manual</p>
+                        <hr size="6" width="100%" color="black">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="small">Tracked items are constantly checked for availability in the refrigerator. If
+                            they aren't in the fridge, they're shown as missing so you can buy them. Once the item is
+                            added to the refrigerator it is automatically removed from missing items.</p>
+                        <p class="small">Manual items can be added and removed at any time. It's up to you.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" data-dismiss="modal" data-toggle="modal"
+                    data-target="#tutorial3">Back</button>
+                <button class="btn btn-info" data-dismiss="modal" data-toggle="modal"
+                    data-target="#tutorial5">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tutorial5" tabindex="-1" role="dialog" aria-labelledby="tutorial5" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
+            <div class="modal-header">
+                <h4 class="modal-title">Tutorial 5/5</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
+                <div class="row">
+                    <div class="col">
+                        <h5 style="text-align: center;">Recipes</h5>
+                        <hr size="6" width="100%" color="black">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="small">You can discover new recipes by selecting items from your current refrigerator.
+                        </p>
+                        <p class="small">Discovered recipes can be saved to the fridge for access at any time.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <hr size="6" width="100%" color="black">
+                        <p class="small" style="text-align: center;">That's all! Enjoy using the Fridge App 9000!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" data-dismiss="modal" data-toggle="modal"
+                    data-target="#tutorial4">Back</button>
+                <button class="btn btn-info" data-dismiss="modal" data-toggle="modal">Finish</button>
+            </div>
+        </div>
+    </div>
+</div>

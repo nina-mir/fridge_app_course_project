@@ -28,9 +28,9 @@ def initialCurrentFridge(request):
     # Set current fridge as first fridge found with user's id
     else:
         try:
-            if user.ownedfridges[0]:
+            try:
                 request.session['current_fridge_id'] = user.ownedfridges[0]
-            elif user.friendedfridges[0]:
+            except:
                 request.session['current_fridge_id'] = user.friendedfridges[0]
         except:
             print("FRIDGE INITIALIZER: No Fridges found.")
@@ -60,12 +60,12 @@ class fridge_manager():
         # Set current fridge as first fridge found with user's id
         else:
             try:
-                if user.ownedfridges[0]:
+                try:
                     self.session['current_fridge_id'] = user.ownedfridges[0]
-                elif user.friendedfridges[0]:
+                except:
                     self.session['current_fridge_id'] = user.friendedfridges[0]
             except:
-                print("FRIDGE REFINDER: No Fridges found.")
+                print("FRIDGE INITIALIZER: No Fridges found.")
 
     def getCurrentFridge(self):
         if(self.session['current_fridge_id']):
@@ -76,13 +76,34 @@ class fridge_manager():
             return None
 
     def getCurrentFridgeContent(self):
-        fridge_content = FridgeContent.objects.filter(
-            Q(fridge_id=self.session['current_fridge_id']))
-        return fridge_content
-
-    def getCurrentFridgeContentByExpiration(self):
         fridge_content_expiration = FridgeContent.objects.filter(
             Q(fridge_id=self.session['current_fridge_id'])).order_by('expirationdate')
+        current_fridge_content = []
+        for each in fridge_content_expiration:
+            if each.eff_end_ts > datetime.now():
+                current_fridge_content.append(each)
+        return current_fridge_content
+
+    def getCurrentFridgeContentByExpiration(self):
+        # Get Current Items
+        current_time = datetime.now()
+        current_fridge_content = []
+        fridge_content = FridgeContent.objects.filter(
+            Q(fridge_id=self.session['current_fridge_id'])).order_by('expirationdate')
+        for each in fridge_content:
+            if each.eff_end_ts > current_time:
+                current_fridge_content.append(each)
+        
+        # Organize items into dictionary
+        week_time = current_time + timedelta(days=7)
+        fridge_content_expiration = {'expired': [], 'expiring': [], 'fresh': []}
+        for each in current_fridge_content:
+            if each.expirationdate < current_time:
+                fridge_content_expiration['expired'].append(each)
+            elif each.expirationdate > week_time:
+                fridge_content_expiration['fresh'].append(each)
+            else:
+                fridge_content_expiration['expiring'].append(each)
         return fridge_content_expiration
 
     def changeCurrentFridge(self, fridge_id):
@@ -144,33 +165,32 @@ class fridge_manager():
         item = Item.objects.filter(name=item_name).get()
         item_dict = {item.id: item.age}
         for item_id in item_dict:
-
             fridge_content = FridgeContent(
-            expirationdate=(datetime.now()+timedelta(hours=item_dict[item_id])),
-            size=1,
-            creation_date=datetime.now(),
-            modified_date=datetime.now(),
-            eff_bgn_ts=datetime.now(),
-            eff_end_ts=datetime(9999, 12, 31),
-            addedby_id=self.session['current_user_id'],
-            fridge_id=self.session['current_fridge_id'],
-            item_id=item_id)
+                expirationdate=(
+                    datetime.now()+timedelta(hours=item_dict[item_id])),
+                size=1,
+                creation_date=datetime.now(),
+                modified_date=datetime.now(),
+                eff_bgn_ts=datetime.now(),
+                eff_end_ts=datetime(9999, 12, 31),
+                addedby_id=self.session['current_user_id'],
+                fridge_id=self.session['current_fridge_id'],
+                item_id=item_id)
             fridge_content.save()
 
     def save_to_db(self, item_dict):
         for item_id in item_dict:
-
             fridge_content = FridgeContent(
-            expirationdate=(datetime.now()+timedelta(hours=item_dict[item_id])),
-            size=1, creation_date=datetime.now(),
-            modified_date=datetime.now(),
-            eff_bgn_ts=datetime.now(),
-            eff_end_ts=datetime(9999, 12, 31),
-            addedby_id=self.session['current_user_id'],
-            fridge_id=self.session['current_fridge_id'],
-            item_id=item_id)
+                expirationdate=(
+                    datetime.now()+timedelta(hours=item_dict[item_id])),
+                size=1, creation_date=datetime.now(),
+                modified_date=datetime.now(),
+                eff_bgn_ts=datetime.now(),
+                eff_end_ts=datetime(9999, 12, 31),
+                addedby_id=self.session['current_user_id'],
+                fridge_id=self.session['current_fridge_id'],
+                item_id=item_id)
             fridge_content.save()
-
 
     def addFriend(self, friend_email):
         # Get friend's username
@@ -195,49 +215,41 @@ class fridge_manager():
             current_fridge.save()
 
     def createFridge(self, fridge_name):
-
         user = User.objects.filter(id=self.session['current_user_id']).get()
-
         fridge = Fridge(name=fridge_name, owner=user,
-        creation_date=datetime.now(),
-        modified_date=datetime.now(),
-        eff_bgn_ts=datetime.now(),
-        eff_end_ts=datetime(9999, 12, 31))
+                        creation_date=datetime.now(),
+                        modified_date=datetime.now(),
+                        eff_bgn_ts=datetime.now(),
+                        eff_end_ts=datetime(9999, 12, 31))
         fridge.save()
         user.ownedfridges.append(fridge.id)
-
         user.save()
         self.session['current_fridge_id'] = fridge.id
         self.session['current_fridge_id'] = fridge.id
 
     def getAllItems(self):
-        return Item.objects.all()
+        return Item.objects.all().order_by('name')
 
     def get_all_the_related_fridges(self):
         # Get all the fridges a user has access to
-        owned = {}
-        friends = {}
+        user_fridges = []
         temp = User.objects.filter(id=self.session['current_user_id']).get()
-        Owndfridge_id = temp.ownedfridges
-        Friendfridge_id = temp.friendedfridges
-
+        Owndfridge_id_list = temp.ownedfridges
+        Friendfridge_id_list = temp.friendedfridges
         try:
-            for i in Owndfridge_id:
+            for i in Owndfridge_id_list:
                 fridge_obj = Fridge.objects.filter(id=i).get()
                 if(fridge_obj.eff_end_ts > datetime.now()):
-                    owned[fridge_obj.name] = fridge_obj.id
+                    user_fridges.append(fridge_obj)
         except:
             print('FRIDGE MANAGER: Error Getting Owned Fridges.')
         try:
-            for i in Friendfridge_id:
+            for i in Friendfridge_id_list:
                 fridge_obj = Fridge.objects.filter(id=i).get()
                 if(fridge_obj.eff_end_ts > datetime.now()):
-                    friends[fridge_obj.name] = fridge_obj.id
+                    user_fridges.append(fridge_obj)
         except:
             print('FRIDGE MANAGER: Error Getting friended fridges.')
-
-        user_fridges = owned.copy()
-        user_fridges.update(friends)
         return user_fridges
 
     class fridge_Object:
@@ -287,25 +299,27 @@ class fridge_manager():
         current_fridge.friends.remove(friend.id)
         friend.save()
         current_fridge.save()
-    
-    
+
     def is_owner(self):
         ownership = False
 
         # Get user id
-        user_id = User.objects.filter(id=self.session['current_user_id']).get().id
+        user_id = User.objects.filter(
+            id=self.session['current_user_id']).get().id
 
         # Get Current Fridge
         curr_fridge = self.getCurrentFridge()
-        
+
         # Get Owner of the Current Fridge
         owner_fridge = curr_fridge.owner.id
 
         if owner_fridge != user_id:
             ownership = False
         else:
-            ownership= True    
-        return ownership            
+            ownership = True
+        return ownership
+
+
 """----------------------- OLD FRIDGE MANAGER --------------------------"""
 
 # current_fridge_id = None

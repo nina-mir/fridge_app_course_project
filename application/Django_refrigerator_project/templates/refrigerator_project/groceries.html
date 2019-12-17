@@ -1,22 +1,5 @@
 {% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
-<style>
-    .modal-dialog,
-    .modal-content {
-        /* overflow-y: initial !important; */
-        height: 95%;
-    }
-
-    .modal-body {
-        max-height: calc(100% - 120px);
-        overflow-y: auto;
-    }
-
-    ul {
-        list-style-type: none;
-    }
-</style>
-
 <script>
     function search(input, ul) {
         var input, filter, ul, li, a, i, txtValue;
@@ -36,25 +19,35 @@
 </script>
 
 <div class="container">
-    <div class="row d-flex justify-content-center">
+    <div class="row d-flex justify-content-center" style="height: 93px;">
         <div class="col card map border-light mb-3"
-            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
             <h3 class="text-center">Grocery List</h3>
+            {% if current_fridge %}
+            <p class="text-center">{{current_fridge.name}}</p>
+            {% else %}
+            <p class="text-center" style="color: #ff8080;">No Refrigerators. Please Add One.</p>
+            {% endif %}
         </div>
     </div>
     <div class="row">
-        <hr size="6" width="100%" color="black">
-    </div>
-    <div class="row">
         <div class="col align-self-center">
-            <h4>Missing Items:</h4>
+            <h5>Missing From Fridge:</h5>
         </div>
-        <div class="col align-self-center">
+        <div class="col-4 align-self-center">
             <div class="float-right">
-                <a data-toggle="modal" data-target="#tracked_items_modal"
-                    class="btn btn-info btn-sm btn-rounded waves-effect" role="button" aria-pressed="true">Tracked
-                    Items</a>
+                <button data-toggle="modal" data-target="#tracked_items_modal"
+                    class="btn btn-info btn-sm btn-rounded waves-effect" role="button" aria-pressed="true"
+                    {% if not current_fridge %} disabled {% endif %}>Edit
+                    Items</button>
             </div>
+        </div>
+    </div>
+    <div class="row" style="padding-top:5px;">
+        <div class="col">
+            <p style="text-align: center; color: darkgray; font-size: small;">Items here are automatically checked for
+                availability in your fridge. When they are not in the fridge they appear here.
+            </p>
         </div>
     </div>
     <div class="row">
@@ -76,23 +69,23 @@
             {% endif %}
         </div>
     </div>
-
     <div class="row">
-        <div class="col">
-            <p style="text-align: center">Tracked items not found in the current fridge are displayed here as missing.
-            </p>
-        </div>
         <hr size="6" width="100%" color="black">
-    </div>
-    <div class="row">
         <div class="col align-self-center">
-            <h4>Manual Items:</h4>
+            <h5>Grocery Items:</h5>
         </div>
         <div class="col align-self-center">
             <div class="float-right">
-                <a data-toggle="modal" data-target="#addItem" class="btn btn-info btn-sm btn-rounded waves-effect"
-                    role="button" aria-pressed="true">Add Items</a>
+                <button data-toggle="modal" data-target="#addItem" class="btn btn-info btn-sm btn-rounded waves-effect"
+                    role="button" aria-pressed="true" {% if not current_fridge %} disabled {% endif %}>Add
+                    Items</button>
             </div>
+        </div>
+    </div>
+    <div class="row" style="padding-top:5px;">
+        <div class="col">
+            <p style="text-align: center; color: darkgray; font-size: small;">Groceries you can keep track of yourself.
+            </p>
         </div>
     </div>
     <div class="row">
@@ -129,17 +122,17 @@
 <!-- Modal: Tracked Items -->
 <div class="modal fade" id="tracked_items_modal" tabindex="-1" role="dialog" aria-labelledby="tracked_items_modal"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
             <!-- Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Select Tracked Items</h4>
+                <h4 class="modal-title">Select Items to Track</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <!--Body-->
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
                 <!-- Search For Items -->
                 <div class="container">
                     <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
@@ -162,23 +155,20 @@
                         {% for each in all_items %}
                         <li id="{{each.name}}" style="padding-top: 4px;">
                             <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
-                                <label>
-                                    <div class="card-body">
-                                        {% if each.name in tracked_items %}
-                                        <input type="checkbox" style="float:right;" name="tracked_items"
-                                            value="{{ each.name }}" id="heading" checked>
-                                        {% else %}
-                                        <input type="checkbox" style="float:right;" name="tracked_items"
-                                            value="{{ each.name }}" id="heading">
-                                        {% endif %}
-                                        <h5 class="card-title">
-                                            {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
-                                            <img src="{% static image_static %}" alt="tracked_item"
-                                                style="height: 30px;">
-                                            {% endwith %}
-                                            {{ each.name }}
-                                        </h5>
-                                    </div>
+                                <label class="card-body">
+                                    {% if each.name in tracked_items %}
+                                    <input type="checkbox" style="float:right;" name="tracked_items"
+                                        value="{{ each.name }}" id="heading" checked>
+                                    {% else %}
+                                    <input type="checkbox" style="float:right;" name="tracked_items"
+                                        value="{{ each.name }}" id="heading">
+                                    {% endif %}
+                                    <h5 class="card-title">
+                                        {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
+                                        <img src="{% static image_static %}" alt="tracked_item" style="height: 30px;">
+                                        {% endwith %}
+                                        {{ each.name }}
+                                    </h5>
                                 </label>
                             </div>
                         </li>
@@ -189,7 +179,7 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-primary" name="tracked_selector_submit" type="submit" value="selection"
+                <button class="btn btn-info" name="tracked_selector_submit" type="submit" value="selection"
                     form="tracked_selector">Save Selection</button>
             </div>
         </div>
@@ -198,17 +188,17 @@
 
 <!-- Modal: Manual items -->
 <div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="addItem" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+        <div class="modal-content" style="height: 95%;">
             <!-- Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Select Manual Items</h4>
+                <h4 class="modal-title">Select Items to Add</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <!--Body-->
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
                 <!-- Search For Items -->
                 <div class="container">
                     <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
@@ -231,18 +221,15 @@
                         {% for each in all_items %}
                         <li id="{{each.name}}" style="padding-top: 4px;">
                             <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
-                                <label>
-                                    <div class="card-body">
-                                        <input type="checkbox" style="float:right;" name="grocery_items"
-                                            value="{{ each.name }}" id="heading">
-                                        <h5 class="card-title">
-                                            {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
-                                            <img src="{% static image_static %}" alt="grocery_item"
-                                                style="height: 30px;">
-                                            {% endwith %}
-                                            {{ each.name }}
-                                        </h5>
-                                    </div>
+                                <label class="card-body">
+                                    <input type="checkbox" style="float:right;" name="grocery_items"
+                                        value="{{ each.name }}" id="heading">
+                                    <h5 class="card-title">
+                                        {% with image_static='/item_icons/'|add:each.name|add:'.png' %}
+                                        <img src="{% static image_static %}" alt="grocery_item" style="height: 30px;">
+                                        {% endwith %}
+                                        {{ each.name }}
+                                    </h5>
                                 </label>
                             </div>
                         </li>
@@ -253,13 +240,11 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-primary" name="grocery_selector_submit" type="submit" value="selection"
+                <button class="btn btn-info" name="grocery_selector_submit" type="submit" value="selection"
                     form="grocery_selector">Save Selection</button>
             </div>
         </div>
     </div>
 </div>
-
-
 
 {% endblock %}

@@ -6,11 +6,11 @@
     <form method="POST">
         {% csrf_token %}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Log In</legend>
+            <legend class="border-bottom mb-4 ">Log In</legend>
             {{ form }}
         </fieldset>
         <div class="form-group">
-            <input type="submit" value="Login" />
+            <button class="btn btn-info btn-block" type="submit" value="Login">Login</button>
         </div>
     </form>
     <div class="border-top pt-3">

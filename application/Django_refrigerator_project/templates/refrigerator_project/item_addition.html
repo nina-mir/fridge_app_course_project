@@ -19,13 +19,14 @@
 </script>
 
 <div class="container">
-    <div class="row">
+    <div class="row fixed-top" style="padding-top: 50px; z-index: 1;">
         <div class="col card map border-light mb-3"
-            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
-            <h3 class="text-center">Select Manual Items</h3>
+            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
+            <h3 class="text-center">Select Items to Add</h3>
+            <p class="text-center">{{current_fridge.name}}</p>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="padding-top: 90px;">
         <div class="col">
             <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
                 <div class="input-group">
@@ -67,11 +68,17 @@
             </form>
         </div>
     </div>
+</div>
+
+<div class="container fixed-bottom" style="padding-bottom: 60px; z-index: 0;">
     <div class="row">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button class="btn btn-primary" name="grocery_selector_submit" type="submit" value="selection"
-            form="grocery_selector">Save Selection</button>
+        <div class="col" style="text-align: right;">
+            <button class="btn btn-info" name="grocery_selector_submit" type="submit" value="selection"
+                form="grocery_selector">Add Items</button>
+        </div>
     </div>
 </div>
+
+
 
 {% endblock %}
