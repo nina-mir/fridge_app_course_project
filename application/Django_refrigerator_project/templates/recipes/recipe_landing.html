@@ -1,24 +1,21 @@
 {% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
 
+<div style="padding-top: 5px; background-color: white; outline: none; border-radius: 0%;">
+    <h3 class="text-center">Recipes</h3>
+    {% if current_fridge %}
+    <p class="text-center" style="padding-bottom: 5px;">{{current_fridge.name}}</p>
+    {% else %}
+    <p class="text-center" style="color: #ff8080; padding-bottom: 5px;">No Refrigerators. Please Add One.</p>
+    {% endif %}
+</div>
 <div class="container">
-    <div class="row d-flex justify-content-center" style="height: 93px;">
-        <div class="col card map border-light mb-3"
-            style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px; height: 77px;">
-            <h3 class="text-center">Recipes</h3>
-            {% if current_fridge %}
-            <p class="text-center">{{current_fridge.name}}</p>
-            {% else %}
-            <p class="text-center" style="color: #ff8080;">No Refrigerators. Please Add One.</p>
-            {% endif %}
-        </div>
-    </div>
-    <div class="row row d-flex justify-content-center" style="padding-top: 10px;">
+    <div class="row row d-flex justify-content-center" style="padding-top: 5px;">
         <div style="width: 70%;">
-            <a {% if current_fridge %} href="{% url 'recipe_search' %}" class="btn btn-info btn-lg btn-block" {% else %} class="btn btn-info btn-lg btn-block disabled"  {% endif %}  class="btn btn-info btn-lg btn-block" role="button"
-                aria-pressed="true">Find Recipes</a>
+            <a {% if current_fridge %} href="{% url 'recipe_search' %}" class="btn btn-info btn-lg btn-block" {% else %}
+                class="btn btn-info btn-lg btn-block disabled" {% endif %} class="btn btn-info btn-lg btn-block"
+                role="button" aria-pressed="true">Find Recipes</a>
         </div>
     </div>
-
     <div class="row" style="padding-top: 10px;">
         <hr size="6" width="100%" color="black">
         <div class="col">
