@@ -1,0 +1,120 @@
+{% extends 'refrigerator_project/base.html' %} {% load static %} {% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static '/css/fridge_card.css' %}">
+
+<div class="container">
+  <div class="row">
+    <div class="col card map border-light mb-3"
+      style="margin: auto; outline: none; border-radius: 0%; padding-top: 5px;">
+      <h3 class="text-center">My Profile</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h4 style="padding-left: 5px; border: 2px solid rgb(92, 201, 235);
+      border-right: none; border-top: none; border-left: none; background-color: white;">{{ user.username }}</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h4 class="text-muted" style="font-size: small; padding-left: 5px;">{{ user.email }} </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <!-- Owned Fridges Accordian -->
+      <div id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="card">
+          <h5 class="card-header">
+            <a data-toggle="collapse" href="#owned" data-parent="#accordion" aria-expanded="true"
+              aria-controls="collapse-example" id="heading" class="collapsed d-block">
+              Owned Fridges
+              <i class="fa fa-chevron-left pull-right float-right"></i>
+            </a>
+          </h5>
+          <!-- Looks for if the query is empty -->
+          {% if not ownedfridge_objectlist %}
+          <div id="owned" class="collapse" style="color: black;" aria-labelledby="heading-example">
+            <div class="row">
+              <div class="col">
+                <p style="text-align: center;">No owned fridges</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          <!--  If the query is not empty, it will display the owned fridges -->
+          {% for each in ownedfridge_objectlist %}
+          <div id="owned" class="collapse" style="color: black;" aria-labelledby="heading-example">
+            <div class="row">
+              <div class="col">
+                <ul style="list-style-type:none; padding-top: 10px;">
+                  <li>Name: {{ each.name }} </li>
+                  <li>Created on: {{ each.creation_date }} </li>
+                  <li>Friends: {{ each.friends_name_list }} </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <!-- Friended Fridges Accordian -->
+      <div id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="card">
+          <h5 class="card-header">
+            <a data-toggle="collapse" href="#friended" data-parent="#accordion" aria-expanded="true"
+              aria-controls="collapse-example" id="heading" class="collapsed d-block">
+              Friended Fridges
+              <i class="fa fa-chevron-left pull-right float-right"></i>
+            </a>
+          </h5>
+          <!-- Looks for if the query is empty -->
+          {% if not friendedfridge_objectlist %}
+          <div id="friended" class="collapse" style="color: black;" aria-labelledby="heading-example">
+            <div class="row">
+              <div class="col">
+                <p style="text-align: center;">No friended fridges</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          <!--  If the query is not empty, it will display the friended fridges -->
+          {% for each in friendedfridge_objectlist %}
+          <div id="friended" class="collapse" style="color: black;" aria-labelledby="heading-example">
+            <div class="row">
+              <div class="col">
+                <ul style="list-style-type:none; padding-top: 10px;">
+                  <li>Name: {{ each.name }} </li>
+                  <li>Created on: {{ each.creation_date }} </li>
+                  <li>Friends: {{ each.friends_name_list }} </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <hr size="3" width="100%" color="gray">
+      
+      <!-- Personal Notes-->
+        <div>
+          <h5 style="text-align: center;">NotePad</h5>
+          <!-- The personal notes are in a form -->
+          <form class="navbar-form navbar-left" role="search" method="POST">
+            {% csrf_token %}
+            <div id="notePad" aria-labelledby="heading-example">
+              <textarea placeholder="Personal Notes" id="myTextArea" rows="5" cols="30" name="personal_notes"
+                class="textarea form-control z-depth-1">{{personalnotes}}</textarea>
+              <button type="submit" name="add_personal_notes" value="ADD personalnotes" aria-pressed="true"
+                class="btn btn-info btn-sm btn-rounded waves-effect" style="width: 100%; margin-top: 3px;">Submit</button>
+            </div>
+          </form>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+{% endblock %}
