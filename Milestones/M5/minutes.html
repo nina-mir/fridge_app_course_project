@@ -1,0 +1,108 @@
+<html>	
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">		
+	<link rel="stylesheet" type="text/css" href="bootstrap.css" >
+	<title>Meeting Notes</title>
+	<style>
+	li
+	{
+	width: 50%;
+	}
+	@media only screen and (max-width: 600px) {
+		li
+		{
+		width: 80%;
+		}
+	}
+	</style>
+
+</head>
+<body>
+
+	<h4 id="C1">&nbspSeptember 2019: </h4>
+	<hr>
+	<ul>
+		<li>Sept.5&nbsp Our first team meeting, basically, a meet-and-greet between team memebers. Eveyone introduced themselves and went over
+		their web devskills and previous projects, in addition to their goals in this team project.</li>
+		<li>Sept.7&nbsp We discussed our software dev stack, choice of server, how to obtain a server access for free, AWS Educate account, 
+		choice of web dev framework (decided to learn Django), and each member's role. Doug was not present but he was in the loop via Discord messages.</li>
+		<li>Sept.12&nbsp Thanks to Abhy, we now have access to AWS. He set-up a server that all all who were present for this meeting (Doug was absent)
+		managed to access it remotely. All that is left to do: Installing relevant packages, Django, Python, ... deplying our about page to this server, so that 			we can meet Milestone 0 expectation in time. </li>
+		<li>Sept.14&nbsp [pre-Meeting messages on Discord: Abhy wonders how to use Django on Apache webserver] 
+		Everyone but Doug was present. We got our servers on AWS running. All that is needed is installing the software packages as we have agreed upon. Josh is 			working on the M0 email. Eveyone seems to be learning python and/or Django. We set up two serves on AWS( master server and test server). We have not yet 			agreed on method of input from the user for thisproject yet.</li>
+		<li>Sept.19&nbsp In class meeting, Ganzhoragie set up our server and software stack beautifully. Instructur discussed M1 with the class. Joshua began a 		google doc for M1 for everyone to contribute. Everybody was present. Everybody wrote storylines. It seems our storyline is mostly for adults who are 			younger. Nina is still working on the test server setup but got django installed successfully. </li>
+		<li>Sept.21&nbsp Group dicussion on M1 objectives: Data definitions, story lines, functional features, prototyping issues, test server issues, use of 			docker technology, questions about django front end matters. This session lasted for about 2 hours. We have completed the data defintions in the google 		doc of M1 so far. Nina will fix up the test server, Wilson is studying Django tutorials, Abhy will look into OCR APIs (openCV).</li>
+		<li>Sept.28&nbsp Finished M1, work on competitive analytics and links to specific apps,  Exective summary is still left, Josh created a sample camera 			interface, Douge and everyone fininshed the user stories, data features, Gangzhairige is learing AWS picture extractor analyzer. </li>
+		 	
+	</ul>
+
+	<h4 id="C2">&nbspOctober 2019: </h4>
+	<hr>
+	<ul>
+		<li>Oct.5 &nbsp User stories, creation of actual mockup, and more functional prototyping dicussions ensued:
+		<pre>How to process text? Abhy and everyone talking about DATA DEFINITIONS: Receipt suggestions
+		based on the selected items by the user at this stage. 
+		Abhy wrote a PATH for all the stories on white board. 
+		Gangzhoariga: Discrepency of apples expiration dates (we keep two rows of apples each pertaining to a different receipt.)
+		-- make a request for adding an item 
+		-- where to upload the receipt on the fridge page and both user profile page 
+		Josh wrting the storyline in detail
+		Nyla story is chosen as one storyline and we all agree on the contetnt steps of it 
+		Gangzhoarie is trying to deploy the site
+		--Nyla: Her mom adds her as a friend to her fridge ()
+		--Nyla checks her mom's fridge to see if she has strawberry this weekend and her mom does 
+		not have it, so she steals her dad's strawberry and take it to her mom's house for the weekend
+		--Nina is pissed with her rroommates. SHe bouys a small fridge and make a new fridge and 
+		scans the receipt and updates her fridge content.</pre>  </li>
+		<li>Oct.10 &nbsp We decided on using google authorization. Then, divided into two groups: backend and frontend (wilson, nina and doug).
+		Drawing wireframes of the profile page, and landing login page. Backend is discussing database design. We have done no coding so far.</li>
+		<li>Oct.12 &nbsp We spend majority of our meeting on drawing out user stories, their related wireframes. Abhi, Josh and Nina all drew wireframes 
+		that everyone else was taking pictures. We also discussed about design of navbar icons. We did not discuss recipes in detail tho.</li>
+		<li>Oct.17 &nbsp (Thursday) Instructor talked to us about : Item info (P.3), Receipts (P2), Grocery List (Manual Add -- Josh says it is P.2)
+		Modification of item size (P.3 ). Let's do wireframe now!Backend: designing the receiptes table and learning the json structure. Instructor says: 			vertical prototype, inventory table is properly set up. U can get requests of the inventory data. Populated by predefined items. </li>
+		<li>Oct.19 &nbsp Eveyone present but doug. ER diagarams are done. Wilson and Josh finished the Wireframes. Gangzhaorige and Abhi designed more data 			tables. Thinking and discussing the different parts of Milestone 02: entity types, relations, algorithms, etc. There was mention of a middle ware cache 		system to speed up the web app. Nina working on mockups. Are we saving the receipt's image or not? We need to ask the instructor. We discussed the 			Primary Fridge meaning. If a user has access to no fridge, then their primary fridge value is null. If they have access to multiple fridges, the first 			fridge they got access to (either created or fridned), our web app makes it the primary fridge untill the user changes this designation on their own.</li>
+		<li>Oct.24 &nbsp Everyone present! We exchanged notes on Django templating language. We debated if we use Docker or not for our project. We also 			discussed more about the structure of the database tables we have. And, we finalized our M02 document. The vertical prototyping works fine. </li> 
+		<li>Oct.26 &nbsp Doug not present. All talking about Git branches and out git policies. It was discussed that as many branches as number of features of 		the app will be used by both front and backend. Priorities are getting users to work and fridge app functionalities. We agreed on 5 branches for now. 
+		Gangzharige is gonna show us how to use template of Django for our HTML code. </li>
+  		<li>Oct.31 &nbsp Everyone was present. We all worked on different parts. Wilson finished Auth app using Django Authorization functionalities. 
+		Wilson merged auth with fridge branch. Josh took care of base.html. Abhi and Gangzhaorige wrking on db setting and issues. Apparently wilson's database 		choice for authorization is not compatible with our RDS database. </li>
+	</ul>
+	<h4 id="C3">&nbspNovember 2019: </h4>
+	<hr>
+	<ul>
+		<li> Nov.2 &nbsp All present but doug. Everyone working hard to get their part done. Abhi and Gangzhaorige are working on merging the database. Josh is 		working on grocery list. Wilson on log-in and registering. Nina on google vision api processing.Josh: transposed search functionality into groceries;
+		Wilson: Improved login UI. Abhi and Gangzhaorige: Merging fridge to auth and auth to dev_main + dicussing goals to achieve today. </li>
+		<li> Nov.7 &nbsp TA gave us feedback about best rpactices on Git, coding style, DjangoClassViews etc. Josh and Gangzhaorige working on Delete Item 			function. Wilson and Doug working on UX design. Abhi helping Docker installation with Doug + helping Josh & Gangzhaorige. Nina working on Recipe. We are 		thinking we could use classBasedViews.py of Django mostly for fridge class and not for the rest. 
+		</li>
+		<li> Nov.9 &nbsp Nov 9 All present but Dooug. Working to fix docker for Wilson. Abhi said adding fridges is now fixed. Database types will be changed to 			list like owned fridges.String textbox added to user. Rename_fridge, Delete_fridge, Added_recipe to user(img_url, url, title) all updated.
+		Bknd issue: search for friend to be added? 
+		</li>
+		<li> Nov.14 &nbsp Instructor visited us and gave us valuable feedback on recipes and also logged remotely to our test server.
+		Josh said we use issues feature of github to better faciliate debugging. Use trello for features. There's a bug currently with the
+		Backened: We need a primary column for fridge table -- we don't have it now. Josh: When doing migrations of Gangzhaorige's recommendation, he saw errors 			re: default values. Wilson is working on the profile page. Doug is working on choosing a color pallette and font.Josh finished up grocery tracking.
+		</li>
+		<li>Nov.16 &nbsp All present. Migrations done successfully. Added a primary fridge column (int) in backend.Josh made a hefty change: fridge.py 			is basically a fridge manager now.Receipt upload broke again. 
+		Database needed to be migrated. Doug still has issues with Docker installation unfortunately. Josh and Backend are trying to help him to get it to work.
+		Wilson has been working on profile.html: it shows all your fridges and friended fridges.
+		</li>
+		<li>Nov.21 &nbsp Discussion about add item -- doug suggestions to be added/Adding a check credentials for editing friends. We should make a version 1
+		Discussion about styling differences. Josh mentioned he uses auto-formatting to take care of it all. We are plannoing to push it to server. 
+		Doug is doing ux. Search into API. Recipe Puppy api ws suggested for a replacement of food2fork API. If owner if condition to modal. 
+		Adding fave recipes to a user is being worked on by Josh. 
+		</li>
+	</ul>
+	<h4 id="C3">&nbspDecember 2019: </h4>
+	<hr>
+	<ul>
+		<li> Dec.5 &nbsp Our first meeting after Thanksgiving. All present. We have a problem with Recipe API as in food2fork went out of business at the end of 			November. As such, we can no longer receive image thumbnails of recipes that it retunrs. We found a another free recipe API called Recipe Puppy. Nina 			will look into this matter. Josh and Doug are working more on UX: colors, font size, hamburger button options. Gangzhaorige and Nina fixed the 			if-conditions on the hamburger button options re: friend's privilege. Group decided to further work in the library after 4 PM. Josh, Wilson, 		Gangzharige, Abhi and Nina came to the library.       
+		</li>
+		<li> Dec.7 &nbsp All present but Doug. Nina brough Pizza. Everyone was working on final touches to our app. There are many issues regarding our server 			hosting as AWS credits are about to finish. Gangzhaorige is taking care of transferrring the server to another AWS server. Josh has been working on 			fixing a bug re: Authentication. Nina changed the UI of add button.  
+		</li>
+		<li> Dec.12 &nbsp All present but Doug. We worked on adding more final touches to our product mostly re: UI. Backend is working on using SSL and 			preparing our servers to production stage. Instructor went over grading rubric. Everybody was pre-occupied with final exams and presentations.  
+		</li>
+		<li> Dec.19 &nbsp All present. Our last session. We started practicing the presentation slides. Nina, Wilson and Josh made most of the slides. Doug edited them and 			Gangzhaorige and Abhi made the order of presentation and practiced it all. We had a run-through and everyone practice it the demo.  
+		</li>
+	</ul>
+</body> 
+</html>
