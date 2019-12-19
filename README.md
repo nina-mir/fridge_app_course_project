@@ -10,7 +10,7 @@
 - Gangzhaorige Li - Git Master / Back End Developer
 
 ## Live Project Link
-[http://ec2-34-224-23-175.compute-1.amazonaws.com](http://ec2-34-224-23-175.compute-1.amazonaws.com)
+[http://fridgeapp9000.com/](http://fridgeapp9000.com/)
 
 ### Test Server Link
 [http://ec2-3-91-133-192.compute-1.amazonaws.com](http://ec2-3-91-133-192.compute-1.amazonaws.com)
