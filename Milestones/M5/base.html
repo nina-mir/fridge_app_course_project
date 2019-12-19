@@ -1,0 +1,542 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Fridge App 9000</title>
+    <meta name="description" content="An application for all your fridge needs.">
+    <meta name="viewport" content="width=device-width initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="{% static '/logo_icons/favicon.ico' %}" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/5316448d7f.js" crossorigin="anonymous"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <link rel="stylesheet" href="{% static '/css/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/modal_checkbox.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+    <script>
+        /* Set the width of the side navigation to 250px */
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        /* Set the width of the side navigation to 0 */
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
+        (function (e, t, n) {
+            var r = e.querySelectorAll("html")[0];
+            r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2")
+        })(document, window, 0);
+    </script>
+</head>
+
+<body>
+    <!-- Header -->
+    <nav class="navbar fixed-top justify-content-center navbar-dark bg-dark">
+        <div class="container" style="height: 35px;">
+            {% if "fridge" in request.path %}
+            <span>
+                <button class="btn btn-dark ml-auto" type="button" id="sidebarCollapse" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fas fa-align-justify"></i>
+                </button>
+            </span> {% endif %} {% if user.is_authenticated %}
+            <a class="navbar-brand" href="{% url 'fridge' %}">
+                <img src="{% static '/logo_icons/logo_gray.png' %}" height="30" alt="">
+            </a>
+            {% else %}
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static '/logo_icons/logo_gray.png' %}" height="30" alt="">
+            </a>
+            {% endif %}
+
+            <div style="position: absolute; right:5%;background-color: #3c4245;">
+                {% if user.is_authenticated %}
+                <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}" role="button">Logout</a> {% endif %}
+            </div>
+        </div>
+    </nav>
+    <!-- Sidebar (Active on Fridge Page Only) -->
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <div id="sidebar">
+            <div id="dismiss">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="sidebar-header">
+                <h3>{{ current_fridge.name }}</h3>
+            </div>
+            <ul class="list-unstyled components">
+                {% if all_fridges %}
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#select_fridge_modal">Select Current Fridge</a>
+                </li>
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#primary_fridge_modal">Set Primary Fridge</a>
+                </li>
+                {% endif %}
+                {% if ownership %}
+                {% if current_fridge_friends %}
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#removeFriend">Remove Friends</a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#addFriend">Add Friends</a>
+                </li>
+
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#rename">Rename Fridge</a>
+                </li>
+
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#delete">Delete Fridge</a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#add">Create Fridge</a>
+                </li>
+            </ul>
+            <div class="d-flex justify-content-center" style="bottom: 5px;">
+                <a class="small" href="#" data-toggle="modal" data-target="#tutorial"> Need Help?</a>
+            </div>
+        </div>
+    </div>
+    <!-- Footer (disabled on home and login pages) -->
+    {% if not "auth" in request.path and request.path != "/" %}
+    <nav class="navbar fixed-bottom justify-content-center navbar-dark bg-dark">
+        <ul class="navbar-nav" style="height: 35px;">
+            <li class="nav-item">
+                <a href="{% url 'fridge' %}"><img src="{% static '/logo_icons/fridge_gray.png' %}"
+                        style="height: 30px; vertical-align: middle;" title="Refrigerator" alt="Refrigerator"></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link icon" href="{% url 'groceries' %}"><i class="fas fa-shopping-cart fa-lg"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link icon" style="margin-top: -5px;" data-toggle="modal"
+                    data-target="#add_button_modal"><i class="far fa-plus-square fa-2x"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link icon" href="{% url 'recipes' %}"><i class="fas fa-scroll fa-lg"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link icon" href="{% url 'profile' %}"></i><i class="fas fa-user fa-lg"></i></a>
+            </li>
+        </ul>
+    </nav>
+    {% else %}
+    <!-- Authentication Details -->
+    <div class="container">
+        {% if messages %} {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <!-- for displaying messages like success -->
+            {{ message }}
+        </div>
+        {% endfor %} {% endif %}
+    </div>
+    {% endif %}
+    <!-- Modals -->
+    <div>
+        <!-- Select Current Fridge -->
+        <div class="modal fade" id="select_fridge_modal" tabindex="-1" role="dialog"
+            aria-labelledby="tracked_items_modal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+                <div class="modal-content" style="height: 95%;">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Select Current Fridge</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
+                        <form id="select_fridge_form" method="POST">
+                            {% csrf_token %}
+                            <ul class="container-fluid" id="select_fridge_ul">
+                                <p style="margin: 0;">Owned Refrigerators:</p>
+                                {% for each in all_fridges %}
+                                {% if each.owner_id == current_user.id %}
+                                <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
+                                    <label class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h5 class="card-text">
+                                                    {% if current_fridge.id == each.id %}
+                                                    <input type="radio" name="select_fridge_selected"
+                                                        value="{{ each.id }}" checked>
+                                                    {% else %}
+                                                    <input type="radio" name="select_fridge_selected"
+                                                        value="{{ each.id }}">
+                                                    {% endif %}
+                                                    <a class="vertical-center" style="padding-left: 20px;">
+                                                        {{ each.name }}
+                                                    </a>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                <p style="padding-top: 10px; margin: 0;">Friends' Refrigerators:</p>
+                                {% for each in all_fridges %}
+                                {% if each.owner_id != current_user.id %}
+                                <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
+                                    <label class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h5 class="card-text">
+                                                    {% if current_fridge.id == each.id %}
+                                                    <input type="radio" name="select_fridge_selected"
+                                                        value="{{ each.id }}" checked>
+                                                    {% else %}
+                                                    <input type="radio" name="select_fridge_selected"
+                                                        value="{{ each.id }}">
+                                                    {% endif %}
+                                                    <a class="vertical-center" style="padding-left: 20px;">
+                                                        {{ each.name }}
+                                                    </a>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </form>
+                        <p style="text-align: center; margin: 0; color: gray;" class="small">The currently displayed
+                            fridge.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-info" name="select_fridge_submit" type="submit" value="selection"
+                            form="select_fridge_form">Select Fridge</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Select Primary Fridge -->
+        <div class="modal fade" id="primary_fridge_modal" tabindex="-1" role="dialog"
+            aria-labelledby="tracked_items_modal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" style="height: 95%;">
+                <div class="modal-content" style="height: 95%;">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Select Primary Fridge</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="max-height: calc(100% - 120px); overflow-y: auto;">
+                        <form id="primary_fridge_form" method="POST">
+                            {% csrf_token %}
+                            <ul class="container-fluid" id="primary_fridge_ul">
+                                <p style="margin: 0;">Owned Refrigerators:</p>
+                                {% for each in all_fridges %}
+                                {% if each.owner_id == current_user.id %}
+                                <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
+                                    <label class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h5 class="card-text">
+                                                    {% if current_fridge.id == each.id %}
+                                                    <input type="radio" name="primary_fridge_selected"
+                                                        value="{{ each.id }}" checked>
+                                                    {% else %}
+                                                    <input type="radio" name="primary_fridge_selected"
+                                                        value="{{ each.id }}">
+                                                    {% endif %}
+                                                    <a class="vertical-center" style="padding-left: 20px;">
+                                                        {{ each.name }}
+                                                    </a>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                <p style="margin: 0; padding-top: 10px;">Friends' Refrigerators:</p>
+                                {% for each in all_fridges %}
+                                {% if each.owner_id != current_user.id %}
+                                <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
+                                    <label class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h5 class="card-text">
+                                                    {% if current_fridge.id == each.id %}
+                                                    <input type="radio" name="primary_fridge_selected"
+                                                        value="{{ each.id }}" checked>
+                                                    {% else %}
+                                                    <input type="radio" name="primary_fridge_selected"
+                                                        value="{{ each.id }}">
+                                                    {% endif %}
+                                                    <a class="vertical-center" style="padding-left: 20px;">
+                                                        {{ each.name }}
+                                                    </a>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </form>
+                        <p style="text-align: center; margin: 0; color: gray;" class="small">The primary fridge is
+                            loaded on log in.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-info" name="primary_fridge_submit" type="submit" value="selection"
+                            form="primary_fridge_form">Select Fridge</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Remove Friends -->
+        <div class="modal fade" id="removeFriend" tabindex="-1" role="dialog" aria-labelledby="removeFriend"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Remove Friends</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="edit_friend_form" method="POST">
+                            {% csrf_token %}
+                            <ul class="container-fluid" id="primary_fridge_ul">
+                                {% for each in current_fridge_friends %}
+                                <div class="card" x style="height: 4.3em; background-color: #f2f2f2;">
+                                    <label class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h5 class="card-text">
+                                                    <input type="checkbox" style="float:right;"
+                                                        name="select_friend_delete" value="{{ each }}" id="heading">
+                                                    {{ each }}
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </ul>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button class="btn btn-info" name="friend_selected_submit" type="submit" value="selection"
+                            form="edit_friend_form">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add Friends -->
+        <div class="modal fade" id="addFriend" tabindex="-1" role="dialog" aria-labelledby="addFriend"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Friends</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 style="text-align: center;">You can add a friend to this fridge via email:</h5>
+                        <form id="addFriend_fridge_form" method="POST">
+                            {% csrf_token %}
+                            <input type="text" name="friend_email" class="form-control" placeholder="Friend's Email"
+                                style="width: 100%;">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-info" name="add_friend_by_email" type="submit" value="ADD FRIEND"
+                            form="addFriend_fridge_form">Add Friend</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Rename Refrigerator -->
+        <div class="modal fade" id="rename" tabindex="-1" role="dialog" aria-labelledby="rename" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Rename Fridge</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 style="text-align: center;">Change name of '{{current_fridge.name}}' to:</h5>
+                        <form id="rename_fridge_form" method="POST">
+                            {% csrf_token %}
+                            <input type="text" name="fridge_name" class="form-control" placeholder="New Fridge Name"
+                                style="width: 100%;">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-info" name="rename_fridge" type="submit" value="RENAME FRIDGE"
+                            form="rename_fridge_form">Rename</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Fridge -->
+        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete Fridge</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="delete_fridge_form" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <h5 style="text-align: center;">Are you sure you want to delete:</h5>
+                                <h4 style="text-align: center;">{{current_fridge.name}}</h4>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-danger" name="delete_fridge" type="submit" value="DELETE FRIDGE"
+                            form="delete_fridge_form">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Create Fridge -->
+        <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Create Fridge</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 style="text-align: center;">Enter the name of your new fridge:</h5>
+                        <form id="create_fridge_form" method="POST">
+                            {% csrf_token %}
+                            <input type="text" name="fridge_name" class="form-control" placeholder="New Fridge Name"
+                                style="width: 100%;">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-info" name="add_fridge" type="submit" value="ADD FRIDGE"
+                            form="create_fridge_form">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add Button -->
+        <div class="modal fade" id="add_button_modal" tabindex="-1" role="dialog" aria-labelledby="add"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--h4 class="modal-title">Item Addition</h4-->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col">
+                                {% if not current_fridge %}
+                                <p class="text-center" style="color: #ff8080;">
+                                    No Refrigerators. Please Add One.</p>
+                                {% endif %}
+                                <form method="GET" action="{% url 'add_button' %}">
+                                    <button type="submit" class="btn btn-info btn-block 
+                                        btn-lg btn-rounded waves-effect"
+                                        {% if not current_fridge %} disabled {% endif %}>
+                                        Add Items
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 4px;">
+                            <div class="col">
+                                <form method="post" enctype="multipart/form-data" action="{% url 'add_button' %}">
+                                    {% csrf_token %}
+                                    <label {% if not current_fridge %}
+                                        class="btn btn-info btn-block btn-lg btn-rounded disabled" {% else %} for="file"
+                                        class="btn btn-info btn-block btn-lg btn-rounded waves-effect" {% endif %}
+                                        aria-pressed="true">
+                                        Upload Receipt
+                                    </label>
+                                    <input type="file" name="receipt_image" id="file" class="inputfile inputfile-5"
+                                        accept="image/*" onchange="this.form.submit()" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Tutorials -->
+        <div>
+            {% include "refrigerator_project/tutorial.html" %}
+        </div>
+    </div>
+
+    <!-- Body Content -->
+    <div style="padding-bottom: 60px;">
+        {% block content %} {% endblock %}
+    </div>
+    <!--div with overlay for hamburger menu functionality, ability to click anywhere outside of the menu to close-->
+    <div class="overlay"></div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#dismiss, .overlay').on('click', function () {
+                $('#sidebar').removeClass('active');
+                $('.overlay').removeClass('active');
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').addClass('active');
+                $('.overlay').addClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+</body>
+
+</html>
